@@ -7,49 +7,38 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.zjp.compose_unit.common.Screen
+import com.zjp.compose_unit.common.viewmodel.DbViewModel
 import com.zjp.compose_unit.common.viewmodel.ShareViewModel
-import com.zjp.compose_unit.compose.text.TextDetailView
-import com.zjp.compose_unit.compose.text.TextFieldDetailView
+import com.zjp.compose_unit.compose.ComposeDetailPage
 
 
 @Composable
-fun App() {
+fun App(dbViewModel: DbViewModel) {
     val navController = rememberNavController()
     val shareViewModel: ShareViewModel = viewModel()
+
     NavHost(navController = navController, startDestination = Screen.Main.route) {
         // 给FirstPage可组合项指定路径
-        composable(Screen.Main.route) { MainPage(navController, shareViewModel) }
-        // 给SecondPage可组合项指定路径
-        composable(
-            Screen.TextDetailScreen.route,
-        ) {
-            TextDetailPage(
-                navController,
-                shareViewModel
+        composable(Screen.Main.route) { MainPage(navController, shareViewModel, dbViewModel) }
+        composable(Screen.ComposeDetailScreen.route) {
+            ComposeDetailPage(
+                viewModel = shareViewModel,
+                dbViewModel = dbViewModel,
+                navController = navController
             )
         }
-        composable(Screen.TextFieldDetailScreen.route) { TextFieldDetailPage(navController) }
     }
 
 }
 
 @Composable
-fun MainPage(navController: NavController, viewModel: ShareViewModel) {
+fun MainPage(navController: NavController, viewModel: ShareViewModel, dbViewModel: DbViewModel) {
     MainView(onClick = {
-        viewModel.addItem(it)
-        navController.navigate(it.detailPage)
-    }, viewModel)
+        viewModel.addCompose(it)
+        navController.navigate(Screen.ComposeDetailScreen.route)
+    }, viewModel, dbViewModel)
 }
 
 
-@Composable
-fun TextDetailPage(navController: NavController, viewModel: ShareViewModel) {
-    TextDetailView(navController, viewModel)
-}
-
-@Composable
-fun TextFieldDetailPage(navController: NavController) {
-    TextFieldDetailView(navController)
-}
 
 

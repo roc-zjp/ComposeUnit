@@ -1,7 +1,5 @@
-package com.zjp.compose_unit.compose.text
+package com.zjp.compose_unit.compose_system.text
 
-
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
@@ -16,19 +14,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-
-
-@Composable
-fun TextFieldDetailView(navController: NavController) {
-    Column {
-        SimpleFilledTextFieldSample()
-        SimpleOutlinedTextFieldSample()
-        StyledTextField()
-        PasswordTextField()
-        NoLeadingZeroes()
-    }
-}
 
 //输入和修改文字
 @Composable

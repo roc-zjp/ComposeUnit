@@ -1,4 +1,4 @@
-package com.zjp.compose_unit
+package com.zjp.compose_unit.common.model
 
 import java.io.Serializable
 

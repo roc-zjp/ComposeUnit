@@ -15,13 +15,13 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun CodeView(code: String) {
+fun CodeView(code: String, modifier: Modifier = Modifier) {
     val state = rememberScrollState()
     Box(
-        modifier = Modifier
+        modifier = modifier
+            .padding(10.dp)
             .background(Color.LightGray)
-            .size(100.dp)
-            .padding(horizontal = 8.dp)
+            .padding(10.dp)
             .horizontalScroll(state)
     ) {
         var formatCode =
