@@ -42,8 +42,6 @@ fun MainView(
 ) {
     val mList by dbViewModel.widgets.observeAsState()
     dbViewModel.getAllWidget()
-
-
     LazyColumn() {
         items<Compose>(mList!!, key = { it }) {
             ComposeItemView(compose = it) {

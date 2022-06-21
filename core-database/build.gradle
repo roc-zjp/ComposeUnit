@@ -53,4 +53,6 @@ dependencies {
 
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    implementation 'com.apkfuns.logutils:library:1.7.5'
 }

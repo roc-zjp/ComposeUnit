@@ -6,13 +6,8 @@ import com.zjp.core_database.model.LikeWidget
 import com.zjp.core_database.model.Node
 
 class ComposeDetailRepository(private val compose: Compose) {
-    private val composeDao = LocalDB.getDatabase().composeDao()
-    private val likeDao = LocalDB.getDatabase().likeDao()
-    private val nodeDao = LocalDB.getDatabase().nodeDao()
 
-    fun getComposeNode(): List<Node> {
-        return nodeDao.getAllById(compose.id)
-    }
+    private val likeDao = LocalDB.getDatabase().likeDao()
 
 
     fun getLikeStatus(): Boolean {
@@ -30,8 +25,6 @@ class ComposeDetailRepository(private val compose: Compose) {
             var result = LocalDB.getDatabase().likeDao().delete(LikeWidget(widgetId = compose.id))
             result <= 0
         }
-
     }
-
 
 }

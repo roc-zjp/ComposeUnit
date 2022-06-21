@@ -13,11 +13,10 @@ import com.zjp.core_database.model.LikeWidget
 import com.zjp.core_database.model.Node
 
 @Database(
-    entities = [Compose::class, Node::class,LikeWidget::class], version = 2
+    entities = [LikeWidget::class], version = 1
 )
 abstract class ComposeDatabase : RoomDatabase() {
-    abstract fun composeDao(): ComposeDao
-    abstract fun nodeDao(): NodeDao
+
     abstract fun likeDao(): LikeDao
 
     companion object {
@@ -32,10 +31,8 @@ abstract class ComposeDatabase : RoomDatabase() {
             Room.databaseBuilder(
                 context.applicationContext,
                 ComposeDatabase::class.java,
-                "compose.db"
+                "like¬.db"
             )
-                .createFromAsset("compose.db")
-                .addMigrations(MIGRATION_1_2)
                 .build()
     }
 

@@ -9,11 +9,7 @@ import com.zjp.core_database.model.Compose
 @Dao
 public interface ComposeDao {
     @Query("SELECT * FROM compose")
-    fun getAll(): List<Compose>
-
-    @Query("SELECT * FROM compose WHERE id IN (:ids)")
-    fun loadAllByIds(ids: IntArray): List<Compose>
-
+    fun getAll(): List<Compose>?
 
     @Insert
     fun insertAll(compose: Array<Compose>)

@@ -1,6 +1,7 @@
 package com.zjp.compose_unit.database
 
 import android.content.Context
+import com.zjp.compose_unit.BuildConfig
 import com.zjp.core_database.ComposeDatabase
 import java.lang.Exception
 
@@ -18,6 +19,7 @@ class LocalDB {
         private lateinit var applicationContext: Context
 
         fun init(context: Context) {
+            BuildConfig.DEBUG
             applicationContext = context
             _database = ComposeDatabase.getInstance(context)
         }

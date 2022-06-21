@@ -2,58 +2,59 @@ package com.zjp.core_database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
+import com.apkfuns.logutils.LogUtils
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
-import com.apkfuns.logutils.LogUtils;
 
-class ComposeDbHelper(context: Context) :
-    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
-    override fun onCreate(db: SQLiteDatabase) {
-       LogUtils.d("datbase onCreate")
-    }
+class DBManager {
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // This database is only a cache for online data, so its upgrade policy is
-        // to simply to discard the data and start over
-
-    }
-
-    override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        onUpgrade(db, oldVersion, newVersion)
-    }
+    lateinit var mDB: SQLiteDatabase
 
     companion object {
-        // If you change the database schema, you must increment the database version.
-        const val DATABASE_VERSION = 1
-        const val DATABASE_NAME = "compose_tem.db"
-        const val SP = "database_version"
-        private const val DATABASE_VERSION_SP = "version_sp"
+        const val COMPOSE_TABLE_NAME = "compose"
+        const val NODE_TABLE_NAME = "Node"
 
         @Volatile
-        private var INSTANCE: ComposeDbHelper? = null
+        private var INSTANCE: DBManager? = null
 
-        fun getDbHelper(): ComposeDbHelper {
+        const val DATABASE_VERSION = 1
+        private const val DATABASE_NAME = "compose_tem.db"
+        private const val SP = "database_version"
+        private const val DATABASE_VERSION_SP = "version_sp"
+        private lateinit var DB_PATH: String
+
+
+        fun getInstance(): DBManager {
             if (INSTANCE == null) {
-                throw Exception("使用前请调用init(context)方法")
+                synchronized(this) {
+                    if (INSTANCE == null) {
+                        INSTANCE = DBManager()
+                        INSTANCE?.mDB = SQLiteDatabase.openDatabase(
+                            DB_PATH, null, SQLiteDatabase.OPEN_READWRITE
+                        )
+                    }
+                }
             }
             return INSTANCE!!
         }
 
-        fun init(context: Context) {
+        fun initDB(context: Context) {
             if (checkShouldCopy(context)) {
                 copyAssets2Data(context)
             }
-            INSTANCE = INSTANCE ?: synchronized(this) {
-                INSTANCE ?: ComposeDbHelper(context)
-            }
+            DB_PATH = context.getDatabasePath(DATABASE_NAME).path
+        }
+
+        fun close() {
+            INSTANCE?.mDB?.close()
+            INSTANCE = null
         }
 
         private fun copyAssets2Data(context: Context) {
             var inputStream = context.assets.open("compose.db")
-            var filePath = context.getDatabasePath(DATABASE_NAME)
+            var filePath = context.getDatabasePath(DBManager.DATABASE_NAME)
             if (filePath.exists()) {
                 filePath.delete()
             }
@@ -63,6 +64,7 @@ class ComposeDbHelper(context: Context) :
             while (inputStream.read(buffer).also { length = it } > 0) {
                 fileOutPutStream.write(buffer, 0, length)
             }
+            fileOutPutStream.flush()
             inputStream.close()
             fileOutPutStream.close()
             LogUtils.d(filePath);
@@ -75,11 +77,15 @@ class ComposeDbHelper(context: Context) :
                 return true
             }
 
-            val oldVersion = context.getSharedPreferences(SP, Context.MODE_PRIVATE)
-                .getString(DATABASE_VERSION_SP, "")
+            var dbFile = context.getDatabasePath(DBManager.DATABASE_NAME)
+
+            if (!dbFile.exists()) {
+                return true
+            }
+            val oldVersion = context.getSharedPreferences(DBManager.SP, Context.MODE_PRIVATE)
+                .getString(DBManager.DATABASE_VERSION_SP, "")
             var input = context.assets.open("version.txt")
             val bf = BufferedReader(InputStreamReader(input))
-
             var stringBuffer = StringBuffer()
             var line: String?
             while (bf.readLine().also { line = it } != null) {
@@ -90,5 +96,8 @@ class ComposeDbHelper(context: Context) :
             }
             return false
         }
+
     }
+
+
 }

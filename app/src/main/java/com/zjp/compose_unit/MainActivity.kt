@@ -39,10 +39,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        GlobalScope.launch {
-            var list = LocalDB.getDatabase()?.composeDao()?.getAll()
-            Log.d("mainactivity", "list size=${list?.size}")
-        }
+//        GlobalScope.launch {
+//            var list = LocalDB.getDatabase()?.composeDao()?.getAll()
+//            Log.d("mainactivity", "list size=${list?.size}")
+//        }
     }
 }
 

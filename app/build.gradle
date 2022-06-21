@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     def nav_version = "2.4.2"
 
     implementation "androidx.navigation:navigation-compose:$nav_version"
@@ -65,4 +66,5 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
+    implementation 'com.apkfuns.logutils:library:1.7.5'
 }

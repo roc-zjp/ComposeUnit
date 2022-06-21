@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -119,35 +120,17 @@ fun AnnotatedClickableText() {
     val context = LocalContext.current
     val annotatedText = buildAnnotatedString {
         append("Click ")
-
-        // We attach this *URL* annotation to the following content
-        // until `pop()` is called
-        pushStringAnnotation(
-            tag = "URL",
-            annotation = "https://developer.android.com"
-        )
-        withStyle(
-            style = SpanStyle(
-                color = Color.Blue,
-                fontWeight = FontWeight.Bold
-            )
-        ) {
+        pushStringAnnotation(tag = "URL", annotation = "https://developer.android.com")
+        withStyle(style = SpanStyle(color = Color.Blue, fontWeight = FontWeight.Bold)) {
             append("here")
         }
-
         pop()
     }
-
     ClickableText(
         modifier = Modifier.padding(start = 10.dp),
         text = annotatedText,
         onClick = { offset ->
-            // We check if there is an *URL* annotation attached to the text
-            // at the clicked position
-            annotatedText.getStringAnnotations(
-                tag = "URL", start = offset,
-                end = offset
-            )
+            annotatedText.getStringAnnotations(tag = "URL", start = offset, end = offset)
                 .firstOrNull()?.let { annotation ->
                     // If yes, we log its value
                     Log.d("Clicked URL", annotation.item)

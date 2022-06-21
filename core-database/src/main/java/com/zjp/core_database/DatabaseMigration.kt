@@ -5,10 +5,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 val MIGRATION_1_2 = object : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
-//        database.execSQL(
-//            "CREATE TABLE `Fruit` (`id` INTEGER, `name` TEXT, " +
-//                    "PRIMARY KEY(`id`))"
-//        )
+
         database.execSQL(
             "INSERT INTO compose (`id`,`name`,`nameCN`,`deprecated`,`family`,`level`,`linkWidget`,`info`) VALUES " +
                     "('1','Text','文字组件','0','0','3.0','','用于显示文字的组件。拥有的属性非常多，足够满足你的使用需求,核心样式由modify属性控制。')"
@@ -16,10 +13,10 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
         database.execSQL(
             "INSERT INTO node (`id`,`widgetId`,`name`,`priority`,`subtitle`,`code`) VALUES " +
                     "('1','1','文字的基本样式','1','【color】 \t\t: 文字颜色  \t【Color】\n" +
-                    "【fontSize】 \t: 字体大小   \t【TextUnit】\n" +
-                    "【fontWeight】 \t: 字重   \t【FontWeight】\n" +
-                    "【textAlign】 \t: 文字对齐   \t【TextAlign】\n" +
-                    "【fontFamily】 \t: 字体   \t【FontFamily】\n','@Composable\n" +
+                    "【fontSize】   \t: 字体大小   \t【TextUnit】\n" +
+                    "【fontWeight】 \t: 字重      \t【FontWeight】\n" +
+                    "【textAlign】  \t: 文字对齐   \t【TextAlign】\n" +
+                    "【fontFamily】 \t: 字体      \t【FontFamily】\n','@Composable\n" +
                     "fun TextCommon() {\n" +
                     "    Text(\n" +
                     "        \"Hello World\",\n" +
@@ -32,8 +29,6 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
                     "    )\n" +
                     "}')"
         )
-
-
     }
 }
 

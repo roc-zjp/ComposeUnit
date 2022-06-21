@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.apkfuns.logutils.LogUtils
 import com.zjp.compose_unit.database.LocalDB
+import com.zjp.compose_unit.repository.ComposeRepository
+import com.zjp.core_database.DBManager
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.LikeWidget
 import com.zjp.core_database.model.Node
@@ -13,6 +16,7 @@ import kotlinx.coroutines.launch
 
 
 class DbViewModel : ViewModel() {
+    private var repository = ComposeRepository(DBManager.getInstance())
 
     private var _widgets = MutableLiveData(listOf<Compose>())
     val widgets: LiveData<List<Compose>> = _widgets
@@ -27,15 +31,16 @@ class DbViewModel : ViewModel() {
 
     fun getAllWidget() {
         GlobalScope.launch {
-            var list = LocalDB.getDatabase().composeDao().getAll()
+            var list = repository.getAllCompose()
             Log.d("TAG", "getAllWidget")
             _widgets.postValue(list)
+            LogUtils.d(list)
         }
     }
 
     fun getNodesByWeightId(id: Int) {
         GlobalScope.launch {
-            var list = LocalDB.getDatabase().nodeDao().getAllById(id)
+            var list = repository.getNodeByWidgetId(id)
             _nodes.postValue(list)
         }
     }

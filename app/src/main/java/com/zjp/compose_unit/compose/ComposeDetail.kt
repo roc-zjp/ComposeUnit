@@ -1,9 +1,10 @@
 package com.zjp.compose_unit.compose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -12,9 +13,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
-
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -25,6 +26,7 @@ import com.zjp.compose_unit.common.compose.ComposeHeadView
 import com.zjp.compose_unit.common.compose.DividerView
 import com.zjp.compose_unit.common.viewmodel.DbViewModel
 import com.zjp.compose_unit.common.viewmodel.ShareViewModel
+import com.zjp.compose_unit.nodeMap
 import com.zjp.core_database.model.Node
 
 
@@ -77,26 +79,40 @@ fun ComposeDetailPage(
 
         ) {
             ComposeHeadView(viewModel.compose!!.nameCN, viewModel.compose!!.info)
-
-            mList?.map {
-                ComposeNode(node = it)
+            mList?.mapIndexed { _, node ->
+                ComposeNode(node = node)
             }?.toList()
         }
     }
 }
 
-
 @Composable
 fun ComposeNode(node: Node) {
-    Column {
+    Column() {
         DividerView(title = node.name)
-        CodeView(code = node.code, modifier = Modifier.fillMaxWidth())
-        Text(
-            text = node.subtitle, modifier = Modifier
-                .padding(10.dp)
+        CodeView(
+            code = node.code,
+            modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xfffafafa))
+                .align(alignment = Alignment.CenterHorizontally)
         )
+        Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
+            nodeMap(id = node.id!!)
+        }
+        Box(
+            modifier = Modifier
+                .padding(10.dp)
+                .background(Color(0xfffafafa))
+        ) {
+            Text(
+                text = node.subtitle,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth()
+
+            )
+        }
+
     }
 }
 
