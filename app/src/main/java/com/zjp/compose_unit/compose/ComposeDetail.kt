@@ -27,6 +27,7 @@ import com.zjp.compose_unit.common.compose.DividerView
 import com.zjp.compose_unit.common.viewmodel.DbViewModel
 import com.zjp.compose_unit.common.viewmodel.ShareViewModel
 import com.zjp.compose_unit.nodeMap
+import com.zjp.compose_unit.state.rememberDetailState
 import com.zjp.core_database.model.Node
 
 
@@ -34,15 +35,18 @@ import com.zjp.core_database.model.Node
 fun ComposeDetailPage(
     viewModel: ShareViewModel,
     dbViewModel: DbViewModel,
-    navController: NavController
+    navController: NavController,
+    composeId: Int? = -1
 ) {
+    var composeState = rememberDetailState(composeId = composeId)
     val mList by dbViewModel.nodes.observeAsState()
     val like by dbViewModel.like.observeAsState()
     dbViewModel.getNodesByWeightId(viewModel.compose!!.id!!)
     dbViewModel.likeStatus(viewModel.compose!!.id!!)
+
     Scaffold(topBar = {
         TopAppBar(
-            title = { viewModel.compose?.name?.let { Text(text = it) } },
+            title = { composeState.compose?.name?.let { Text(text = it) } },
             navigationIcon = {
                 IconButton(onClick = {
                     navController.popBackStack()

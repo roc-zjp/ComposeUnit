@@ -2,12 +2,14 @@ package com.zjp.compose_unit.repository
 
 import android.annotation.SuppressLint
 import android.database.Cursor
-import com.zjp.core_database.ComposeDbHelper
+import com.apkfuns.logutils.LogUtils
+import com.zjp.compose_unit.Result
 import com.zjp.core_database.DBManager
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.Node
+import java.lang.Exception
 
-class ComposeRepository(private val dbManager: DBManager) {
+class ComposeRepository(private val dbManager: DBManager = DBManager.getInstance()) {
 
     private val compose = arrayOf(
         ComposeEntry.ID,
@@ -42,27 +44,35 @@ class ComposeRepository(private val dbManager: DBManager) {
     }
 
 
-    fun getAllCompose(): List<Compose> {
-        var cursor =
-            dbManager.mDB.query(
-                COMPOSE_TABLE_NAME,
-                compose,
-                null,
-                null,
-                null,
-                null,
-                sortOrder
-            )
-        var composes = mutableListOf<Compose>()
+    fun getAllCompose(): Result<List<Compose>> {
+        try {
+            var cursor =
+                dbManager.mDB.query(
+                    COMPOSE_TABLE_NAME,
+                    compose,
+                    null,
+                    null,
+                    null,
+                    null,
+                    sortOrder
+                )
+            var composes = mutableListOf<Compose>()
 
-        while (cursor.moveToNext()) {
-            composes.add(parseCompose(cursor))
+            while (cursor.moveToNext()) {
+                composes.add(parseCompose(cursor))
+            }
+            cursor.close()
+            LogUtils.d("获取数据成功")
+            LogUtils.d(composes)
+            return Result.Success(data = composes)
+        } catch (e: Exception) {
+            return Result.Error(e)
         }
-        cursor.close()
-        return composes
+        return Result.Error(Exception("获取数据失败"))
     }
 
     fun getComposeById(id: Int): Compose? {
+
         var cursor =
             dbManager.mDB.query(
                 COMPOSE_TABLE_NAME,
@@ -73,10 +83,11 @@ class ComposeRepository(private val dbManager: DBManager) {
                 null,
                 sortOrder
             )
+
+        LogUtils.d("getComposeById")
         if (cursor.moveToNext()) {
             return parseCompose(cursor)
         }
-
         return null
     }
 
@@ -112,7 +123,7 @@ class ComposeRepository(private val dbManager: DBManager) {
             info = cursor.getString(cursor.getColumnIndex(ComposeEntry.INFO)),
             linkWidget = cursor.getString(cursor.getColumnIndex(ComposeEntry.LINK_WIDGET)),
         )
-        cursor.close()
+
         return compose
     }
 

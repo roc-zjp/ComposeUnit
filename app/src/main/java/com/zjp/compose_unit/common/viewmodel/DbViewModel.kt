@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.apkfuns.logutils.LogUtils
+import com.zjp.compose_unit.Result
 import com.zjp.compose_unit.database.LocalDB
 import com.zjp.compose_unit.repository.ComposeRepository
 import com.zjp.core_database.DBManager
@@ -16,10 +17,14 @@ import kotlinx.coroutines.launch
 
 
 class DbViewModel : ViewModel() {
+    init {
+        getAllWidget()
+    }
+
     private var repository = ComposeRepository(DBManager.getInstance())
 
     private var _widgets = MutableLiveData(listOf<Compose>())
-    val widgets: LiveData<List<Compose>> = _widgets
+//    val composes: LiveData<List<Compose>> = MutableLiveData(getAllWidgets())
 
 
     private var _nodes = MutableLiveData(listOf<Node>())
@@ -29,16 +34,24 @@ class DbViewModel : ViewModel() {
     val like: LiveData<Boolean> = _like
 
 
+    fun getAllWidgets(): Result<List<Compose>> {
+        var list = repository.getAllCompose()
+        Log.d("TAG", "getAllWidget")
+        return list
+    }
+
+
     fun getAllWidget() {
         GlobalScope.launch {
-            var list = repository.getAllCompose()
-            Log.d("TAG", "getAllWidget")
-            _widgets.postValue(list)
-            LogUtils.d(list)
+//            var list = repository.getAllCompose()
+//            Log.d("TAG", "getAllWidget")
+////            _widgets.postValue(list.da)
+//            LogUtils.d(list)
         }
     }
 
     fun getNodesByWeightId(id: Int) {
+        Log.d("TAG", "getNodesByWeightId")
         GlobalScope.launch {
             var list = repository.getNodeByWidgetId(id)
             _nodes.postValue(list)
@@ -46,6 +59,7 @@ class DbViewModel : ViewModel() {
     }
 
     fun likeStatus(id: Int) {
+        Log.d("TAG", "likeStatus")
         GlobalScope.launch {
             var list = LocalDB.getDatabase().likeDao().getAllById(id)
             _like.postValue(list.isNotEmpty())

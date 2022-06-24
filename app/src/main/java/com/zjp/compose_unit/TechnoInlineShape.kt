@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 
-class TechnoInlineShape(
+ class TechnoInlineShape(
     private val spanWidth: Float = 5f,
     private val innerRate: Float = 0.15f,
 ) : Shape {

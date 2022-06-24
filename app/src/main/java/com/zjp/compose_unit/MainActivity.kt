@@ -28,7 +28,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val dbViewModel: DbViewModel = viewModel()
-
             Compose_unitTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -39,10 +38,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-//        GlobalScope.launch {
-//            var list = LocalDB.getDatabase()?.composeDao()?.getAll()
-//            Log.d("mainactivity", "list size=${list?.size}")
-//        }
     }
 }
 
