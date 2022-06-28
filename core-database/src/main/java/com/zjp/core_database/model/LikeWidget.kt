@@ -7,6 +7,6 @@ import java.io.Serializable
 
 @Entity(tableName = "like_widget")
 data class LikeWidget(
-    @PrimaryKey(autoGenerate = true) val id: Int? = 0,
-    @ColumnInfo(name = "widget_id") val widgetId: Int ,
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    @ColumnInfo(name = "widget_id") val widgetId: Int,
 ) : Serializable

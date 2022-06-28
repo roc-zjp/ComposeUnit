@@ -31,7 +31,7 @@ abstract class ComposeDatabase : RoomDatabase() {
             Room.databaseBuilder(
                 context.applicationContext,
                 ComposeDatabase::class.java,
-                "like¬.db"
+                "like.db"
             )
                 .build()
     }

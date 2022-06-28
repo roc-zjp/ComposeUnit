@@ -22,3 +22,9 @@ object NodeEntry : BaseColumns {
     const val CODE = "code"
 
 }
+
+
+object LikeEntry : BaseColumns {
+    const val ID = "id"
+    const val WIDGET_ID = "widgetId"
+}

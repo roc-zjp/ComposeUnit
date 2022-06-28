@@ -72,27 +72,33 @@ class ComposeRepository(private val dbManager: DBManager = DBManager.getInstance
     }
 
     fun getComposeById(id: Int): Compose? {
+        try {
+            var cursor =
+                dbManager.mDB.query(
+                    COMPOSE_TABLE_NAME,
+                    compose,
+                    composeSelection,
+                    arrayOf("$id"),
+                    null,
+                    null,
+                    sortOrder
+                )
 
-        var cursor =
-            dbManager.mDB.query(
-                COMPOSE_TABLE_NAME,
-                compose,
-                composeSelection,
-                arrayOf("$id"),
-                null,
-                null,
-                sortOrder
-            )
-
-        LogUtils.d("getComposeById")
-        if (cursor.moveToNext()) {
-            return parseCompose(cursor)
+            LogUtils.d("getComposeById")
+            if (cursor.moveToNext()) {
+                var compose = parseCompose(cursor)
+                cursor.close()
+                return compose
+            }
+            cursor.close()
+        } catch (e: Exception) {
+            LogUtils.e(e)
         }
         return null
     }
 
 
-    fun getNodeByWidgetId(composeId: Int): List<Node> {
+    fun getNodesByWidgetId(composeId: Int): List<Node> {
         var cursor =
             dbManager.mDB.query(
                 NODE_TABLE_NAME,

@@ -16,15 +16,17 @@ class ComposeDetailRepository(private val compose: Compose) {
     }
 
     fun like(): Boolean {
-        val status = getLikeStatus()
-        return if (!status) {
-            var result =
-                LocalDB.getDatabase().likeDao().insertAll(LikeWidget(widgetId = compose.id))
-            result >= 0
-        } else {
-            var result = LocalDB.getDatabase().likeDao().delete(LikeWidget(widgetId = compose.id))
-            result <= 0
-        }
+//        val status = getLikeStatus()
+//        return if (!status) {
+//            var result =
+//                LocalDB.getDatabase().likeDao().insertAll(LikeWidget(widgetId = compose.id, id = 0))
+//            result >= 0
+//        } else {
+//            var result = LocalDB.getDatabase().likeDao().delete(LikeWidget(widgetId = compose.id))
+//            result <= 0
+//        }
+        return false
+
     }
 
 }

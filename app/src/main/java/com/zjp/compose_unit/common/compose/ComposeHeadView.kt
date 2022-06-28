@@ -22,41 +22,50 @@ import androidx.compose.ui.unit.sp
 import com.zjp.compose_unit.R
 
 import com.zjp.compose_unit.ui.theme.Compose_unitTheme
+import com.zjp.core_database.model.Compose
 
 @Composable
-fun ComposeHeadView(name: String, description: String) {
-    Log.d("dp", 100.dp.toString())
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(end = 10.dp)
+fun ComposeHeadView(compose: Compose?) {
 
-        ) {
-            Text(
-                text = name, style = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xff4699FB), fontSize = 20.sp
-                )
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(text = description, maxLines = 3, overflow = TextOverflow.Ellipsis)
-        }
-        Image(
-            painter = painterResource(id = R.drawable.caver),
-            contentDescription = null,
+    if (compose == null) {
+        Box(
             modifier = Modifier
-                .clip(
-                    RoundedCornerShape(4.dp)
-                )
-                .width(100.dp)
-                .height(66.dp)
+                .fillMaxWidth()
+                .height(50.dp)
         )
+    } else {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 10.dp)
+
+            ) {
+                Text(
+                    text = compose.name, style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xff4699FB), fontSize = 20.sp
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(text = compose.info, maxLines = 3, overflow = TextOverflow.Ellipsis)
+            }
+            Image(
+                painter = painterResource(id = R.drawable.caver),
+                contentDescription = null,
+                modifier = Modifier
+                    .clip(
+                        RoundedCornerShape(4.dp)
+                    )
+                    .width(100.dp)
+                    .height(66.dp)
+            )
+        }
     }
 }
 
@@ -65,6 +74,6 @@ fun ComposeHeadView(name: String, description: String) {
 @Composable
 fun ComposeHeadPreview() {
     Compose_unitTheme(darkTheme = false) {
-        ComposeHeadView("标题", "详情")
+        ComposeHeadView(null)
     }
 }
