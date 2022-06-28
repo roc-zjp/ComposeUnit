@@ -2,7 +2,6 @@ package com.zjp.compose_unit
 
 import android.app.Application
 import com.zjp.compose_unit.database.LocalDB
-import com.zjp.core_database.ComposeDbHelper
 import com.zjp.core_database.DBManager
 
 

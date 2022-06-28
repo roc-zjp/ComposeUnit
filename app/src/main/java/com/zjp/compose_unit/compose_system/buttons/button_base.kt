@@ -25,8 +25,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.zjp.compose_unit.common.Const.Companion.tabColors
 import kotlinx.coroutines.launch
 
 /**
@@ -176,6 +178,14 @@ fun RadioButtonGroup() {
     }
 }
 
+/**
+ * 【checked】：Checkbox 是选中还是未选中
+ * 【onCheckedChange】：单击复选框时要调用的回调
+ * 【modifier】：应用于复选框布局的修饰符
+ * 【enabled】：组件是启用还是灰显
+ * 【interactionSource】：Interaction您可以创建并传入自己记住的内容。
+ * 【colors】:不同状态下复选标记/框/边框的颜色。CheckboxDefaults.colors
+ */
 @Composable
 fun CheckBoxBase() {
     var checked by remember { mutableStateOf(false) }
@@ -494,34 +504,137 @@ fun ButtonDrawerBase() {
     }
 }
 
+/**
+ * 【onClick】：点击卡片时调用的回调
+ * 【modifier】：应用于卡片布局的修饰符。
+ * 【shape】：定义卡片的形状及其阴影。elevation仅当大于零时才会显示阴影
+ * 【backgroundColor】：背景颜色。
+ * 【border】：边框
+ * 【elevation】：阴影的大小
+ * 【interactionSource】：Interaction您可以创建并传递自己的记忆
+ * 【indication】：按下卡时显示的指示。LocalIndication
+ * 【role】：用户界面元素的类型。可访问性服务可能会使用它来描述元素或进行自定义。例如，如果卡片充当按钮，您应该通过Role.Button
+ */
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun CardBase() {
+    var count by remember { mutableStateOf(0) }
+    Card(
+        onClick = { count++ }, modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+    ) {
+        Text("Clickable card content with count: $count")
+    }
+}
 
+
+@OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
 fun ButtonPre() {
     var openDialog by remember { mutableStateOf(false) }
-    Column(Modifier.verticalScroll(rememberScrollState())) {
-        ButtonShapeAndBorder()
-        ButtonWithCustomColor()
-        ButtonWithMultipleText()
-        ButtonWithIcon()
-        TextButtonBase()
-        OutlinedButtonBase()
-        RadioButtonBase()
-        RadioButtonGroup()
-        CheckBoxBase()
-        SwitchBase()
-        ChipBase()
-        ToggleButtonBase()
-        OutlinedButton(onClick = { openDialog = true }) {
-            Text(text = "showDailog")
-        }
-        AlertDialogBase(openDialog = openDialog) {
-            openDialog = false
-        }
 
-        BackdropScaffoldBase()
-        BadgeBase()
-        BottomAppBarBase()
+    val scope = rememberCoroutineScope()
+    val scaffoldState = rememberBottomSheetScaffoldState()
+    BottomSheetScaffold(
+        sheetContent = {
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(128.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Swipe up to expand sheet")
+            }
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(64.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Sheet content")
+                Spacer(Modifier.height(20.dp))
+                Button(
+                    onClick = {
+                        scope.launch { scaffoldState.bottomSheetState.collapse() }
+                    }
+                ) {
+                    Text("Click to collapse sheet")
+                }
+            }
+        },
+        scaffoldState = scaffoldState,
+        topBar = {
+            TopAppBar(
+                title = { Text("Bottom sheet scaffold") },
+                navigationIcon = {
+                    IconButton(onClick = { scope.launch { scaffoldState.drawerState.open() } }) {
+                        Icon(Icons.Default.Menu, contentDescription = "Localized description")
+                    }
+                }
+            )
+        },
+        floatingActionButton = {
+            var clickCount by remember { mutableStateOf(0) }
+            FloatingActionButton(
+                onClick = {
+                    // show snackbar as a suspend function
+                    scope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar("Snackbar #${++clickCount}")
+                    }
+                }
+            ) {
+                Icon(Icons.Default.Favorite, contentDescription = "Localized description")
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End,
+        sheetPeekHeight = 128.dp,
+        drawerContent = {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Drawer content")
+                Spacer(Modifier.height(20.dp))
+                Button(onClick = { scope.launch { scaffoldState.drawerState.close() } }) {
+                    Text("Click to close drawer")
+                }
+            }
+        }
+    ) { innerPadding ->
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(innerPadding)
+        ) {
+            ButtonShapeAndBorder()
+            ButtonWithCustomColor()
+            ButtonWithMultipleText()
+            ButtonWithIcon()
+            TextButtonBase()
+            OutlinedButtonBase()
+            RadioButtonBase()
+            RadioButtonGroup()
+            CheckBoxBase()
+            SwitchBase()
+            ChipBase()
+            ToggleButtonBase()
+            OutlinedButton(onClick = { openDialog = true }) {
+                Text(text = "showDailog")
+            }
+            AlertDialogBase(openDialog = openDialog) {
+                openDialog = false
+            }
 
+            BackdropScaffoldBase()
+            BadgeBase()
+            BottomAppBarBase()
+            CardBase()
+        }
     }
+
+
 }
