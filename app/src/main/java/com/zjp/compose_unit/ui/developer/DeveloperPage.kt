@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.zjp.compose_unit.compose_system.buttons.ButtonPre
+import com.zjp.compose_unit.compose_system.widgets.ImageDefaultPre
 
 @Composable
 fun DeveloperScreen(
@@ -28,7 +29,7 @@ fun DeveloperScreen(
         },
         content = {
             Box(modifier = Modifier.padding(it)) {
-                ButtonPre()
+                ImageDefaultPre()
             }
         }
     )

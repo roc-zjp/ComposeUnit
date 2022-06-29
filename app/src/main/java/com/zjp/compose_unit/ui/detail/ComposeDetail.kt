@@ -22,7 +22,7 @@ import com.zjp.compose_unit.code.CodeView
 
 import com.zjp.compose_unit.common.compose.ComposeHeadView
 import com.zjp.compose_unit.common.compose.DividerView
-import com.zjp.compose_unit.nodeMap
+import com.zjp.compose_unit.utils.nodeMap
 import com.zjp.compose_unit.route.Screen
 import com.zjp.compose_unit.viewmodel.DetailViewModel
 import com.zjp.compose_unit.viewmodel.DetailViewModelFactory

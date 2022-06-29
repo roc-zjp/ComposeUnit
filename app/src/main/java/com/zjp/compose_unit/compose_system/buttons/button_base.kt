@@ -156,11 +156,11 @@ fun RadioButtonBase() {
 
 @Composable
 fun RadioButtonGroup() {
-    var context = LocalContext.current
-    val tags = arrayListOf("Java", "Kotlin", "XML", "Compose", "JetPack")
-    var selectedTag by remember {
-        mutableStateOf("Null")
-    }
+//    var context = LocalContext.current
+//    val tags = arrayListOf("Java", "Kotlin", "XML", "Compose", "JetPack")
+//    var selectedTag by remember {
+//        mutableStateOf("Null")
+//    }
 //    Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
 //        tags.forEach {
 //            Row(modifier = Modifier.height(20.dp)) {

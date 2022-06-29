@@ -3,6 +3,7 @@ package com.zjp.compose_unit.compose_system.text
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -11,7 +12,6 @@ import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -38,7 +39,9 @@ fun TextCommon() {
         fontSize = 30.sp,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,
-        modifier = Modifier.width(150.dp),
+        modifier = Modifier
+            .width(150.dp)
+            .background(Color(0xff44D1FD)),
         fontFamily = FontFamily.SansSerif
     )
 }
@@ -53,7 +56,9 @@ fun TextMaxLine() {
         fontSize = 30.sp,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,
-        modifier = Modifier.width(150.dp),
+        modifier = Modifier
+            .width(150.dp)
+            .background(Color(0xff44D1FD)),
         fontFamily = FontFamily.SansSerif
     )
 }
@@ -88,7 +93,7 @@ fun RichText() {
                 }
                 append("Compose")
             }
-        }, modifier = Modifier.padding(start = 10.dp)
+        }, modifier = Modifier.padding(start = 10.dp).background(Color(0xff44D1FD))
     )
 }
 
@@ -98,7 +103,7 @@ fun RichText() {
 @Composable
 fun PartiallySelectableText() {
     SelectionContainer {
-        Column(modifier = Modifier.padding(start = 10.dp)) {
+        Column(modifier = Modifier.padding(start = 10.dp).background(Color(0xff44D1FD))) {
             Text("This text is selectable")
             Text("This one too")
             Text("This one as well")
@@ -127,7 +132,7 @@ fun AnnotatedClickableText() {
         pop()
     }
     ClickableText(
-        modifier = Modifier.padding(start = 10.dp),
+        modifier = Modifier.padding(start = 10.dp).background(Color(0xff44D1FD)),
         text = annotatedText,
         onClick = { offset ->
             annotatedText.getStringAnnotations(tag = "URL", start = offset, end = offset)
@@ -140,4 +145,16 @@ fun AnnotatedClickableText() {
                 }
         }
     )
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun DefaultPre() {
+    Column {
+        TextCommon()
+        TextMaxLine()
+        RichText()
+        PartiallySelectableText()
+        AnnotatedClickableText()
+    }
 }
