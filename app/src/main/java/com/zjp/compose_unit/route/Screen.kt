@@ -8,6 +8,7 @@ sealed class Screen(val route: String) {
     object Profile : Screen(route = "profile_screen")
     object ComposeDetailScreen : Screen(route = "compose_detail_screen")
     object Debug : Screen(route = "debug_screen")
+    object Splash : Screen(route = "splash_screen")
 
     fun createComposeDetailRoute(compose: Compose): String {
         return "${Screen.ComposeDetailScreen.route}/${compose.id}"

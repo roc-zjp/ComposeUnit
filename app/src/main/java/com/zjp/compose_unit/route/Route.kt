@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.zjp.compose_unit.ui.developer.DeveloperScreen
 import com.zjp.compose_unit.MainView
+import com.zjp.compose_unit.ui.SplashView
 import com.zjp.compose_unit.ui.detail.ComposeDetailPage
 import com.zjp.compose_unit.ui.home.ProfileScreen
 
@@ -16,11 +17,12 @@ import com.zjp.compose_unit.ui.home.ProfileScreen
 @Composable
 fun App() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.Main.route) {
+    NavHost(navController = navController, startDestination = Screen.Splash.route) {
         // 给FirstPage可组合项指定路径
         composable(Screen.Main.route) { MainPage(navController) }
         composable(Screen.Debug.route) { DeveloperPage(navController) }
         composable(Screen.Profile.route) { ProfilePage(navController) }
+        composable(Screen.Splash.route) { SplashPage(navController) }
         composable(
             Screen.ComposeDetailScreen.route + "/{composeId}",
             arguments = listOf(navArgument("composeId") { type = NavType.IntType })
@@ -63,6 +65,18 @@ fun ProfilePage(
     navController: NavController,
 ) {
     ProfileScreen()
+}
+
+@Composable
+fun SplashPage(
+    navController: NavController,
+) {
+    SplashView() {
+        navController.navigate(Screen.Main.route) {
+            launchSingleTop = true
+            navController.popBackStack()
+        }
+    }
 }
 
 

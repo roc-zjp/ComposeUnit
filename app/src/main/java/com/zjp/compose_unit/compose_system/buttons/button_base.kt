@@ -8,16 +8,14 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -163,18 +161,29 @@ fun RadioButtonGroup() {
     var selectedTag by remember {
         mutableStateOf("Null")
     }
-    Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
-        tags.forEach {
-            Row(modifier = Modifier.height(20.dp)) {
-                RadioButton(
-                    selected = it == selectedTag,
-                    onClick = {
-                        selectedTag = it
-                    })
-                Text(text = it)
-                Spacer(modifier = Modifier.width(0.dp))
-            }
-        }
+//    Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
+//        tags.forEach {
+//            Row(modifier = Modifier.height(20.dp)) {
+//                RadioButton(
+//                    selected = it == selectedTag,
+//                    onClick = {
+//                        selectedTag = it
+//                    })
+//                Text(text = it)
+//                Spacer(modifier = Modifier.width(0.dp))
+//            }
+//        }
+//    }
+    var state by remember { mutableStateOf(true) }
+    Row(Modifier.selectableGroup()) {
+        RadioButton(
+            selected = state,
+            onClick = { state = true }
+        )
+        RadioButton(
+            selected = !state,
+            onClick = { state = false }
+        )
     }
 }
 
@@ -529,6 +538,126 @@ fun CardBase() {
 }
 
 
+@Composable
+fun DropdownMenuBase() {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.TopStart)
+    ) {
+        IconButton(onClick = { expanded = true }) {
+            Icon(Icons.Default.MoreVert, contentDescription = "Localized description")
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(onClick = { /* Handle refresh! */ }) {
+                Text("Refresh")
+            }
+            DropdownMenuItem(onClick = { /* Handle settings! */ }) {
+                Text("Settings")
+            }
+            Divider()
+            DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
+                Text("Send Feedback")
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ExposedDropdownMenuBoxBase() {
+    val options = listOf("Option 1", "Option 2", "Option 3", "Option 4", "Option 5")
+    var expanded by remember { mutableStateOf(false) }
+    var selectedOptionText by remember { mutableStateOf("") }
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        }
+    ) {
+        TextField(
+            value = selectedOptionText,
+            onValueChange = { selectedOptionText = it },
+            label = { Text("Label") },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded
+                )
+            },
+            colors = ExposedDropdownMenuDefaults.textFieldColors()
+        )
+        // filter options based on text field value
+        val filteringOptions =
+            options.filter { it.contains(selectedOptionText, ignoreCase = true) }
+        if (filteringOptions.isNotEmpty()) {
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = {
+                    expanded = false
+                }
+            ) {
+                filteringOptions.forEach { selectionOption ->
+                    DropdownMenuItem(
+                        onClick = {
+                            selectedOptionText = selectionOption
+                            expanded = false
+                        }
+                    ) {
+                        Text(text = selectionOption)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ExtendedFloatingActionButtonBase() {
+    ExtendedFloatingActionButton(
+        icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
+        text = { Text("FLUID FAB") },
+        onClick = { /*do something*/ },
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun FilterChipBase() {
+    val state = remember { mutableStateOf(false) }
+    FilterChip(
+        selected = state.value,
+        onClick = { state.value = !state.value },
+        border = ChipDefaults.outlinedBorder,
+        colors = ChipDefaults.outlinedFilterChipColors(),
+        selectedIcon = {
+            Icon(
+                imageVector = Icons.Filled.Done,
+                contentDescription = "Localized Description",
+                modifier = Modifier.requiredSize(ChipDefaults.SelectedIconSize)
+            )
+        }) {
+        Text("Filter chip")
+    }
+}
+
+@Composable
+fun IconToggleButtonBase() {
+    var checked by remember { mutableStateOf(false) }
+
+    IconToggleButton(checked = checked, onCheckedChange = { checked = it }) {
+        val tint by animateColorAsState(if (checked) Color(0xFFEC407A) else Color(0xFFB0BEC5))
+        Icon(Icons.Filled.Favorite, contentDescription = "Localized description", tint = tint)
+    }
+}
+
+
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
@@ -633,6 +762,22 @@ fun ButtonPre() {
             BadgeBase()
             BottomAppBarBase()
             CardBase()
+            DropdownMenuBase()
+            ExposedDropdownMenuBoxBase()
+            ExtendedFloatingActionButtonBase()
+            FilterChipBase()
+            IconToggleButtonBase()
+            ListItem(
+                text = { Text("One line list item with 56x56 icon") },
+                icon = {
+                    Icon(
+                        Icons.Filled.Favorite,
+                        contentDescription = null,
+                        modifier = Modifier.size(56.dp)
+                    )
+                }
+            )
+
         }
     }
 

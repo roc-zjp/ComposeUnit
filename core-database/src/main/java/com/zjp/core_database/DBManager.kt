@@ -20,9 +20,9 @@ class DBManager {
         private var INSTANCE: DBManager? = null
 
         const val DATABASE_VERSION = 1
-        private const val DATABASE_NAME = "compose_tem.db"
-        private const val SP = "database_version"
-        private const val DATABASE_VERSION_SP = "version_sp"
+        const val DATABASE_NAME = "compose_tem.db"
+        const val SP = "database_version"
+        const val DATABASE_VERSION_SP = "version_sp"
         private lateinit var DB_PATH: String
 
 
