@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +16,6 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -27,7 +25,6 @@ import com.apkfuns.logutils.LogUtils
 import com.zjp.compose_unit.common.shape.TechnoOutlineShape
 import com.zjp.compose_unit.viewmodel.HomeUiState
 import com.zjp.compose_unit.viewmodel.HomeViewModel
-
 import com.zjp.core_database.model.Compose
 
 @Composable
@@ -95,7 +92,7 @@ fun ComposeItemView(
 ) {
     Row(
         modifier = Modifier
-            .clickable { onClick() }
+
             .padding(20.dp)
             .fillMaxWidth()
             .height(100.dp)
@@ -113,6 +110,7 @@ fun ComposeItemView(
                 this.drawContent()
             }
             .background(Color(0xFF00F1F1))
+            .clickable { onClick() }
             .padding(10.dp)
     ) {
 
@@ -132,7 +130,6 @@ fun ComposeItemView(
             Text(
                 text = compose.name,
                 color = Color.Black,
-                style = MaterialTheme.typography.subtitle2.copy(fontWeight = FontWeight.Black)
             )
             Spacer(modifier = Modifier.height(5.dp))
             Text(

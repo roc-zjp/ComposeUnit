@@ -12,6 +12,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.zjp.compose_unit.R
+import com.zjp.compose_unit.ui.detail.code.lightColor
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,
@@ -33,6 +34,9 @@ private val LightColorPalette = lightColors(
     onSurface = Color.Black,
     */
 )
+
+
+
 
 @Composable
 fun Compose_unitTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {

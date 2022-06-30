@@ -1,4 +1,4 @@
-package com.zjp.compose_unit
+package com.zjp.compose_unit.ui.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -16,12 +16,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import com.zjp.compose_unit.R
 import com.zjp.compose_unit.route.BottomNavigationScreens
 import com.zjp.compose_unit.route.Screen
-import com.zjp.compose_unit.ui.home.ComposesScreen
-import com.zjp.compose_unit.ui.home.ProfileScreen
+
 import com.zjp.compose_unit.ui.theme.Compose_unitTheme
 import com.zjp.core_database.model.Compose
+
 
 @Composable
 fun MainView(

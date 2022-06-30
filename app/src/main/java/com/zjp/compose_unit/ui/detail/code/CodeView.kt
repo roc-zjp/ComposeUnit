@@ -1,4 +1,4 @@
-package com.zjp.compose_unit.code
+package com.zjp.compose_unit.ui.detail.code
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -9,9 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import com.zjp.compose_unit.ui.detail.code.formatCode
 
 
 @Composable
@@ -24,9 +22,9 @@ fun CodeView(code: String, modifier: Modifier = Modifier) {
             .padding(10.dp)
             .horizontalScroll(state)
     ) {
-        var formatCode =
-            AnnotatedString(code).formatCode()
-        Text(text = formatCode)
+//        var formatCode =
+//            AnnotatedString(code).formatCode()
+        Text(text = code)
     }
 }
 

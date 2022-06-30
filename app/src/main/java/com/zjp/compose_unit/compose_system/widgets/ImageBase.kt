@@ -2,10 +2,18 @@ package com.zjp.compose_unit.compose_system.widgets
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -15,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.zjp.compose_unit.R
+import com.zjp.compose_unit.common.painterWebpResource
 import com.zjp.compose_unit.ui.custom.WrapLayout
 
 /**
@@ -183,6 +192,20 @@ fun ImageBlendMode() {
     }
 }
 
+@Composable
+fun CornerImage() {
+    Image(
+        painter = painterResource(R.drawable.caver),
+        contentDescription = "图标",
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .height(100.dp)
+            .width(100.dp)
+            .clip(CircleShape)
+            .border(2.dp, color = Color.Red, CircleShape)
+    )
+}
+
 
 @Preview(showSystemUi = true)
 @Composable
@@ -191,6 +214,11 @@ fun ImageDefaultPre() {
         modifier = Modifier.verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_baseline_unfold_less_24),
+            contentDescription = "person"
+        )
+        CornerImage()
         ImageBase()
         ImageContentScaleType()
         ImageQuality()

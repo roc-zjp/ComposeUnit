@@ -8,9 +8,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.zjp.compose_unit.ui.developer.DeveloperScreen
-import com.zjp.compose_unit.MainView
 import com.zjp.compose_unit.ui.SplashView
 import com.zjp.compose_unit.ui.detail.ComposeDetailPage
+import com.zjp.compose_unit.ui.home.MainView
 import com.zjp.compose_unit.ui.home.ProfileScreen
 
 

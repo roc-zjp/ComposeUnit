@@ -9,8 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,10 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
-import com.zjp.compose_unit.code.CodeView
+import com.zjp.compose_unit.ui.detail.code.CodeView
 
 import com.zjp.compose_unit.common.compose.ComposeHeadView
-import com.zjp.compose_unit.common.compose.DividerView
 import com.zjp.compose_unit.utils.nodeMap
 import com.zjp.compose_unit.route.Screen
 import com.zjp.compose_unit.viewmodel.DetailViewModel
@@ -66,9 +64,6 @@ fun ComposeDetailPage(
         )
 
     }) {
-        LaunchedEffect(true) {
-//            viewModel.first()
-        }
         Box(modifier = Modifier.padding(it)) {
             var scrollState = rememberScrollState()
             Column(
@@ -83,7 +78,7 @@ fun ComposeDetailPage(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(color = Color.Red)
+                            .background(color = Color.Gray)
                             .height(500.dp)
                     ) {
                         Text(text = "待收录", modifier = Modifier.align(Alignment.Center))
@@ -94,22 +89,27 @@ fun ComposeDetailPage(
                     }.toList()
                 }
             }
-//            LogUtils.d(viewModel.composeId)
-//            Text(text = "detail")
         }
     }
 }
 
 @Composable
 fun ComposeNode(node: Node) {
+    var folded by remember {
+        mutableStateOf(true)
+    }
     Column() {
-        DividerView(title = node.name)
-        CodeView(
-            code = node.code,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(alignment = Alignment.CenterHorizontally)
-        )
+        NodeTitle(title = node.name, folded = folded) {
+            folded = !folded
+        }
+        if (!folded) {
+            CodeView(
+                code = node.code,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(alignment = Alignment.CenterHorizontally)
+            )
+        }
         Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
             nodeMap(id = node.id!!)
         }

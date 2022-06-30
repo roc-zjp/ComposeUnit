@@ -7,10 +7,7 @@ import com.zjp.compose_unit.compose_system.text.AnnotatedClickableText
 import com.zjp.compose_unit.compose_system.text.PartiallySelectableText
 import com.zjp.compose_unit.compose_system.text.RichText
 import com.zjp.compose_unit.compose_system.text.TextCommon
-import com.zjp.compose_unit.compose_system.widgets.ImageBase
-import com.zjp.compose_unit.compose_system.widgets.ImageBlendMode
-import com.zjp.compose_unit.compose_system.widgets.ImageContentScaleType
-import com.zjp.compose_unit.compose_system.widgets.ImageQuality
+import com.zjp.compose_unit.compose_system.widgets.*
 
 
 @Composable
@@ -24,6 +21,7 @@ fun nodeMap(id: Int) {
         6 -> ImageContentScaleType()
         7 -> ImageQuality()
         8 -> ImageBlendMode()
+        9 -> CornerImage()
         else -> NotFound()
     }
 }
