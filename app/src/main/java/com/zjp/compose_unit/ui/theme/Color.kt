@@ -1,11 +1,11 @@
 package com.zjp.compose_unit.ui.theme
 
 import androidx.compose.ui.graphics.Color
-
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+//
+//val Purple200 = Color(0xFFBB86FC)
+//val Purple500 = Color(0xFF6200EE)
+//val Purple700 = Color(0xFF3700B3)
+//val Teal200 = Color(0xFF03DAC5)
 
 
 
@@ -37,7 +37,7 @@ val md_theme_light_inversePrimary = Color(0xFFD0BCFF)
 val md_theme_light_onPrimaryContainer = Color(0xFF21005D)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFEADDFF)
-val md_theme_light_primary = Color(0xFF6750A4)
+val md_theme_light_primary = Color(0xFF2196F3)
 
 val md_theme_dark_surfaceTint = Color(0xFFD0BCFF)
 val md_theme_dark_surfaceTintColor = Color(0xFFD0BCFF)
@@ -67,7 +67,7 @@ val md_theme_dark_inversePrimary = Color(0xFF6750A4)
 val md_theme_dark_onPrimaryContainer = Color(0xFFEADDFF)
 val md_theme_dark_onPrimary = Color(0xFF381E72)
 val md_theme_dark_primaryContainer = Color(0xFF4F378B)
-val md_theme_dark_primary = Color(0xFFD0BCFF)
+val md_theme_dark_primary = Color(0xFF2196F3)
 
 
 val seed = Color(0xFF6750A4)

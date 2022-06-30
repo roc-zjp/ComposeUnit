@@ -1,10 +1,13 @@
 package com.zjp.compose_unit.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Typography
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -12,30 +15,37 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.zjp.compose_unit.R
-import com.zjp.compose_unit.ui.detail.code.lightColor
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primaryVariant = md_theme_dark_primary,
+    primary = md_theme_dark_primary,
+    onPrimary = md_theme_dark_onPrimary,
+    secondary = md_theme_dark_secondary,
+    onSecondary = md_theme_dark_onSecondary,
+    error = md_theme_dark_error,
+    onError = md_theme_dark_onError,
+    background = md_theme_dark_background,
+    onBackground = md_theme_dark_onBackground,
+    surface = md_theme_dark_surface,
+    onSurface = md_theme_dark_onSurface,
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primaryVariant = md_theme_light_primary,
+    primary = md_theme_light_primary,
+    onPrimary = md_theme_light_onPrimary,
 
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+    secondary = md_theme_light_secondary,
+    onSecondary = md_theme_light_onSecondary,
+
+    error = md_theme_light_error,
+    onError = md_theme_light_onError,
+
+    background = md_theme_light_background,
+    onBackground = md_theme_light_onBackground,
+    surface = md_theme_light_surface,
+    onSurface = md_theme_light_onSurface,
 )
-
-
 
 
 @Composable
@@ -82,11 +92,11 @@ val Yellow200 = Color(0xffffeb46)
 val Blue200 = Color(0xff91a4fc)
 // ...
 
-val DarkColors = darkColors(
-    primary = Color(0xff4699FB),
-    secondary = Blue200,
-    // ...
-)
+//val DarkColors = darkColors(
+//    primary = Color(0xff4699FB),
+//    secondary = Blue200,
+//    // ...
+//)
 // val LightColors = lightColors(
 //    primary = Color(0xff4699FB),
 //    primaryVariant = Yellow400,
