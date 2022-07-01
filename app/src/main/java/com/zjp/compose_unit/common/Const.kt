@@ -22,6 +22,15 @@ class Const {
         val colorOrange = Color(0xFFFF9800)
         val colorYellow = Color(0xFFDBD83F)
 
-
     }
 }
+
+var palettes = arrayListOf<String>(
+    "Text",
+    "Buttons",
+    "Widgets",
+    "Layouts",
+    "Containers",
+    "Helpers",
+    "Google",
+)

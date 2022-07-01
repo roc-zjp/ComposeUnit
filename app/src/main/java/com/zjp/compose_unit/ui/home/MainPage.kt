@@ -30,23 +30,6 @@ fun MainView(
         mutableStateOf(BottomNavigationScreens.Composes.tableName)
     }
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Composes Unit") },
-                actions = {
-                    IconButton(onClick = {
-                        toDeveloper()
-                    }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.debug),
-                            contentDescription = "Home",
-                        )
-                    }
-
-                }
-            )
-
-        },
         bottomBar = {
             BottomAppBar(cutoutShape = CircleShape) {
 
@@ -91,11 +74,17 @@ fun MainView(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    toDeveloper()
+                },
                 shape = RoundedCornerShape(50),
                 backgroundColor = Color.Magenta
             ) {
-                Icon(Icons.Filled.Add, tint = Color.White, contentDescription = "Add")
+                Icon(
+                    painter = painterResource(id = R.drawable.debug),
+                    tint = Color.White,
+                    contentDescription = "Add"
+                )
             }
         },
         isFloatingActionButtonDocked = true,

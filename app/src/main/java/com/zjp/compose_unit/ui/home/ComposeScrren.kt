@@ -1,5 +1,6 @@
 package com.zjp.compose_unit.ui.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -7,19 +8,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerBasedShape
-import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -28,10 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.apkfuns.logutils.LogUtils
 import com.zjp.compose_unit.common.Const
-import com.zjp.compose_unit.common.shape.TechnoInlineShape
-import com.zjp.compose_unit.common.shape.TechnoOutlineShape
 import com.zjp.compose_unit.common.shape.TechnoShapeBorder
 import com.zjp.compose_unit.viewmodel.HomeUiState
 import com.zjp.compose_unit.viewmodel.HomeViewModel
@@ -43,22 +39,35 @@ fun ComposesScreen(
     onClick: (compose: Compose) -> Unit,
 ) {
     val uiState = homeViewModel.uiState
-    LogUtils.d("重组")
-    if (homeViewModel.uiState.isLoading) {
-        LoadingCompose()
-    } else {
-        if (uiState is HomeUiState.HasCompose) {
-            Composes(uiState.composes, onClick)
-        } else {
-            NoCompose()
+    var selectedIndex by remember {
+        mutableStateOf(0)
+    }
+//    val scrollBehavior = TopAppB
+    Scaffold(
+
+    ) {
+        Box(modifier = Modifier.padding(it)) {
+            if (homeViewModel.uiState.isLoading) {
+                LoadingCompose()
+            } else {
+                if (uiState is HomeUiState.HasCompose) {
+                    Composes(uiState.composes, onClick)
+                } else {
+                    NoCompose()
+                }
+            }
         }
     }
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Composes(composes: List<Compose>, onClick: (compose: Compose) -> Unit) {
     LazyColumn() {
+        stickyHeader {
+            ComposesAppBar(onItemSelected = {})
+        }
         items<Compose>(
             composes,
             key = { it.id }) {
@@ -104,11 +113,21 @@ fun ComposeItemView(
             .padding(20.dp)
             .fillMaxWidth()
             .height(100.dp)
-            .clip(TechnoShapeBorder(storkWidth = 1.0f, cornerWidth = 20.dp.value))
+            .clip(
+                TechnoShapeBorder(
+                    storkWidth = 1.0f,
+                    cornerWidth = 20.dp.value,
+                    spanWidth = 20.dp.value
+                )
+            )
             .border(
                 1.dp,
                 Const.colorDarkBlue,
-                TechnoShapeBorder(storkWidth = 1.0f, cornerWidth = 20.dp.value)
+                TechnoShapeBorder(
+                    storkWidth = 1.0f,
+                    cornerWidth = 20.dp.value,
+                    spanWidth = 20.dp.value
+                )
             )
             .background(Const.colorDarkBlue.copy(0.25f))
             .clickable { onClick() }
