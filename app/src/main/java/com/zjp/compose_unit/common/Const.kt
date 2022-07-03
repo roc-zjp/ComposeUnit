@@ -26,11 +26,11 @@ class Const {
 }
 
 var palettes = arrayListOf<String>(
+    "All",
     "Text",
     "Buttons",
     "Widgets",
     "Layouts",
     "Containers",
     "Helpers",
-    "Google",
 )

@@ -10,11 +10,9 @@ import com.zjp.compose_unit.data.Result
 import com.zjp.compose_unit.data.repository.ComposesRepository
 import com.zjp.core_database.DBManager
 import com.zjp.core_database.model.Compose
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 sealed interface HomeUiState {
-
     val isLoading: Boolean
     val errorMessages: List<String?>
     val searchInput: String
@@ -64,9 +62,11 @@ data class HomeState(
 
 class HomeViewModel(private val repository: ComposesRepository = ComposesRepository(DBManager.getInstance())) :
     ViewModel() {
-    private val viewModelState = MutableLiveData<HomeState>(HomeState(isLoading = false))
+    private val viewModelState = MutableLiveData<HomeState>(HomeState(isLoading = true))
 
     var uiState by mutableStateOf<HomeUiState>(viewModelState.value!!.toUiState())
+    var composes = listOf<Compose>()
+    var selectIndex by mutableStateOf(0)
 
     init {
         refreshComposes()
@@ -74,27 +74,42 @@ class HomeViewModel(private val repository: ComposesRepository = ComposesReposit
 
     private fun refreshComposes() {
         viewModelScope.launch {
-            viewModelState.value = HomeState(isLoading = true)
-            delay(10000)
             when (val result = repository.getAllCompose()) {
                 is Result.Success -> {
+                    composes = result.data
                     viewModelState.value = HomeState(
-                        composes = result.data,
+                        composes = composes,
                         isLoading = false
                     )
                     uiState = viewModelState.value!!.toUiState()
                 }
                 is Result.Error -> {
+                    composes = listOf()
                     viewModelState.value =
                         HomeState(
                             isLoading = false,
                             errorMessages = listOf(result.exception.message),
                         )
-
                     uiState = viewModelState.value!!.toUiState()
                 }
             }
 
+        }
+    }
+
+
+    fun filter(index: Int) {
+        selectIndex = index
+        var resuts = composes.filter { compose ->
+            index == 0 || compose.family == index
+        }
+        viewModelScope.launch {
+            viewModelState.value =
+                HomeState(
+                    composes = resuts,
+                    isLoading = false
+                )
+            uiState = viewModelState.value!!.toUiState()
         }
     }
 

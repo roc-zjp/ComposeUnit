@@ -8,17 +8,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -39,21 +38,24 @@ fun ComposesScreen(
     onClick: (compose: Compose) -> Unit,
 ) {
     val uiState = homeViewModel.uiState
-    var selectedIndex by remember {
-        mutableStateOf(0)
-    }
-//    val scrollBehavior = TopAppB
-    Scaffold(
 
-    ) {
+    Scaffold {
         Box(modifier = Modifier.padding(it)) {
             if (homeViewModel.uiState.isLoading) {
                 LoadingCompose()
             } else {
                 if (uiState is HomeUiState.HasCompose) {
-                    Composes(uiState.composes, onClick)
+                    Composes(uiState.composes, onClick) {
+                        ComposesAppBar(selectIndex = homeViewModel.selectIndex, onItemSelected = {
+                            homeViewModel.filter(index = it)
+                        })
+                    }
                 } else {
-                    NoCompose()
+                    NoCompose() {
+                        ComposesAppBar(selectIndex = homeViewModel.selectIndex, onItemSelected = {
+                            homeViewModel.filter(index = it)
+                        })
+                    }
                 }
             }
         }
@@ -63,10 +65,14 @@ fun ComposesScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Composes(composes: List<Compose>, onClick: (compose: Compose) -> Unit) {
+fun Composes(
+    composes: List<Compose>,
+    onClick: (compose: Compose) -> Unit,
+    appbar: @Composable () -> Unit
+) {
     LazyColumn() {
         stickyHeader {
-            ComposesAppBar(onItemSelected = {})
+            appbar()
         }
         items<Compose>(
             composes,
@@ -80,14 +86,18 @@ fun Composes(composes: List<Compose>, onClick: (compose: Compose) -> Unit) {
 
 
 @Composable
-fun NoCompose() {
-    Box(
-        modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth()
-    ) {
-        Text(text = "没数据，哥也没办法\\n(≡ _ ≡)/~┴┴", modifier = Modifier.align(Alignment.Center))
+fun NoCompose(appbar: @Composable () -> Unit) {
+    Column() {
+        appbar()
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth()
+        ) {
+            Text(text = "没数据，哥也没办法\\n(≡ _ ≡)/~┴┴", modifier = Modifier.align(Alignment.Center))
+        }
     }
+
 }
 
 
@@ -98,7 +108,11 @@ fun LoadingCompose() {
             .fillMaxHeight()
             .fillMaxWidth()
     ) {
-        Text(text = "加载中", modifier = Modifier.align(Alignment.Center))
+        Column(modifier = Modifier.align(Alignment.Center)) {
+            CircularProgressIndicator()
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(text = "加载中...")
+        }
     }
 }
 

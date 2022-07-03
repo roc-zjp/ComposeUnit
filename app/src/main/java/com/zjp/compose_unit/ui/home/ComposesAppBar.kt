@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,10 +23,7 @@ import com.zjp.compose_unit.common.Const
 import com.zjp.compose_unit.common.palettes
 
 @Composable
-fun ComposesAppBar(onItemSelected: (index: Int) -> Unit) {
-    var selectIndex by remember {
-        mutableStateOf(0)
-    }
+fun ComposesAppBar(selectIndex: Int, onItemSelected: (index: Int) -> Unit) {
     Row(
         modifier = Modifier
             .background(Color.White.copy(alpha = 0.01f))
@@ -56,7 +54,6 @@ fun ComposesAppBar(onItemSelected: (index: Int) -> Unit) {
                             )
                         )
                         .clickable {
-                            selectIndex = index
                             onItemSelected(index)
                         }
                         .background(Const.tabColors[index])
@@ -88,6 +85,6 @@ fun ComposesAppBar(onItemSelected: (index: Int) -> Unit) {
 @Preview(showSystemUi = true, backgroundColor = 0xff0000)
 @Composable
 fun ComposesAppBarPre() {
-    ComposesAppBar() {}
+    ComposesAppBar(0) {}
 
 }
