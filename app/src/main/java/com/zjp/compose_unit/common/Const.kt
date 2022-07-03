@@ -20,7 +20,7 @@ class Const {
         val colorPurple = Color(0xffB375FF)
         val colorGreen = Color(0xFF4CAF50)
         val colorOrange = Color(0xFFFF9800)
-        val colorYellow = Color(0xFFDBD83F)
+        val colorYellow = Color(0xFFFFEB3B)
 
     }
 }
