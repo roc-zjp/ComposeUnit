@@ -4,8 +4,6 @@ import android.graphics.Point
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
-import com.apkfuns.logutils.LogUtils
-
 @Composable
 fun WrapLayout(
     modifier: Modifier = Modifier,
@@ -43,20 +41,9 @@ fun WrapLayout(
             withd = maxOf(withd, xPosition)
             maxHeight = maxOf(maxHeight, placeable.height)
         }
-
         height = maxOf(height, yPosition + maxHeight)
-        LogUtils.d("set width=$withd,set height=$height")
 
-
-        // Set the size of the layout as big as it can
         layout(withd, height) {
-            // Track the y co-ord we have placed children up to
-            var yPosition = 0
-            var xPosition = 0
-            var maxHeight = 0
-
-            LogUtils.d("maxWidth=${constraints.maxWidth},maxHeight=${constraints.maxHeight}")
-
             placeables.forEachIndexed() { index, placeable ->
                 val point = locations[index]
 

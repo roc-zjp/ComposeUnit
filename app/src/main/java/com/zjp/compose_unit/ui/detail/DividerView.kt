@@ -3,6 +3,7 @@ package com.zjp.compose_unit.ui.detail
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -10,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Share
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -57,7 +59,10 @@ fun NodeTitle(title: String, folded: Boolean = false, toggleFold: () -> Unit) {
                 painter = painterResource(id = if (folded) R.drawable.ic_baseline_unfold_more_24 else R.drawable.ic_baseline_unfold_less_24),
                 contentDescription = "less",
                 tint = Const.colorDarkBlue,
-                modifier = Modifier.clickable { toggleFold() }
+                modifier = Modifier
+                    .clickable(indication = null, interactionSource = remember {
+                        MutableInteractionSource()
+                    }) { toggleFold() }
             )
             Spacer(modifier = Modifier.padding(start = 10.dp))
         }
