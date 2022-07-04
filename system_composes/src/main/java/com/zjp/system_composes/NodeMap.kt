@@ -3,6 +3,7 @@ package com.zjp.system_composes
 import androidx.compose.runtime.Composable
 import com.zjp.system_composes.buttons.ButtonBase
 import com.zjp.system_composes.buttons.*
+import com.zjp.system_composes.containers.BoxBase
 import com.zjp.system_composes.text.*
 import com.zjp.system_composes.widgets.*
 
@@ -26,6 +27,7 @@ fun NodeMap(id: Int) {
         15 -> CustomRadioButton()
         16 -> RadioButtonGroup()
         17 -> SwitchBase()
+        18 -> BoxBase()
 
     }
 }
