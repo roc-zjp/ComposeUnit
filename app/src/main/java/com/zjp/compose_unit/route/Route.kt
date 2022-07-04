@@ -27,7 +27,7 @@ fun App() {
             Screen.ComposeDetailScreen.route + "/{composeId}",
             arguments = listOf(navArgument("composeId") { type = NavType.IntType })
         ) {
-            var composeId = it.arguments?.getInt("composeId")
+            val composeId = it.arguments?.getInt("composeId")
             ComposeDetailPage(
                 navController = navController,
                 composeId = composeId!!

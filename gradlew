@@ -78,7 +78,7 @@ case "`uname`" in
   NONSTOP* )
     nonstop=true
     ;;
-esac
+esa
 
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 

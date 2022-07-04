@@ -65,7 +65,7 @@ class HomeViewModel(private val repository: ComposesRepository = ComposesReposit
     private val viewModelState = MutableLiveData<HomeState>(HomeState(isLoading = true))
 
     var uiState by mutableStateOf<HomeUiState>(viewModelState.value!!.toUiState())
-    var composes = listOf<Compose>()
+    private var composes = listOf<Compose>()
     var selectIndex by mutableStateOf(0)
 
     init {
@@ -100,7 +100,7 @@ class HomeViewModel(private val repository: ComposesRepository = ComposesReposit
 
     fun filter(index: Int) {
         selectIndex = index
-        var resuts = composes.filter { compose ->
+        val resuts = composes.filter { compose ->
             index == 0 || compose.family == index
         }
         viewModelScope.launch {

@@ -1,4 +1,4 @@
-package com.zjp.compose_unit.common.compose
+package com.zjp.compose_unit.ui.home
 
 
 import android.util.Log
@@ -56,7 +56,7 @@ fun ComposeHeadView(compose: Compose?) {
                 Text(text = compose.info, maxLines = 3, overflow = TextOverflow.Ellipsis)
             }
             Image(
-                painter = painterResource(id = R.drawable.caver),
+                painter = painterResource(id = com.zjp.system_composes.R.drawable.caver),
                 contentDescription = null,
                 modifier = Modifier
                     .clip(

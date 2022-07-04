@@ -47,7 +47,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
 
     fun getAllCompose(): Result<List<Compose>> {
         try {
-            var cursor =
+            val cursor =
                 dbManager.mDB.query(
                     COMPOSE_TABLE_NAME,
                     compose,
@@ -57,7 +57,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
                     null,
                     sortOrder
                 )
-            var composes = mutableListOf<Compose>()
+            val composes = mutableListOf<Compose>()
 
             while (cursor.moveToNext()) {
                 composes.add(parseCompose(cursor))
@@ -73,7 +73,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
 
     fun getComposeById(id: Int): Compose? {
         try {
-            var cursor =
+            val cursor =
                 dbManager.mDB.query(
                     COMPOSE_TABLE_NAME,
                     compose,
@@ -86,7 +86,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
 
             LogUtils.d("getComposeById")
             if (cursor.moveToNext()) {
-                var compose = parseCompose(cursor)
+                val compose = parseCompose(cursor)
                 cursor.close()
                 return compose
             }
@@ -99,7 +99,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
 
 
     fun getNodesByWidgetId(composeId: Int): List<Node> {
-        var cursor =
+        val cursor =
             dbManager.mDB.query(
                 NODE_TABLE_NAME,
                 node,
@@ -110,7 +110,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
                 sortOrder
             )
 
-        var nodes = mutableListOf<Node>()
+        val nodes = mutableListOf<Node>()
         while (cursor.moveToNext()) {
             nodes.add(parseNode(cursor))
         }
@@ -120,7 +120,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
 
     @SuppressLint("Range")
     fun parseCompose(cursor: Cursor): Compose {
-        var compose = Compose(
+        val compose = Compose(
             id = cursor.getInt(cursor.getColumnIndex(ComposeEntry.ID)),
             name = cursor.getString(cursor.getColumnIndex(ComposeEntry.NAME)),
             nameCN = cursor.getString(cursor.getColumnIndex(ComposeEntry.NAME_CN)),

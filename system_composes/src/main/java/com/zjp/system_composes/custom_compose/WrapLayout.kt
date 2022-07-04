@@ -1,4 +1,4 @@
-package com.zjp.compose_unit.ui.custom
+package com.zjp.system_composes.custom_compose
 
 import android.graphics.Point
 import androidx.compose.runtime.Composable
@@ -28,7 +28,7 @@ fun WrapLayout(
         var xPosition = 0
         var maxHeight = 0
 
-        var locations = mutableListOf<Point>()
+        val locations = mutableListOf<Point>()
 
 
         placeables.forEach { placeable ->
@@ -58,7 +58,7 @@ fun WrapLayout(
             LogUtils.d("maxWidth=${constraints.maxWidth},maxHeight=${constraints.maxHeight}")
 
             placeables.forEachIndexed() { index, placeable ->
-                var point = locations[index]
+                val point = locations[index]
 
                 placeable.placeRelative(x = point.x, y = point.y)
 

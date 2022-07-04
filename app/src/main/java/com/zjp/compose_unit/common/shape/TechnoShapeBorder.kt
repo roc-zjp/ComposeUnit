@@ -12,18 +12,18 @@ class TechnoShapeBorder(
     var color: Color = Color.Green,
     var cornerWidth: Float = 10.0f,
     var spanWidth: Float = 2.5f,
-    var innerRate: Float = 0.15f,
+    private var innerRate: Float = 0.15f,
     var storkWidth: Float = 1.0f
 
 ) : Shape {
 
-    var outLinePath = Path();
+    private var outLinePath = Path();
     override fun createOutline(
         size: Size,
         layoutDirection: LayoutDirection,
         density: Density
     ): Outline {
-        var width = size.width;
+        val width = size.width;
         outLinePath.moveTo(cornerWidth, 0f)
         outLinePath.relativeLineTo(width - cornerWidth * 2, 0f)
         outLinePath.relativeLineTo(cornerWidth, cornerWidth)

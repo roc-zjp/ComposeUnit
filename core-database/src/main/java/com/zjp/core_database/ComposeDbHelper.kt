@@ -12,7 +12,7 @@ class ComposeDbHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
-       LogUtils.d("datbase onCreate")
+       LogUtils.d("database onCreate")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -29,7 +29,7 @@ class ComposeDbHelper(context: Context) :
         // If you change the database schema, you must increment the database version.
         const val DATABASE_VERSION = 1
         const val DATABASE_NAME = "compose_tem.db"
-        const val SP = "database_version"
+        private const val SP = "database_version"
         private const val DATABASE_VERSION_SP = "version_sp"
 
         @Volatile
@@ -52,12 +52,12 @@ class ComposeDbHelper(context: Context) :
         }
 
         private fun copyAssets2Data(context: Context) {
-            var inputStream = context.assets.open("compose.db")
-            var filePath = context.getDatabasePath(DATABASE_NAME)
+            val inputStream = context.assets.open("compose.db")
+            val filePath = context.getDatabasePath(DATABASE_NAME)
             if (filePath.exists()) {
                 filePath.delete()
             }
-            var fileOutPutStream = FileOutputStream(filePath);
+            val fileOutPutStream = FileOutputStream(filePath);
             val buffer = ByteArray(1024)
             var length: Int
             while (inputStream.read(buffer).also { length = it } > 0) {
@@ -77,10 +77,10 @@ class ComposeDbHelper(context: Context) :
 
             val oldVersion = context.getSharedPreferences(SP, Context.MODE_PRIVATE)
                 .getString(DATABASE_VERSION_SP, "")
-            var input = context.assets.open("version.txt")
+            val input = context.assets.open("version.txt")
             val bf = BufferedReader(InputStreamReader(input))
 
-            var stringBuffer = StringBuffer()
+            val stringBuffer = StringBuffer()
             var line: String?
             while (bf.readLine().also { line = it } != null) {
                 stringBuffer.append(line)

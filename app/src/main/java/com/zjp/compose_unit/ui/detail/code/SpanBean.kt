@@ -6,7 +6,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 
-class SpanBean(val start: Int, val end: Int, val value: String, val type: SpanType) {
+class SpanBean(val start: Int, val end: Int, private val value: String, val type: SpanType) {
 
     fun toAnnotatedString(): AnnotatedString {
         return buildAnnotatedString {

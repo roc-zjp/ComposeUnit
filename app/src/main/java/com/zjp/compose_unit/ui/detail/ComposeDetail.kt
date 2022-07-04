@@ -18,13 +18,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
 import com.zjp.compose_unit.ui.detail.code.CodeView
-
-import com.zjp.compose_unit.common.compose.ComposeHeadView
-import com.zjp.compose_unit.utils.nodeMap
 import com.zjp.compose_unit.route.Screen
+import com.zjp.compose_unit.ui.home.ComposeHeadView
 import com.zjp.compose_unit.viewmodel.DetailViewModel
 import com.zjp.compose_unit.viewmodel.DetailViewModelFactory
 import com.zjp.core_database.model.Node
+import com.zjp.system_composes.NodeMap
 
 
 @Composable
@@ -65,7 +64,7 @@ fun ComposeDetailPage(
 
     }) {
         Box(modifier = Modifier.padding(it)) {
-            var scrollState = rememberScrollState()
+            val scrollState = rememberScrollState()
             Column(
                 Modifier
                     .verticalScroll(scrollState)
@@ -111,7 +110,7 @@ fun ComposeNode(node: Node) {
             )
         }
         Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
-            nodeMap(id = node.id!!)
+            NodeMap(id = node.id!!)
         }
         Box(
             modifier = Modifier

@@ -96,7 +96,7 @@ fun MainView(
 @Composable
 fun ComposeItemPreview() {
     Compose_unitTheme() {
-        var navController = rememberNavController()
+        val navController = rememberNavController()
         MainView(onClick = {
             navController.navigate(Screen.ComposeDetailScreen.createComposeDetailRoute(it))
         })

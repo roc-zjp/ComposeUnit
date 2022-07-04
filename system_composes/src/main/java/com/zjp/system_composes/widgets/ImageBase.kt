@@ -1,15 +1,10 @@
-package com.zjp.compose_unit.compose_system.widgets
+package com.zjp.system_composes.widgets
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,9 +20,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.zjp.compose_unit.R
-import com.zjp.compose_unit.common.painterWebpResource
-import com.zjp.compose_unit.ui.custom.WrapLayout
+import com.zjp.system_composes.R
+import com.zjp.system_composes.custom_compose.WrapLayout
 import kotlin.math.roundToInt
 
 /**
@@ -61,7 +55,7 @@ fun ImageBase() {
  */
 @Composable
 fun ImageContentScaleType() {
-    var scaleType = listOf<ContentScale>(
+    val scaleType = listOf<ContentScale>(
         ContentScale.Fit,
         ContentScale.Crop,
         ContentScale.FillBounds,
@@ -70,7 +64,7 @@ fun ImageContentScaleType() {
         ContentScale.FillWidth,
         ContentScale.Inside
     )
-    var scaleTypeName = listOf<String>(
+    val scaleTypeName = listOf<String>(
         "Fit",
         "Crop",
         "FillBounds",
@@ -104,19 +98,19 @@ fun ImageContentScaleType() {
 
 @Composable
 fun ImageQuality() {
-    var qualityType = listOf<FilterQuality>(
+    val qualityType = listOf<FilterQuality>(
         FilterQuality.None,
         FilterQuality.Low,
         FilterQuality.Medium,
         FilterQuality.High
     )
-    var qualityTypeName = listOf<String>(
+    val qualityTypeName = listOf<String>(
         "None",
         "Low",
         "Medium",
         "High",
     )
-    var context = LocalContext.current
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .horizontalScroll(rememberScrollState())
@@ -145,7 +139,7 @@ fun ImageQuality() {
 
 @Composable
 fun ImageBlendMode() {
-    var modes = listOf<BlendMode>(
+    val modes = listOf<BlendMode>(
         BlendMode.Color,
         BlendMode.Clear,
         BlendMode.SrcIn,
@@ -251,10 +245,6 @@ fun ImageDefaultPre() {
         modifier = Modifier.verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_baseline_unfold_less_24),
-            contentDescription = "person"
-        )
         CornerImage()
         ImageBase()
         ImageContentScaleType()

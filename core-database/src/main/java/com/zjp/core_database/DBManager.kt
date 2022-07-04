@@ -20,9 +20,9 @@ class DBManager {
         private var INSTANCE: DBManager? = null
 
         const val DATABASE_VERSION = 1
-        const val DATABASE_NAME = "compose_tem.db"
-        const val SP = "database_version"
-        const val DATABASE_VERSION_SP = "version_sp"
+        private const val DATABASE_NAME = "compose_tem.db"
+        private const val SP = "database_version"
+        private const val DATABASE_VERSION_SP = "version_sp"
         private lateinit var DB_PATH: String
 
 
@@ -53,12 +53,12 @@ class DBManager {
         }
 
         private fun copyAssets2Data(context: Context) {
-            var inputStream = context.assets.open("compose.db")
-            var filePath = context.getDatabasePath(DBManager.DATABASE_NAME)
+            val inputStream = context.assets.open("compose.db")
+            val filePath = context.getDatabasePath(DBManager.DATABASE_NAME)
             if (filePath.exists()) {
                 filePath.delete()
             }
-            var fileOutPutStream = FileOutputStream(filePath);
+            val fileOutPutStream = FileOutputStream(filePath);
             val buffer = ByteArray(1024)
             var length: Int
             while (inputStream.read(buffer).also { length = it } > 0) {
@@ -77,16 +77,16 @@ class DBManager {
                 return true
             }
 
-            var dbFile = context.getDatabasePath(DBManager.DATABASE_NAME)
+            val dbFile = context.getDatabasePath(DBManager.DATABASE_NAME)
 
             if (!dbFile.exists()) {
                 return true
             }
             val oldVersion = context.getSharedPreferences(DBManager.SP, Context.MODE_PRIVATE)
                 .getString(DBManager.DATABASE_VERSION_SP, "")
-            var input = context.assets.open("version.txt")
+            val input = context.assets.open("version.txt")
             val bf = BufferedReader(InputStreamReader(input))
-            var stringBuffer = StringBuffer()
+            val stringBuffer = StringBuffer()
             var line: String?
             while (bf.readLine().also { line = it } != null) {
                 stringBuffer.append(line)

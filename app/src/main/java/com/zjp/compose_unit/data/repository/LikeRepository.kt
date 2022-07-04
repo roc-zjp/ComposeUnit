@@ -9,7 +9,7 @@ class LikeRepository(private val db: ComposeDatabase = LocalDB.getDatabase()) {
 
     fun getAllLike(): Result<List<LikeWidget>> {
         return try {
-            var list = LocalDB.getDatabase().likeDao().getAll()
+            val list = LocalDB.getDatabase().likeDao().getAll()
             Result.Success(list)
         } catch (e: Exception) {
             Result.Error(Exception("获取收藏数据失败"))
@@ -19,10 +19,10 @@ class LikeRepository(private val db: ComposeDatabase = LocalDB.getDatabase()) {
     fun toggleLike(composeId: Int): Boolean {
         val likeWidgets = getLikeStatus(composeId)
         return if (likeWidgets.isEmpty()) {
-            var result = add(composeId)
+            val result = add(composeId)
             result >= 0
         } else {
-            var result = delete(likeWidgets.first())
+            val result = delete(likeWidgets.first())
             result <= 0
         }
     }

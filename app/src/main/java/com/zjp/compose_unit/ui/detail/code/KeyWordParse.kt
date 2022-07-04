@@ -9,12 +9,12 @@ class KeyWordParse(val code: AnnotatedString) {
     private val builder: AnnotatedString.Builder = AnnotatedString.Builder(code)
 
     fun toAnnotatedString(): AnnotatedString {
-        var keyWordRegex = Regex("\\w+'")
-        var results = keyWordRegex.findAll(code)
+        val keyWordRegex = Regex("\\w+'")
+        val results = keyWordRegex.findAll(code)
         results?.let {
             it.forEach { match ->
-                var commentEndRegex = Regex(".*\\n")
-                var commentEnd = commentEndRegex.find(code, match.range.first)
+                val commentEndRegex = Regex(".*\\n")
+                val commentEnd = commentEndRegex.find(code, match.range.first)
                 var endIndex = 0
                 endIndex = commentEnd?.range?.last ?: code.length
                 builder.addStyle(
@@ -32,8 +32,8 @@ class KeyWordParse(val code: AnnotatedString) {
 
 fun AnnotatedString.highlightCommend(): AnnotatedString {
     val builder: AnnotatedString.Builder = AnnotatedString.Builder(this)
-    var commentRegex = Regex("\\*(.|\\n)*\\*/")
-    var results = commentRegex.findAll(this)
+    val commentRegex = Regex("\\*(.|\\n)*\\*/")
+    val results = commentRegex.findAll(this)
     results?.let {
         it.forEach { match ->
             builder.addStyle(
@@ -48,12 +48,12 @@ fun AnnotatedString.highlightCommend(): AnnotatedString {
 
 fun AnnotatedString.highlightLineCommend(): AnnotatedString {
     val builder: AnnotatedString.Builder = AnnotatedString.Builder(this)
-    var keyWordRegex = Regex("//")
-    var results = keyWordRegex.findAll(this)
+    val keyWordRegex = Regex("//")
+    val results = keyWordRegex.findAll(this)
     results?.let {
         it.forEach { match ->
-            var commentEndRegex = Regex(".*\\n")
-            var commentEnd = commentEndRegex.find(this, match.range.first)
+            val commentEndRegex = Regex(".*\\n")
+            val commentEnd = commentEndRegex.find(this, match.range.first)
             var endIndex = 0
             endIndex = commentEnd?.range?.last ?: this.length
             builder.addStyle(
@@ -68,9 +68,9 @@ fun AnnotatedString.highlightLineCommend(): AnnotatedString {
 
 fun AnnotatedString.highlightKeyWord(): AnnotatedString {
     val builder: AnnotatedString.Builder = AnnotatedString.Builder(this)
-    var keyWordRegex = Regex("\\w+")
-    var results = keyWordRegex.findAll(this)
-    var language = KotlinLanguage()
+    val keyWordRegex = Regex("\\w+")
+    val results = keyWordRegex.findAll(this)
+    val language = KotlinLanguage()
     Log.d(TAG, "${results?.count() ?: 0}")
     results?.let {
 
@@ -97,4 +97,4 @@ fun AnnotatedString.formatCode(): AnnotatedString {
 }
 
 
-val TAG = "CodeParse"
+const val TAG = "CodeParse"

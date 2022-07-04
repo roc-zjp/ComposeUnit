@@ -15,7 +15,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DetailViewModel(val composeId: Int) : ViewModel() {
+class DetailViewModel(private val composeId: Int) : ViewModel() {
     private val repository = ComposesRepository()
     private val likeRepository = LikeRepository()
 
@@ -31,7 +31,7 @@ class DetailViewModel(val composeId: Int) : ViewModel() {
             nodes = repository.getNodesByWidgetId(composeId)
         }
         viewModelScope.launch(Dispatchers.IO) {
-            var result = likeRepository.getLikeStatus(composeId)
+            val result = likeRepository.getLikeStatus(composeId)
             withContext(Dispatchers.Main) {
                 likeStatus = (result != null && result.isNotEmpty())
             }

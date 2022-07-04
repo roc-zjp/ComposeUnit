@@ -48,7 +48,7 @@ fun SplashView(toHomePage: () -> Unit) {
                 )
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.jetpack_compose),
+                    painter = painterResource(id = com.zjp.system_composes.R.drawable.jetpack_compose),
                     contentDescription = "Compose",
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -75,7 +75,7 @@ fun SplashView(toHomePage: () -> Unit) {
 
 @Preview(showSystemUi = true)
 @Composable
-fun defaultPre() {
+fun DefaultPre() {
     SplashView() {
 
     }

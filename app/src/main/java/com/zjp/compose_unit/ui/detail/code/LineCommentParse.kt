@@ -9,12 +9,12 @@ class LineCommentParse(val code: AnnotatedString) {
     private val builder: AnnotatedString.Builder = AnnotatedString.Builder(code)
 
     fun toAnnotatedString(): AnnotatedString {
-        var commentRegex = Regex("//")
-        var results = commentRegex.findAll(code)
+        val commentRegex = Regex("//")
+        val results = commentRegex.findAll(code)
         results?.let {
             it.forEach { match ->
-                var commentEndRegex = Regex(".*\\n")
-                var commentEnd = commentEndRegex.find(code, match.range.first)
+                val commentEndRegex = Regex(".*\\n")
+                val commentEnd = commentEndRegex.find(code, match.range.first)
                 var endIndex = 0
                 endIndex = commentEnd?.range?.last ?: code.length
                 builder.addStyle(

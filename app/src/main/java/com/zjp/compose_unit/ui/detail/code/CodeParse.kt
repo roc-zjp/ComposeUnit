@@ -9,23 +9,23 @@ import androidx.compose.ui.text.SpanStyle
 class CodeParse(val code: AnnotatedString) {
 
     companion object {
-        val TAG = "CodeParse"
+        const val TAG = "CodeParse"
     }
 
-    val builder: AnnotatedString.Builder = AnnotatedString.Builder(code)
+    private val builder: AnnotatedString.Builder = AnnotatedString.Builder(code)
 
 
-    val results = arrayListOf<SpanBean>()
-    val language = KotlinLanguage()
+    private val results = arrayListOf<SpanBean>()
+    private val language = KotlinLanguage()
 
     fun parseCode(): List<SpanBean>? {
         var startIndex = 0
-        var endIndex = code.length
+        val endIndex = code.length
         var result: MatchResult?
         Log.d(TAG, "length=${code.length}")
         while (startIndex != endIndex) {
 
-            var commentRegex = Regex("\\*(.|\\n)*\\*/")
+            val commentRegex = Regex("\\*(.|\\n)*\\*/")
             result = commentRegex.find(code, startIndex)
 
             if (result != null) {
@@ -42,11 +42,11 @@ class CodeParse(val code: AnnotatedString) {
                 continue
             }
 
-            var lineCommentRegex = Regex("//")
+            val lineCommentRegex = Regex("//")
             result = lineCommentRegex.find(code, startIndex)
             if (result != null) {
-                var lineCommentEndRegex = Regex(".*\\n")
-                var endResult = lineCommentEndRegex.find(code, result.range.start)
+                val lineCommentEndRegex = Regex(".*\\n")
+                val endResult = lineCommentEndRegex.find(code, result.range.first)
 
                 if (endResult != null) {
                     Log.d(
@@ -76,8 +76,8 @@ class CodeParse(val code: AnnotatedString) {
                 }
             }
 
-            var keywordRegex = Regex("\\w+");
-            var result = keywordRegex.find(code, startIndex + 1);
+            val keywordRegex = Regex("\\w+");
+            val result = keywordRegex.find(code, startIndex + 1);
             if (result != null) {
                 if (language.containsKeywords(result.value)) {
                     results.add(
@@ -104,8 +104,8 @@ class CodeParse(val code: AnnotatedString) {
 
 
     fun toAnnotatedString(): AnnotatedString {
-        var commentRegex = Regex("\\*(.|\\n)*\\*/")
-        var results = commentRegex.findAll(code)
+        val commentRegex = Regex("\\*(.|\\n)*\\*/")
+        val results = commentRegex.findAll(code)
         results.let {
             it.forEach { match ->
                 builder.addStyle(SpanStyle(color = Color.Red), match.range.first, match.range.last)

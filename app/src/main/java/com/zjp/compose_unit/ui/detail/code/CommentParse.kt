@@ -8,8 +8,8 @@ class CommentParse(var code: AnnotatedString) {
     private val builder: AnnotatedString.Builder = AnnotatedString.Builder(code)
 
     fun toAnnotatedString(): AnnotatedString {
-        var commentRegex = Regex("\\*(.|\\n)*\\*/")
-        var results = commentRegex.findAll(code)
+        val commentRegex = Regex("\\*(.|\\n)*\\*/")
+        val results = commentRegex.findAll(code)
         results?.let {
             it.forEach { match ->
                 builder.addStyle(SpanStyle(color = Color.Gray), match.range.first, match.range.last)

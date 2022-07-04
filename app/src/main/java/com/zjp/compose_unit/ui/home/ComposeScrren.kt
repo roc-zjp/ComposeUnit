@@ -39,7 +39,7 @@ fun ComposesScreen(
 ) {
     val uiState = homeViewModel.uiState
 
-    Scaffold {
+    Scaffold { it ->
         Box(modifier = Modifier.padding(it)) {
             if (homeViewModel.uiState.isLoading) {
                 LoadingCompose()
