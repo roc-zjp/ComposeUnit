@@ -7,6 +7,7 @@ import com.zjp.system_composes.system.containers.BoxBase
 import com.zjp.system_composes.system.text.*
 import com.zjp.system_composes.system.widgets.*
 import com.zjp.system_composes.system.containers.*
+import com.zjp.system_composes.system.helper.DividerBase
 
 @Composable
 fun NodeMap(id: Int) {
@@ -35,6 +36,14 @@ fun NodeMap(id: Int) {
         22 -> SliderBase()
         23 -> SliderBaseWithStep()
         24 -> RangeSliderBase()
-
+        25 -> DividerBase()
+        26 -> RowBase()
+        27 -> ColumnBase()
+        28 -> SpacerBase()
+        29 -> IconBase()
+        31 -> LazyColumnBase()
+        32 -> LazyColumnWithKey()
+        33 -> LazyRowBase()
+        34 -> LazyRowWithKey()
     }
 }

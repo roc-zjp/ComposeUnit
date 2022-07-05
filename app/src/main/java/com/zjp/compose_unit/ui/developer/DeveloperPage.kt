@@ -7,7 +7,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.zjp.system_composes.system.widgets.SliderPreview
+import com.zjp.system_composes.system.containers.Preview
+import com.zjp.system_composes.system.containers.RowBase
 
 
 @Composable
@@ -29,7 +30,7 @@ fun DeveloperScreen(
         },
         content = {
             Box(modifier = Modifier.padding(it)) {
-                SliderPreview()
+                Preview()
             }
         }
     )
