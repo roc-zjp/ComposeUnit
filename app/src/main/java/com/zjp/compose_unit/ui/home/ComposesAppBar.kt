@@ -86,5 +86,4 @@ fun ComposesAppBar(selectIndex: Int, onItemSelected: (index: Int) -> Unit) {
 @Composable
 fun ComposesAppBarPre() {
     ComposesAppBar(0) {}
-
 }

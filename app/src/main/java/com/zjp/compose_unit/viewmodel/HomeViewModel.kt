@@ -100,13 +100,13 @@ class HomeViewModel(private val repository: ComposesRepository = ComposesReposit
 
     fun filter(index: Int) {
         selectIndex = index
-        val resuts = composes.filter { compose ->
+        val results = composes.filter { compose ->
             index == 0 || compose.family == index
         }
         viewModelScope.launch {
             viewModelState.value =
                 HomeState(
-                    composes = resuts,
+                    composes = results,
                     isLoading = false
                 )
             uiState = viewModelState.value!!.toUiState()

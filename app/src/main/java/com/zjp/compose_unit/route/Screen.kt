@@ -23,6 +23,14 @@ sealed class BottomNavigationScreens(val tableName: String, val iconResId: Int) 
     object Composes :
         BottomNavigationScreens(tableName = "Composes", iconResId = R.drawable.widget)
 
+    object Collection :
+        BottomNavigationScreens(
+            tableName = "Collection",
+            iconResId = R.drawable.ic_outline_collections_24
+        )
+    object Samples :
+        BottomNavigationScreens(tableName = "Samples", iconResId = R.drawable.samples_icon)
+
     object Profile :
         BottomNavigationScreens(tableName = "Profile", iconResId = R.drawable.profile_light)
 

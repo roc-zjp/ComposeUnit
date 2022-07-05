@@ -39,13 +39,37 @@ fun MainView(
                         contentDescription = null
                     )
                 },
-                    label = { Text(BottomNavigationScreens.Composes.tableName) },
+
                     selected = currentTableName == BottomNavigationScreens.Composes.tableName,
                     onClick = {
                         currentTableName = BottomNavigationScreens.Composes.tableName
                     })
 
+                BottomNavigationItem(icon = {
+                    Icon(
+                        painter = painterResource(id = BottomNavigationScreens.Collection.iconResId),
+                        contentDescription = null
+                    )
+                },
+
+                    selected = currentTableName == BottomNavigationScreens.Collection.tableName,
+                    onClick = {
+                        currentTableName = BottomNavigationScreens.Collection.tableName
+                    })
+
+
                 Spacer(modifier = Modifier.width(100.dp))
+
+                BottomNavigationItem(icon = {
+                    Icon(
+                        painter = painterResource(id = BottomNavigationScreens.Samples.iconResId),
+                        contentDescription = null
+                    )
+                },
+                    selected = currentTableName == BottomNavigationScreens.Samples.tableName,
+                    onClick = {
+                        currentTableName = BottomNavigationScreens.Samples.tableName
+                    })
 
                 BottomNavigationItem(icon = {
                     Icon(
@@ -53,7 +77,6 @@ fun MainView(
                         contentDescription = null
                     )
                 },
-                    label = { Text(BottomNavigationScreens.Profile.tableName) },
                     selected = currentTableName == BottomNavigationScreens.Profile.tableName,
                     onClick = {
                         currentTableName = BottomNavigationScreens.Profile.tableName
@@ -68,6 +91,8 @@ fun MainView(
                     BottomNavigationScreens.Composes.tableName -> ComposesScreen() { compose ->
                         onClick(compose)
                     }
+                    BottomNavigationScreens.Collection.tableName -> CollectionPage()
+                    BottomNavigationScreens.Samples.tableName -> SamplesPage()
                 }
 
             }
