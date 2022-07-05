@@ -1,4 +1,4 @@
-package com.zjp.system_composes.widgets
+package com.zjp.system_composes.system.widgets
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation

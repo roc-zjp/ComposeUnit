@@ -1,7 +1,6 @@
-package com.zjp.system_composes.containers
+package com.zjp.system_composes.system.containers
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding

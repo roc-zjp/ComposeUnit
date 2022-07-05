@@ -1,10 +1,7 @@
-package com.zjp.system_composes.widgets
+package com.zjp.system_composes.system.widgets
 
-
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,33 +10,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-
-/**
- * 【progress】：进度，为空时，一直循环加载
- * 【backgroundColor】：背景颜色
- * 【color】: 前景颜色
- */
+@Preview
 @Composable
-fun LinearProgress() {
-    LinearProgressIndicator(
-        progress = 0.7f,
-        backgroundColor = Color.LightGray,
-        color = Color.Red,
-    )
-}
+fun ProgressCollection() {
+    Column {
 
-/**
- * 【progress】：进度，为空时，一直转圈圈
- * 【color】: 前景颜色
- * 【strokeWidth】：线条宽度
- */
-@Composable
-fun CircularProgress() {
-    CircularProgressIndicator(
-        progress = 0.5f,
-        color = Color.Red,
-        strokeWidth = 10.dp
-    )
+        Spacer(modifier = Modifier.height(10.dp))
+        CircularProgress()
+        Spacer(modifier = Modifier.height(10.dp))
+        CircularProgressAnimated()
+
+    }
 }
 
 @Composable
@@ -76,16 +57,41 @@ private fun CircularProgressAnimated() {
     }
 }
 
-@Preview("Home list drawer screen")
+/**
+ * 【progress】：进度，为空时，一直循环加载
+ * 【backgroundColor】：背景颜色
+ * 【color】: 前景颜色
+ */
 @Composable
-fun ProgressCollection() {
-    Column {
-        LinearProgress()
-        LinearProgressIndicator()
-        Spacer(modifier = Modifier.height(10.dp))
-        CircularProgress()
-        Spacer(modifier = Modifier.height(10.dp))
-        CircularProgressAnimated()
+fun LinearProgress() {
+    Row {
+        Spacer(modifier = Modifier.width(10.dp))
+        LinearProgressIndicator(
+            progress = 0.7f,
+            backgroundColor = Color.LightGray,
+            color = Color.Red,
+            modifier = Modifier.weight(1f)
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        LinearProgressIndicator(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.width(10.dp))
+    }
+}
 
+/**
+ * 【progress】：进度，为空时，一直转圈圈【Float】
+ * 【color】: 前景颜色【color】
+ * 【strokeWidth】：线条宽度【DP]
+ */
+@Composable
+fun CircularProgress() {
+    Row {
+        CircularProgressIndicator(
+            progress = 0.5f,
+            color = Color.Red,
+            strokeWidth = 10.dp
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        CircularProgressIndicator()
     }
 }

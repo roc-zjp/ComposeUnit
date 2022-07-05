@@ -1,11 +1,12 @@
 package com.zjp.system_composes
 
 import androidx.compose.runtime.Composable
-import com.zjp.system_composes.buttons.ButtonBase
-import com.zjp.system_composes.buttons.*
-import com.zjp.system_composes.containers.BoxBase
-import com.zjp.system_composes.text.*
-import com.zjp.system_composes.widgets.*
+import com.zjp.system_composes.system.buttons.ButtonBase
+import com.zjp.system_composes.system.buttons.*
+import com.zjp.system_composes.system.containers.BoxBase
+import com.zjp.system_composes.system.text.*
+import com.zjp.system_composes.system.widgets.*
+import com.zjp.system_composes.system.containers.*
 
 @Composable
 fun NodeMap(id: Int) {
@@ -28,6 +29,12 @@ fun NodeMap(id: Int) {
         16 -> RadioButtonGroup()
         17 -> SwitchBase()
         18 -> BoxBase()
+        19 -> CardBase()
+        20 -> LinearProgress()
+        21 -> CircularProgress()
+        22 -> SliderBase()
+        23 -> SliderBaseWithStep()
+        24 -> RangeSliderBase()
 
     }
 }

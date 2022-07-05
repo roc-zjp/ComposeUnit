@@ -1,4 +1,4 @@
-package com.zjp.system_composes.text
+package com.zjp.system_composes.system.text
 
 import android.content.Intent
 import android.net.Uri

@@ -41,8 +41,10 @@ class DBManager {
         }
 
         fun initDB(context: Context) {
-            if (checkShouldCopy(context)) {
+            var appBuiltInVersion = appBuiltInVersion(context)
+            if (checkShouldCopy(context, appBuiltInVersion)) {
                 copyAssets2Data(context)
+                saveNewVersion(context, appBuiltInVersion)
             }
             DB_PATH = context.getDatabasePath(DATABASE_NAME).path
         }
@@ -71,7 +73,23 @@ class DBManager {
             LogUtils.d("复制成功");
         }
 
-        private fun checkShouldCopy(context: Context): Boolean {
+        private fun saveNewVersion(context: Context, version: String) {
+            context.getSharedPreferences(SP, Context.MODE_PRIVATE).edit()
+                .putString(DATABASE_VERSION_SP, version)
+        }
+
+        private fun appBuiltInVersion(context: Context): String {
+            val input = context.assets.open("version.txt")
+            val bf = BufferedReader(InputStreamReader(input))
+            val stringBuffer = StringBuffer()
+            var line: String?
+            while (bf.readLine().also { line = it } != null) {
+                stringBuffer.append(line)
+            }
+            return stringBuffer.toString()
+        }
+
+        private fun checkShouldCopy(context: Context, appBuiltInVersion: String): Boolean {
 
             if (BuildConfig.DEBUG) {
                 return true
@@ -84,14 +102,8 @@ class DBManager {
             }
             val oldVersion = context.getSharedPreferences(DBManager.SP, Context.MODE_PRIVATE)
                 .getString(DBManager.DATABASE_VERSION_SP, "")
-            val input = context.assets.open("version.txt")
-            val bf = BufferedReader(InputStreamReader(input))
-            val stringBuffer = StringBuffer()
-            var line: String?
-            while (bf.readLine().also { line = it } != null) {
-                stringBuffer.append(line)
-            }
-            if (!oldVersion.equals(stringBuffer.toString())) {
+
+            if (!oldVersion.equals(appBuiltInVersion)) {
                 return true
             }
             return false
