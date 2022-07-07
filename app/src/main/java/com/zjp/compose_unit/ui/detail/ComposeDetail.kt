@@ -1,5 +1,6 @@
 package com.zjp.compose_unit.ui.detail
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.scaleMatrix
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
@@ -92,6 +94,7 @@ fun ComposeDetailPage(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ComposeNode(node: Node) {
     var folded by remember {
@@ -101,13 +104,26 @@ fun ComposeNode(node: Node) {
         NodeTitle(title = node.name, folded = folded) {
             folded = !folded
         }
-        if (!folded) {
-            CodeView(
-                code = node.code,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(alignment = Alignment.CenterHorizontally)
-            )
+
+//        Crossfade(targetState = folded) { screen ->
+//            if (!screen) {
+//                CodeView(
+//                    code = node.code,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .align(alignment = Alignment.CenterHorizontally)
+//                )
+//            }
+//        }
+        AnimatedContent(targetState = folded) {
+            if (!it) {
+                CodeView(
+                    code = node.code,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(alignment = Alignment.CenterHorizontally)
+                )
+            }
         }
         Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
             NodeMap(id = node.id!!)

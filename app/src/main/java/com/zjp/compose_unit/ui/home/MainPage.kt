@@ -45,31 +45,31 @@ fun MainView(
                         currentTableName = BottomNavigationScreens.Composes.tableName
                     })
 
-                BottomNavigationItem(icon = {
-                    Icon(
-                        painter = painterResource(id = BottomNavigationScreens.Collection.iconResId),
-                        contentDescription = null
-                    )
-                },
-
-                    selected = currentTableName == BottomNavigationScreens.Collection.tableName,
-                    onClick = {
-                        currentTableName = BottomNavigationScreens.Collection.tableName
-                    })
+//                BottomNavigationItem(icon = {
+//                    Icon(
+//                        painter = painterResource(id = BottomNavigationScreens.Collection.iconResId),
+//                        contentDescription = null
+//                    )
+//                },
+//
+//                    selected = currentTableName == BottomNavigationScreens.Collection.tableName,
+//                    onClick = {
+//                        currentTableName = BottomNavigationScreens.Collection.tableName
+//                    })
 
 
                 Spacer(modifier = Modifier.width(100.dp))
 
-                BottomNavigationItem(icon = {
-                    Icon(
-                        painter = painterResource(id = BottomNavigationScreens.Samples.iconResId),
-                        contentDescription = null
-                    )
-                },
-                    selected = currentTableName == BottomNavigationScreens.Samples.tableName,
-                    onClick = {
-                        currentTableName = BottomNavigationScreens.Samples.tableName
-                    })
+//                BottomNavigationItem(icon = {
+//                    Icon(
+//                        painter = painterResource(id = BottomNavigationScreens.Samples.iconResId),
+//                        contentDescription = null
+//                    )
+//                },
+//                    selected = currentTableName == BottomNavigationScreens.Samples.tableName,
+//                    onClick = {
+//                        currentTableName = BottomNavigationScreens.Samples.tableName
+//                    })
 
                 BottomNavigationItem(icon = {
                     Icon(

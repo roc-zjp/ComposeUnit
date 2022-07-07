@@ -1,6 +1,7 @@
 package com.zjp.system_composes
 
 import androidx.compose.runtime.Composable
+import com.zjp.system_composes.system.animation.*
 import com.zjp.system_composes.system.buttons.ButtonBase
 import com.zjp.system_composes.system.buttons.*
 import com.zjp.system_composes.system.containers.BoxBase
@@ -45,5 +46,16 @@ fun NodeMap(id: Int) {
         32 -> LazyColumnWithKey()
         33 -> LazyRowBase()
         34 -> LazyRowWithKey()
+        35 -> SimpleFilledTextFieldSample()
+        36 -> PasswordTextField()
+        37 -> LazyVerticalGridBase()
+        38 -> LazyVerticalGridFixed()
+        39 -> AnimatedVisibilityBase()
+        40 -> AnimatedVisibilitySpring()
+        41 -> AnimatedMutableTransitionState()
+        42 -> ChildAnimated()
+        43 -> AnimatedTransition()
+        44 -> AnimatedContentBase()
+        45 -> AnimatedContentWithContentTransform()
     }
 }

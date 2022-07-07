@@ -1,5 +1,6 @@
 package com.zjp.compose_unit.ui.home
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -124,7 +125,7 @@ fun ComposeItemView(
 ) {
     Row(
         modifier = Modifier
-            .padding(20.dp)
+            .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
             .fillMaxWidth()
             .height(100.dp)
             .clip(
@@ -147,7 +148,6 @@ fun ComposeItemView(
             .clickable { onClick() }
             .padding(10.dp)
     ) {
-
         Box(
             modifier = Modifier
                 .size(80.dp, 80.dp)
@@ -166,6 +166,7 @@ fun ComposeItemView(
                     )
                 ),
             )
+
         }
         Column(modifier = Modifier.padding(10.dp)) {
             Text(
