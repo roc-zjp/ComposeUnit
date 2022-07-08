@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.zjp.system_composes.system.animation.AnimatedContentBase
+import com.zjp.system_composes.system.animation.Gesture
 
 
 @Composable
@@ -29,7 +30,7 @@ fun DeveloperScreen(
         },
         content = {
             Box(modifier = Modifier.padding(it)) {
-                AnimatedContentBase()
+                Gesture()
             }
         }
     )

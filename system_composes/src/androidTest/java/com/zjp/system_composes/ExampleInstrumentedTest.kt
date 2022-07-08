@@ -1,12 +1,10 @@
 package com.zjp.system_composes
 
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-
+import androidx.test.platform.app.InstrumentationRegistry
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -22,3 +20,34 @@ class ExampleInstrumentedTest {
         assertEquals("com.zjp.system_composes.test", appContext.packageName)
     }
 }
+
+//@get:Rule
+//val rule = createComposeRule()
+//
+//@Test
+//fun testAnimationWithClock() {
+//    // Pause animations
+//    rule.mainClock.autoAdvance = false
+//    var enabled by mutableStateOf(false)
+//    rule.setContent {
+//        val color by animateColorAsState(
+//            targetValue = if (enabled) Color.Red else Color.Green,
+//            animationSpec = tween(durationMillis = 250)
+//        )
+//        Box(
+//            modifier = Modifier
+//                .size(64.dp)
+//                .background(color)
+//        )
+//    }
+//
+//    // Initiate the animation.
+//    enabled = true
+//
+//    // Let the animation proceed.
+//    rule.mainClock.advanceTimeBy(50L)
+//
+//    // Compare the result with the image showing the expected result.
+//    // `assertAgainGolden` needs to be implemented in your code.
+//    rule.onRoot().captureToImage().assertAgainstGolden()
+//}

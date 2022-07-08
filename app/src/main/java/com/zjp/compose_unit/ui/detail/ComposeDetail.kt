@@ -104,17 +104,6 @@ fun ComposeNode(node: Node) {
         NodeTitle(title = node.name, folded = folded) {
             folded = !folded
         }
-
-//        Crossfade(targetState = folded) { screen ->
-//            if (!screen) {
-//                CodeView(
-//                    code = node.code,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .align(alignment = Alignment.CenterHorizontally)
-//                )
-//            }
-//        }
         AnimatedContent(targetState = folded) {
             if (!it) {
                 CodeView(

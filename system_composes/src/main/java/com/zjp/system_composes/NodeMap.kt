@@ -57,5 +57,10 @@ fun NodeMap(id: Int) {
         43 -> AnimatedTransition()
         44 -> AnimatedContentBase()
         45 -> AnimatedContentWithContentTransform()
+        46 -> AnimatedContentSizeTransform()
+        47 -> ModifierContentAnimated()
+        48 -> AnimatedContentChild()
+        49 -> CrossfadeBase()
+        50 -> TableRowBase()
     }
 }
