@@ -62,5 +62,7 @@ fun NodeMap(id: Int) {
         48 -> AnimatedContentChild()
         49 -> CrossfadeBase()
         50 -> TableRowBase()
+        51 -> OutlinedButtonBase()
+        52 -> ButtonClearPadding()
     }
 }

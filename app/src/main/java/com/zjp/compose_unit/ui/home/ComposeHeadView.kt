@@ -2,10 +2,11 @@ package com.zjp.compose_unit.ui.home
 
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +20,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zjp.compose_unit.R
+import com.zjp.compose_unit.common.Const
 import com.zjp.compose_unit.ui.theme.Compose_unitTheme
 import com.zjp.core_database.model.Compose
 
@@ -30,6 +33,7 @@ fun ComposeHeadView(compose: Compose?) {
     } else {
         InfoHeader(compose = compose)
     }
+
 }
 
 @Composable
@@ -125,7 +129,6 @@ fun LoadingHeader() {
         )
     }
 }
-
 
 @Preview(name = "dark", showBackground = true)
 @Composable

@@ -23,7 +23,7 @@ import com.zjp.core_database.model.Compose
 
 @Composable
 fun MainView(
-    onClick: (compose: Compose) -> Unit,
+    onClick: (compose: Compose) -> Unit = {},
     toDeveloper: () -> Unit = {},
 ) {
     var currentTableName by remember {
@@ -121,9 +121,6 @@ fun MainView(
 @Composable
 fun ComposeItemPreview() {
     Compose_unitTheme() {
-        val navController = rememberNavController()
-        MainView(onClick = {
-            navController.navigate(Screen.ComposeDetailScreen.createComposeDetailRoute(it))
-        })
+        MainView()
     }
 }

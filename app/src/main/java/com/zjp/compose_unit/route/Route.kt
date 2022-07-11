@@ -29,8 +29,12 @@ fun App() {
         ) {
             val composeId = it.arguments?.getInt("composeId")
             ComposeDetailPage(
-                navController = navController,
-                composeId = composeId!!
+                composeId = composeId!!,
+                goBack = { navController.popBackStack() },
+                goHome = { navController.popBackStack(Screen.Main.route, false) },
+                toComposeDetail = { id ->
+                    navController.navigate(Screen.ComposeDetailScreen.createComposeDetailRoute(id))
+                }
             )
         }
     }
@@ -43,7 +47,7 @@ fun MainPage(
 ) {
     MainView(
         onClick = {
-            navController.navigate(Screen.ComposeDetailScreen.createComposeDetailRoute(it))
+            navController.navigate(Screen.ComposeDetailScreen.createComposeDetailRoute(it.id))
         },
         toDeveloper = {
             navController.navigate(Screen.Debug.route)

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.zjp.system_composes.system.animation.AnimatedContentBase
 import com.zjp.system_composes.system.animation.Gesture
+import com.zjp.system_composes.system.buttons.OutlinedButtonBase
 
 
 @Composable
@@ -30,7 +31,7 @@ fun DeveloperScreen(
         },
         content = {
             Box(modifier = Modifier.padding(it)) {
-                Gesture()
+                OutlinedButtonBase()
             }
         }
     )

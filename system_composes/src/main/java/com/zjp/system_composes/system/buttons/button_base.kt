@@ -128,7 +128,32 @@ fun TextButtonBase() {
 
 @Composable
 fun OutlinedButtonBase() {
-    OutlinedButton(onClick = { /*TODO*/ }) {
+    Column {
+        OutlinedButton(onClick = {  }) {
+            Text(text = "OutlineButton", Modifier.padding(start = 10.dp))
+        }
+        Button(onClick = {  }) {
+            Text(text = "Button")
+        }
+    }
+}
+
+/**
+ * 取消按钮内边距
+ * 【contentPadding】：子组合和边框的间距【PaddingValues】
+ * 【enabled】：是否可用【Boolean】
+ */
+@Composable
+fun ButtonClearPadding() {
+    Button(
+        onClick = {},
+        enabled = false,
+        contentPadding = PaddingValues(0.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = android.R.drawable.ic_menu_add),
+            contentDescription = "Button With Icon"
+        )
         Text(text = "Add to cart", Modifier.padding(start = 10.dp))
     }
 }
@@ -422,7 +447,6 @@ fun ButtonDrawerBase() {
         )
     }
 }
-
 
 
 @Composable

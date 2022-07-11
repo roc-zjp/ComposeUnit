@@ -71,6 +71,39 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
         }
     }
 
+    fun getLinkComposes(links: Array<String>): Result<List<Compose>> {
+        LogUtils.d("links:${links.toList()}")
+        try {
+//            val cursor =
+//                dbManager.mDB.query(
+//                    COMPOSE_TABLE_NAME,
+//                    compose,
+//                    composeSelection,
+//                    links,
+//                    null,
+//                    null,
+//                    sortOrder
+//                )
+            var sqlBuffer = StringBuffer("SELECT * FROM $COMPOSE_TABLE_NAME WHERE id IN (")
+            links.forEach { linkId ->
+                sqlBuffer.append("$linkId,")
+            }
+            sqlBuffer.append(")")
+            sqlBuffer.delete(sqlBuffer.lastIndexOf(","), sqlBuffer.lastIndexOf(",") + 1)
+            LogUtils.d(sqlBuffer)
+            val cursor = dbManager.mDB.rawQuery(sqlBuffer.toString(), null)
+            val composes = mutableListOf<Compose>()
+            while (cursor.moveToNext()) {
+                composes.add(parseCompose(cursor))
+            }
+            cursor.close()
+            return Result.Success(data = composes)
+        } catch (e: Exception) {
+            LogUtils.e(e)
+            return Result.Error(e)
+        }
+    }
+
     fun getComposeById(id: Int): Compose? {
         try {
             val cursor =
@@ -83,8 +116,6 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
                     null,
                     sortOrder
                 )
-
-            LogUtils.d("getComposeById")
             if (cursor.moveToNext()) {
                 val compose = parseCompose(cursor)
                 cursor.close()

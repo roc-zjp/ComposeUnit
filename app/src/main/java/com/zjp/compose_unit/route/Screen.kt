@@ -10,8 +10,8 @@ sealed class Screen(val route: String) {
     object Debug : Screen(route = "debug_screen")
     object Splash : Screen(route = "splash_screen")
 
-    fun createComposeDetailRoute(compose: Compose): String {
-        return "${Screen.ComposeDetailScreen.route}/${compose.id}"
+    fun createComposeDetailRoute(id: Int): String {
+        return "${Screen.ComposeDetailScreen.route}/${id}"
     }
 
     fun composeDetailRoute(): String {
@@ -28,6 +28,7 @@ sealed class BottomNavigationScreens(val tableName: String, val iconResId: Int) 
             tableName = "Collection",
             iconResId = R.drawable.ic_outline_collections_24
         )
+
     object Samples :
         BottomNavigationScreens(tableName = "Samples", iconResId = R.drawable.samples_icon)
 

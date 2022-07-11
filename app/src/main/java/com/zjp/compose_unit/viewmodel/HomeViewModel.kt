@@ -8,9 +8,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zjp.compose_unit.data.Result
 import com.zjp.compose_unit.data.repository.ComposesRepository
+import com.zjp.compose_unit.database.LocalDB
+import com.zjp.core_database.ComposeDatabase
 import com.zjp.core_database.DBManager
 import com.zjp.core_database.model.Compose
+import com.zjp.core_database.model.LikeWidget
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 sealed interface HomeUiState {
     val isLoading: Boolean
@@ -60,13 +65,14 @@ data class HomeState(
 
 }
 
-class HomeViewModel(private val repository: ComposesRepository = ComposesRepository(DBManager.getInstance())) :
-    ViewModel() {
-    private val viewModelState = MutableLiveData<HomeState>(HomeState(isLoading = true))
+class HomeViewModel : ViewModel() {
+    private val repository: ComposesRepository = ComposesRepository(DBManager.getInstance())
+    private val viewModelState = MutableLiveData(HomeState(isLoading = true))
 
-    var uiState by mutableStateOf<HomeUiState>(viewModelState.value!!.toUiState())
+    var uiState by mutableStateOf(viewModelState.value!!.toUiState())
     private var composes = listOf<Compose>()
     var selectIndex by mutableStateOf(0)
+    var likeCollects by mutableStateOf(listOf<LikeWidget>())
 
     init {
         refreshComposes()
@@ -93,7 +99,15 @@ class HomeViewModel(private val repository: ComposesRepository = ComposesReposit
                     uiState = viewModelState.value!!.toUiState()
                 }
             }
+        }
+    }
 
+    fun updateLikeList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            var result = LocalDB.getDatabase().likeDao().getAll()
+            withContext(Dispatchers.Main) {
+                likeCollects = result
+            }
         }
     }
 

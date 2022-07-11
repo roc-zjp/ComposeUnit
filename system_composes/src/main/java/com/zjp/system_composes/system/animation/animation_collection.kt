@@ -258,7 +258,6 @@ fun AnimatedVisibilitySpring() {
         )
     )
 
-
     var dampingRatio by remember {
         mutableStateOf(0.01f)
     }
