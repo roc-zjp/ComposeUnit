@@ -4,7 +4,6 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.apkfuns.logutils.LogUtils
 import com.zjp.compose_unit.data.Result
 import com.zjp.compose_unit.data.repository.ComposesRepository
 import com.zjp.compose_unit.data.repository.LikeRepository
@@ -20,6 +19,8 @@ class DetailViewModel(private val composeId: Int) : ViewModel() {
     var compose by mutableStateOf<Compose?>(null)
     var nodes by mutableStateOf(listOf<Node>())
     var links by mutableStateOf<List<Compose>?>(null)
+
+    var tips by mutableStateOf(false)
 
 
     init {
@@ -53,15 +54,21 @@ class DetailViewModel(private val composeId: Int) : ViewModel() {
     fun toggleLike() {
         viewModelScope.launch(Dispatchers.IO) {
             likeStatus = likeRepository.toggleLike(composeId = composeId)
+            showLikeResult(likeStatus)
         }
     }
 
+    suspend fun showLikeResult(like: Boolean) {
+        tips = true
+        delay(3000)
+        tips = false
+    }
 }
 
 
 class DetailViewModelFactory constructor(private val composeId: Int) :
     ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
             return DetailViewModel(composeId) as T
         }

@@ -1,7 +1,6 @@
 package com.zjp.compose_unit.ui.detail
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -22,6 +21,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zjp.compose_unit.R
@@ -34,6 +36,7 @@ import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.Node
 import com.zjp.system_composes.NodeMap
 import com.zjp.system_composes.custom_compose.WrapLayout
+import androidx.compose.ui.unit.*
 
 @Composable
 fun ComposeDetailPage(
@@ -99,6 +102,33 @@ fun ComposeDetailPage(
                     viewModel.nodes.mapIndexed { _, node ->
                         ComposeNode(node = node)
                     }.toList()
+                }
+            }
+            var height = 30.dp
+            AnimatedVisibility(
+                visible = viewModel.tips,
+                modifier = Modifier.align(Alignment.BottomStart),
+                enter = slideInVertically(initialOffsetY = {
+                    30.dp.value.toInt()
+                }),
+                exit = slideOutVertically(
+                    targetOffsetY = { 30.dp.value.toInt() }
+                )
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(30.dp)
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colors.primary)
+
+                ) {
+                    Text(
+                        text = if (viewModel.likeStatus) "收藏成功" else "取消成功",
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .padding(start = 10.dp)
+                    )
                 }
             }
         }

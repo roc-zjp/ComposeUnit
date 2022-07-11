@@ -46,7 +46,7 @@ android {
 dependencies {
 
     implementation 'androidx.compose.material:material:1.1.1'
-    def nav_version = "2.4.2"
+    def nav_version = "2.5.0"
 
     implementation "androidx.navigation:navigation-compose:$nav_version"
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -67,5 +67,4 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     implementation 'com.apkfuns.logutils:library:1.7.5'
-
 }
