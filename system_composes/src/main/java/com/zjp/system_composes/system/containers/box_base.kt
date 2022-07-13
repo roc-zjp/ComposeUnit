@@ -1,10 +1,8 @@
 package com.zjp.system_composes.system.containers
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,8 +50,16 @@ fun BoxBase() {
     }
 }
 
+
+@Composable
+fun BoxWithConstraintsBase() {
+    BoxWithConstraints {
+        Text("My minHeight is $minHeight while my maxWidth is $maxHeight")
+    }
+}
+
 @Preview
 @Composable
 fun BoxPreview() {
-    BoxBase()
+    BoxWithConstraintsBase()
 }

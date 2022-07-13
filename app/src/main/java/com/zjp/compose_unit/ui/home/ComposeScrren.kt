@@ -59,27 +59,27 @@ fun ComposesScreen(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
-    Scaffold { it ->
-        Box(modifier = Modifier.padding(it)) {
-            if (homeViewModel.uiState.isLoading) {
-                LoadingCompose()
+
+    Box() {
+        if (homeViewModel.uiState.isLoading) {
+            LoadingCompose()
+        } else {
+            if (uiState is HomeUiState.HasCompose) {
+                Composes(uiState.composes, onClick, homeViewModel.likeCollects) {
+                    ComposesAppBar(selectIndex = homeViewModel.selectIndex, onItemSelected = {
+                        homeViewModel.filter(index = it)
+                    })
+                }
             } else {
-                if (uiState is HomeUiState.HasCompose) {
-                    Composes(uiState.composes, onClick, homeViewModel.likeCollects) {
-                        ComposesAppBar(selectIndex = homeViewModel.selectIndex, onItemSelected = {
-                            homeViewModel.filter(index = it)
-                        })
-                    }
-                } else {
-                    NoCompose {
-                        ComposesAppBar(selectIndex = homeViewModel.selectIndex, onItemSelected = {
-                            homeViewModel.filter(index = it)
-                        })
-                    }
+                NoCompose {
+                    ComposesAppBar(selectIndex = homeViewModel.selectIndex, onItemSelected = {
+                        homeViewModel.filter(index = it)
+                    })
                 }
             }
         }
     }
+
 }
 
 

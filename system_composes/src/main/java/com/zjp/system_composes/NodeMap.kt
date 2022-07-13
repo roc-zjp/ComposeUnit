@@ -64,5 +64,8 @@ fun NodeMap(id: Int) {
         50 -> TableRowBase()
         51 -> OutlinedButtonBase()
         52 -> ButtonClearPadding()
+        53 -> ExtendedFloatingActionButtonBase()
+        54 -> FloatingActionButtonBase()
+        55 -> SnackbarBase()
     }
 }

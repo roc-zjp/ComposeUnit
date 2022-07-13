@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,43 +31,46 @@ fun SplashView(toHomePage: () -> Unit) {
         toHomePage()
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-    ) {
-        Column(modifier = Modifier.align(Alignment.Center)) {
-            AnimatedVisibility(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
-                visible = state,
-                enter = slideInVertically(
-                    initialOffsetY = { -1000 },
-                    animationSpec = tween(durationMillis = 1200)
-                ) + fadeIn(
-                    animationSpec = tween(durationMillis = 1200)
-                )
-            ) {
-                Image(
-                    painter = painterResource(id = com.zjp.system_composes.R.drawable.jetpack_compose),
-                    contentDescription = "Compose",
+    Scaffold {
+        Box(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxWidth()
+                .fillMaxHeight()
+        ) {
+            Column(modifier = Modifier.align(Alignment.Center)) {
+                AnimatedVisibility(
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .width(100.dp)
-                        .height(100.dp)
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            AnimatedVisibility(
-                visible = state,
-                enter = slideInVertically(
-                    initialOffsetY = { 1000 },
-                    animationSpec = tween(durationMillis = 1200)
-                ) + fadeIn(
-                    animationSpec = tween(durationMillis = 1200)
-                )
-            ) {
-                Text(text = "Compose Unit", fontSize = 24.sp)
+                        .align(Alignment.CenterHorizontally),
+                    visible = state,
+                    enter = slideInVertically(
+                        initialOffsetY = { -1000 },
+                        animationSpec = tween(durationMillis = 1200)
+                    ) + fadeIn(
+                        animationSpec = tween(durationMillis = 1200)
+                    )
+                ) {
+                    Image(
+                        painter = painterResource(id = com.zjp.system_composes.R.drawable.jetpack_compose),
+                        contentDescription = "Compose",
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .width(100.dp)
+                            .height(100.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                AnimatedVisibility(
+                    visible = state,
+                    enter = slideInVertically(
+                        initialOffsetY = { 1000 },
+                        animationSpec = tween(durationMillis = 1200)
+                    ) + fadeIn(
+                        animationSpec = tween(durationMillis = 1200)
+                    )
+                ) {
+                    Text(text = "Compose Unit", fontSize = 24.sp)
+                }
             }
         }
     }

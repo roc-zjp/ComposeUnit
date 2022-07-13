@@ -1,17 +1,23 @@
 package com.zjp.compose_unit.ui.developer
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import com.zjp.system_composes.system.animation.AnimatedContentBase
 import com.zjp.system_composes.system.animation.Gesture
 import com.zjp.system_composes.system.buttons.OutlinedButtonBase
+import com.zjp.system_composes.system.containers.BoxPreview
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DeveloperScreen(
     onBack: () -> Unit
@@ -30,9 +36,17 @@ fun DeveloperScreen(
             )
         },
         content = {
-            Box(modifier = Modifier.padding(it)) {
-                OutlinedButtonBase()
+            Box(
+                modifier = Modifier
+                    .padding(it)
+                    .nestedScroll(object : NestedScrollConnection {
+
+                    })
+            ) {
+                BoxPreview()
             }
+
+
         }
     )
 }

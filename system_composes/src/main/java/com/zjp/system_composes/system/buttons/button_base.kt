@@ -129,10 +129,10 @@ fun TextButtonBase() {
 @Composable
 fun OutlinedButtonBase() {
     Column {
-        OutlinedButton(onClick = {  }) {
+        OutlinedButton(onClick = { }) {
             Text(text = "OutlineButton", Modifier.padding(start = 10.dp))
         }
-        Button(onClick = {  }) {
+        Button(onClick = { }) {
             Text(text = "Button")
         }
     }
@@ -197,6 +197,13 @@ fun CheckBoxBase() {
         }
     }
 
+}
+
+@Composable
+fun SnackbarBase() {
+    Snackbar {
+        Text(text = "snackbar")
+    }
 }
 
 
@@ -528,6 +535,9 @@ fun ExposedDropdownMenuBoxBase() {
     }
 }
 
+/**
+ * 用法同FloatingActionButton,提供了icon和Text两个插槽
+ */
 @Composable
 fun ExtendedFloatingActionButtonBase() {
     ExtendedFloatingActionButton(
@@ -536,6 +546,22 @@ fun ExtendedFloatingActionButtonBase() {
         onClick = { /*do something*/ },
         modifier = Modifier.fillMaxWidth()
     )
+}
+
+/**
+ * 用法同FloatingActionButton,提供了icon和Text两个插槽
+ */
+@Composable
+fun FloatingActionButtonBase() {
+    FloatingActionButton(
+        onClick = { /*do something*/ },
+        modifier = Modifier.fillMaxWidth(),
+        shape = CircleShape,
+        backgroundColor = Color.Magenta,
+        contentColor = Color.White
+    ) {
+        Icon(Icons.Filled.Favorite, contentDescription = null)
+    }
 }
 
 
@@ -579,129 +605,3 @@ fun ButtonBasePreview() {
     }
 }
 
-
-//@Preview
-//@Composable
-//fun ButtonPre() {
-//
-////    Column {
-////        ButtonBase()
-////    }
-//
-//
-////    BottomSheetScaffold(
-////        sheetContent = {
-////            Box(
-////                Modifier
-////                    .fillMaxWidth()
-////                    .height(128.dp),
-////                contentAlignment = Alignment.Center
-////            ) {
-////                Text("Swipe up to expand sheet")
-////            }
-////            Column(
-////                Modifier
-////                    .fillMaxWidth()
-////                    .padding(64.dp),
-////                horizontalAlignment = Alignment.CenterHorizontally
-////            ) {
-////                Text("Sheet content")
-////                Spacer(Modifier.height(20.dp))
-////                Button(
-////                    onClick = {
-////                        scope.launch { scaffoldState.bottomSheetState.collapse() }
-////                    }
-////                ) {
-////                    Text("Click to collapse sheet")
-////                }
-////            }
-////        },
-////        scaffoldState = scaffoldState,
-////        topBar = {
-////            TopAppBar(
-////                title = { Text("Bottom sheet scaffold") },
-////                navigationIcon = {
-////                    IconButton(onClick = { scope.launch { scaffoldState.drawerState.open() } }) {
-////                        Icon(Icons.Default.Menu, contentDescription = "Localized description")
-////                    }
-////                }
-////            )
-////        },
-////        floatingActionButton = {
-////            var clickCount by remember { mutableStateOf(0) }
-////            FloatingActionButton(
-////                onClick = {
-////                    // show snackbar as a suspend function
-////                    scope.launch {
-////                        scaffoldState.snackbarHostState.showSnackbar("Snackbar #${++clickCount}")
-////                    }
-////                }
-////            ) {
-////                Icon(Icons.Default.Favorite, contentDescription = "Localized description")
-////            }
-////        },
-////        floatingActionButtonPosition = FabPosition.End,
-////        sheetPeekHeight = 128.dp,
-////        drawerContent = {
-////            Column(
-////                Modifier
-////                    .fillMaxWidth()
-////                    .padding(16.dp),
-////                horizontalAlignment = Alignment.CenterHorizontally
-////            ) {
-////                Text("Drawer content")
-////                Spacer(Modifier.height(20.dp))
-////                Button(onClick = { scope.launch { scaffoldState.drawerState.close() } }) {
-////                    Text("Click to close drawer")
-////                }
-////            }
-////        }
-////    ) { innerPadding ->
-////        Column(
-////            Modifier
-////                .verticalScroll(rememberScrollState())
-////                .padding(innerPadding)
-////        ) {
-////            ButtonShapeAndBorder()
-////            ButtonWithCustomColor()
-////            ButtonWithMultipleText()
-////            ButtonWithIcon()
-////            TextButtonBase()
-////            OutlinedButtonBase()
-////            RadioButtonGroup()
-////            CheckBoxBase()
-////            SwitchBase()
-////            ChipBase()
-////            ToggleButtonBase()
-////            OutlinedButton(onClick = { openDialog = true }) {
-////                Text(text = "showDailog")
-////            }
-////            AlertDialogBase(openDialog = openDialog) {
-////                openDialog = false
-////            }
-////
-////            BackdropScaffoldBase()
-////            BadgeBase()
-////            BottomAppBarBase()
-////            CardBase()
-////            DropdownMenuBase()
-////            ExposedDropdownMenuBoxBase()
-////            ExtendedFloatingActionButtonBase()
-////            FilterChipBase()
-////            IconToggleButtonBase()
-////            ListItem(
-////                text = { Text("One line list item with 56x56 icon") },
-////                icon = {
-////                    Icon(
-////                        Icons.Filled.Favorite,
-////                        contentDescription = null,
-////                        modifier = Modifier.size(56.dp)
-////                    )
-////                }
-////            )
-////
-////        }
-////    }
-//
-//
-//}

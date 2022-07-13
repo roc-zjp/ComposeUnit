@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import com.zjp.compose_unit.route.App
+import com.zjp.compose_unit.ui.App
 import com.zjp.compose_unit.ui.theme.Compose_unitTheme
 
 
