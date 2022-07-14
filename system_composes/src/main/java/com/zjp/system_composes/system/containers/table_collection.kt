@@ -1,6 +1,6 @@
 package com.zjp.system_composes.system.containers
 
-import androidx.compose.animation.animateColor
+
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.spring
@@ -81,6 +81,71 @@ fun TableRowBase() {
 }
 
 @Composable
+fun ScrollTableRowBase() {
+    var tabPage by remember {
+        mutableStateOf(0)
+    }
+    ScrollableTabRow(
+        selectedTabIndex = tabPage,
+        divider = {
+            Divider(
+                Modifier
+                    .width(5.dp)
+                    .background(Color.Cyan)
+            )
+        },
+    ) {
+        repeat(10) {
+            Row(
+                modifier = Modifier
+                    .clickable(onClick = {
+                        tabPage = it
+                    })
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = null
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(text = "home")
+            }
+        }
+    }
+}
+
+@Composable
+fun TabBase() {
+    var selected by remember {
+        mutableStateOf(false)
+    }
+    Tab(
+        selected = selected,
+        onClick = {
+            selected =! selected
+        }
+    ) {
+
+        Row(
+            modifier = Modifier
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Home,
+                contentDescription = null
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(text = "home")
+        }
+
+    }
+}
+
+@Composable
 private fun CustomIndicator(
     tabPositions: List<TabPosition>,
     tabPage: TabPage
@@ -96,15 +161,7 @@ private fun CustomIndicator(
     )
     val indicatorLeft by transition.animateDp(
         transitionSpec = {
-            if (TabPage.Home isTransitioningTo TabPage.DELETE) {
-                // Indicator moves to the right.
-                // The left edge moves slower than the right edge.
-                spring(stiffness = Spring.StiffnessVeryLow)
-            } else {
-                // Indicator moves to the left.
-                // The left edge moves faster than the right edge.
-                spring(stiffness = Spring.StiffnessMedium)
-            }
+            spring(stiffness = Spring.StiffnessMedium)
         },
         label = "Indicator left"
     ) { page ->

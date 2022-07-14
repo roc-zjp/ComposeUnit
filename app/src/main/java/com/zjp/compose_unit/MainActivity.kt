@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
 import com.zjp.compose_unit.ui.App
 import com.zjp.compose_unit.ui.theme.Compose_unitTheme
 
@@ -14,6 +15,8 @@ import com.zjp.compose_unit.ui.theme.Compose_unitTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //内容延伸到状态栏
+        WindowCompat.setDecorFitsSystemWindows(window,false)
         setContent {
             Compose_unitTheme() {
                 // A surface container using the 'background' color from the theme

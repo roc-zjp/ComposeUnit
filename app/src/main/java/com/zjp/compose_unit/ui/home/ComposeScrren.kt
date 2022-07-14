@@ -38,6 +38,7 @@ import com.zjp.compose_unit.common.Const
 import com.zjp.compose_unit.common.shape.TechnoShapeBorder
 import com.zjp.compose_unit.viewmodel.HomeUiState
 import com.zjp.compose_unit.viewmodel.HomeViewModel
+import com.zjp.core_database.BuildConfig
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.LikeWidget
 
@@ -219,6 +220,9 @@ fun ComposeItemView(
                     .align(Alignment.TopEnd)
                     .padding(end = 20.dp, top = 5.dp)
             )
+        }
+        if (BuildConfig.DEBUG) {
+            Text(text = compose.id.toString(), modifier = Modifier.align(Alignment.CenterStart))
         }
     }
 }

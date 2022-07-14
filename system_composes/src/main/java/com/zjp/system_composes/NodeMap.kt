@@ -1,5 +1,6 @@
 package com.zjp.system_composes
 
+import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.runtime.Composable
 import com.zjp.system_composes.system.animation.*
 import com.zjp.system_composes.system.buttons.ButtonBase
@@ -8,7 +9,8 @@ import com.zjp.system_composes.system.containers.BoxBase
 import com.zjp.system_composes.system.text.*
 import com.zjp.system_composes.system.widgets.*
 import com.zjp.system_composes.system.containers.*
-import com.zjp.system_composes.system.helper.DividerBase
+import com.zjp.system_composes.system.helper.*
+
 
 @Composable
 fun NodeMap(id: Int) {
@@ -67,5 +69,24 @@ fun NodeMap(id: Int) {
         53 -> ExtendedFloatingActionButtonBase()
         54 -> FloatingActionButtonBase()
         55 -> SnackbarBase()
+        56 -> ScaffoldBase()
+        57 -> TopAppBarBase()
+        58 -> BottomAppBarBase()
+        59 -> BottomNavigationBase()
+        60 -> BottomNavigationBase()
+        61 -> NavigationRailItemBase()
+        62 -> NavigationRailItemBase()
+        63 -> ModalBottomSheetLayoutBase()
+        64 -> ModalDrawerBase()
+        65 -> BottomDrawerBase()
+        66 -> SimpleOutlinedTextFieldSample()
+        67 -> OutlinedTextFieldCursor()
+        68 -> ScrollTableRowBase()
+        69 -> CustomSnackbar()
+        70 -> CustomSnackbar()
+        71 -> SwipeToDismissBase()
+        72 -> TabBase()
+        73 -> TriStateCheckboxBase()
+        74 -> CheckBoxBase()
     }
 }

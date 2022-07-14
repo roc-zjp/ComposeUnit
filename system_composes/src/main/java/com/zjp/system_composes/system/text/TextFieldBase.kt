@@ -3,6 +3,7 @@ package com.zjp.system_composes.system.text
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
@@ -12,12 +13,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -83,11 +82,29 @@ fun SimpleFilledTextFieldSample() {
     )
 }
 
-//样式设置
+/**
+ * 【onValueChange】：输入回调
+ * 【label】：未获得焦点显示在文本框内，获得焦点显示在文本边框上
+ */
 @Composable
 fun SimpleOutlinedTextFieldSample() {
     var text by remember { mutableStateOf("") }
+    OutlinedTextField(
+        value = text,
+        onValueChange = { text = it },
+        label = { Text("Label") }
+    )
+}
 
+/**
+ * 【TextRange】：选择范围
+ *
+ */
+@Composable
+fun OutlinedTextFieldCursor() {
+    var text by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue("example", TextRange(0, 7)))
+    }
     OutlinedTextField(
         value = text,
         onValueChange = { text = it },

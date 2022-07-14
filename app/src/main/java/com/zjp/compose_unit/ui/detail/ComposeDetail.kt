@@ -37,6 +37,9 @@ import com.zjp.core_database.model.Node
 import com.zjp.system_composes.NodeMap
 import com.zjp.system_composes.custom_compose.WrapLayout
 import androidx.compose.ui.unit.*
+import com.google.accompanist.insets.*
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.zjp.compose_unit.ui.UnitTopAppBar
 
 @Composable
 fun ComposeDetailPage(
@@ -46,38 +49,42 @@ fun ComposeDetailPage(
     goHome: () -> Unit = {},
     toComposeDetail: (id: Int) -> Unit = {}
 ) {
-    Scaffold(topBar = {
-        TopAppBar(
-            title = { viewModel.compose?.name?.let { Text(text = it) } },
-            navigationIcon = {
-                IconButton(onClick = {
-                    goBack()
-                }) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
-                }
-            },
-            actions = {
-                IconButton(onClick = {
-                    goHome()
-                }) {
-                    Icon(imageVector = Icons.Filled.Home, contentDescription = "Home")
-                }
+    Scaffold(
+        topBar = {
+            UnitTopAppBar(
+                title = { viewModel.compose?.name?.let { Text(text = it) } },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        goBack()
+                    }) {
+                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = {
+                        goHome()
+                    }) {
+                        Icon(imageVector = Icons.Filled.Home, contentDescription = "Home")
+                    }
 
-                IconButton(onClick = {
-                    viewModel.toggleLike()
-                }) {
-                    Icon(
-                        imageVector = Icons.Filled.Favorite,
-                        contentDescription = "Home",
-                        tint = if (viewModel.likeStatus) Color.Red else Color.Gray
-                    )
-                }
+                    IconButton(onClick = {
+                        viewModel.toggleLike()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Favorite,
+                            contentDescription = "Home",
+                            tint = if (viewModel.likeStatus) Color.Red else Color.Gray
+                        )
+                    }
 
-            }
-        )
-
-    }) {
-        Box(modifier = Modifier.padding(it)) {
+                },
+            )
+        }) {
+        Box(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+        ) {
             val scrollState = rememberScrollState()
             Column(
                 Modifier
@@ -104,7 +111,7 @@ fun ComposeDetailPage(
                     }.toList()
                 }
             }
-            var height = 30.dp
+
             AnimatedVisibility(
                 visible = viewModel.tips,
                 modifier = Modifier.align(Alignment.BottomStart),
@@ -156,7 +163,11 @@ fun ComposeNode(node: Node) {
                 )
             }
         }
-        Box(modifier = Modifier.align(alignment = Alignment.CenterHorizontally)) {
+        Box(
+            modifier = Modifier
+                .align(alignment = Alignment.CenterHorizontally)
+                .heightIn(20.dp, 500.dp)
+        ) {
             NodeMap(id = node.id!!)
         }
         Box(

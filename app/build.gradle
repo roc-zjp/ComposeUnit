@@ -67,4 +67,8 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     implementation 'com.apkfuns.logutils:library:1.7.5'
+    // https://mvnrepository.com/artifact/com.google.accompanist/accompanist-insets
+    implementation 'com.google.accompanist:accompanist-insets:0.23.1'
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.23.1"
+
 }

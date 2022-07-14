@@ -29,7 +29,9 @@ fun NavGraphBuilder.unitNavGraph(
         ComposeDetailPage(
             composeId = composeId!!,
             goBack = { navController.popBackStack() },
-            goHome = { navController.popBackStack(Screen.Main.route, false) },
+            goHome = {
+                navController.popBackStack(HomeSections.COMPOSE.route, false)
+            },
             toComposeDetail = { id ->
                 navController.navigate(Screen.ComposeDetailScreen.createComposeDetailRoute(id))
             }
@@ -58,7 +60,9 @@ fun NavGraphBuilder.addHomeGraph(
         SamplesPage()
     }
     composable(HomeSections.PROFILE.route) {
-        ProfilePage(navController)
+        ProfilePage() { route ->
+            navController.navigate(route)
+        }
     }
 }
 
@@ -73,7 +77,7 @@ fun DeveloperPage(
 }
 
 @Composable
-fun ProfilePage(navController: NavController) {
+fun ProfilePage(navigateToRoute: (String) -> Unit) {
     ProfileScreen()
 }
 

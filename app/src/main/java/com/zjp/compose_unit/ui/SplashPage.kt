@@ -6,22 +6,30 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.zjp.compose_unit.R
 import com.zjp.core_database.DBManager
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashView(toHomePage: () -> Unit) {
+
+    val systemUiController = rememberSystemUiController()
+//分开设置，考虑到背景颜色，我们需要动态更新图标颜色嘛
+    systemUiController.setStatusBarColor(Color.Transparent, darkIcons = true)
+
     val context = LocalContext.current
     var state by remember { mutableStateOf(false) }
     LaunchedEffect(true) {
@@ -31,12 +39,15 @@ fun SplashView(toHomePage: () -> Unit) {
         toHomePage()
     }
 
+
     Scaffold {
         Box(
             modifier = Modifier
                 .padding(it)
                 .fillMaxWidth()
                 .fillMaxHeight()
+
+
         ) {
             Column(modifier = Modifier.align(Alignment.Center)) {
                 AnimatedVisibility(
