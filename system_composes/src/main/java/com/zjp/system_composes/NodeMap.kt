@@ -88,5 +88,6 @@ fun NodeMap(id: Int) {
         72 -> TabBase()
         73 -> TriStateCheckboxBase()
         74 -> CheckBoxBase()
+        75 -> ListItemBase()
     }
 }

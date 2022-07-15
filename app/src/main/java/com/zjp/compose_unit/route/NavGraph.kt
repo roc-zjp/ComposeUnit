@@ -38,6 +38,22 @@ fun NavGraphBuilder.unitNavGraph(
         )
     }
     composable(
+        Screen.Collection.route + "/{composeId}",
+        arguments = listOf(navArgument("composeId") { type = NavType.IntType })
+    ) {
+        val composeId = it.arguments?.getInt("composeId")
+        ComposeDetailPage(
+            composeId = composeId!!,
+            goBack = { navController.popBackStack() },
+            goHome = {
+                navController.popBackStack(HomeSections.COMPOSE.route, false)
+            },
+            toComposeDetail = { id ->
+                navController.navigate(Screen.ComposeDetailScreen.createComposeDetailRoute(id))
+            }
+        )
+    }
+    composable(
         Screen.Splash.route,
     ) {
         SplashPage(navController = navController)

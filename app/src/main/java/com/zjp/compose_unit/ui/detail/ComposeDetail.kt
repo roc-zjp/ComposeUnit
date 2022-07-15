@@ -21,9 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zjp.compose_unit.R
@@ -36,9 +33,6 @@ import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.Node
 import com.zjp.system_composes.NodeMap
 import com.zjp.system_composes.custom_compose.WrapLayout
-import androidx.compose.ui.unit.*
-import com.google.accompanist.insets.*
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.zjp.compose_unit.ui.UnitTopAppBar
 
 @Composable
@@ -242,39 +236,9 @@ fun LinkComposes(links: List<Compose>?, onItemClick: (id: Int) -> Unit) {
     }
 }
 
-@Composable
-fun LinkItem(
-    name: String,
-    id: Int,
-    onItemClick: (id: Int) -> Unit = {},
-    modifier: Modifier = Modifier.padding(start = 5.dp, end = 5.dp, top = 5.dp, bottom = 5.dp),
-) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .height(24.dp)
-            .background(MaterialTheme.colors.primary)
-            .clickable { onItemClick(id) }
-    ) {
-        Text(
-            text = name,
-            color = Color.White,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(
-                    start = 10.dp,
-                    end = 10.dp,
-                    bottom = 2.dp
-                )
-        )
-    }
-}
-
-
 @Preview
 @Composable
 fun ItemPre() {
-//    LinkItem(name = "name", id = 1, onItemClick = {})
+
 }
 

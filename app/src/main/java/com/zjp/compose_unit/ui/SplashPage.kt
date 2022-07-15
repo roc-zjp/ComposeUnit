@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.apkfuns.logutils.LogUtils
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.zjp.compose_unit.R
 import com.zjp.core_database.DBManager
@@ -27,7 +28,6 @@ import kotlinx.coroutines.delay
 fun SplashView(toHomePage: () -> Unit) {
 
     val systemUiController = rememberSystemUiController()
-//分开设置，考虑到背景颜色，我们需要动态更新图标颜色嘛
     systemUiController.setStatusBarColor(Color.Transparent, darkIcons = true)
 
     val context = LocalContext.current
@@ -35,19 +35,16 @@ fun SplashView(toHomePage: () -> Unit) {
     LaunchedEffect(true) {
         state = true
         DBManager.initDB(context.applicationContext)
+        LogUtils.d("版本号：${DBManager.getInstance().mDB.version}")
         delay(3000)
         toHomePage()
     }
-
-
     Scaffold {
         Box(
             modifier = Modifier
                 .padding(it)
                 .fillMaxWidth()
                 .fillMaxHeight()
-
-
         ) {
             Column(modifier = Modifier.align(Alignment.Center)) {
                 AnimatedVisibility(

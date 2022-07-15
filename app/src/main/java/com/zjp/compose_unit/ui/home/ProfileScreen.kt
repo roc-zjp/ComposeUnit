@@ -19,7 +19,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zjp.compose_unit.R
-import com.zjp.compose_unit.common.Const
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -36,7 +35,6 @@ fun ProfileScreen() {
                         200.dp
                     )
                     .fillMaxWidth()
-
             )
             Image(
                 painter = painterResource(id = R.drawable.kobe), contentDescription = "kobe",
@@ -60,8 +58,8 @@ fun ProfileScreen() {
                 Text(
                     text = "天涯浪子",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp,
-                    color = Const.colorDarkBlue,
+                    fontSize = 28.sp,
+                    color = MaterialTheme.colors.primary,
                     textAlign = TextAlign.End,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -71,7 +69,7 @@ fun ProfileScreen() {
                     Icon(
                         Icons.Outlined.Settings,
                         contentDescription = "",
-                        tint = Const.colorDarkBlue
+                        tint = MaterialTheme.colors.primary
                     )
                 }) {
                     Text(text = "应用设置")
@@ -80,15 +78,38 @@ fun ProfileScreen() {
                     Icon(
                         Icons.Outlined.Create,
                         contentDescription = "",
-                        tint = Const.colorDarkBlue
+                        tint = MaterialTheme.colors.primary
                     )
                 }) {
                     Text(text = "关于应用")
                 }
                 ListItem(icon = {
-                    Icon(Icons.Filled.Person, contentDescription = "", tint = Const.colorDarkBlue)
+                    Icon(
+                        Icons.Filled.Person,
+                        contentDescription = "",
+                        tint = MaterialTheme.colors.primary
+                    )
                 }) {
                     Text(text = "关于我")
+                }
+                Divider()
+                ListItem(icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.app_version),
+                        contentDescription = "",
+                        tint = MaterialTheme.colors.primary
+                    )
+                }) {
+                    Text(text = "检查APP版本")
+                }
+                ListItem(icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.database),
+                        contentDescription = "",
+                        tint = MaterialTheme.colors.primary
+                    )
+                }) {
+                    Text(text = "检查数据库版本")
                 }
             }
         }

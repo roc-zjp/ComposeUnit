@@ -3,13 +3,13 @@ package com.zjp.system_composes.system.containers
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.outlined.Create
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -100,7 +100,7 @@ fun LazyColumnBase() {
  */
 @Composable
 fun LazyColumnWithKey() {
-    var list = List(50) { index -> "Item: $index" }
+    val list = List(50) { index -> "Item: $index" }
     Box(
         modifier = Modifier
             .height(100.dp)
@@ -145,7 +145,7 @@ fun LazyRowBase() {
  */
 @Composable
 fun LazyRowWithKey() {
-    var list = List(50) { index -> "Item: $index" }
+    val list = List(50) { index -> "Item: $index" }
     Box {
         LazyRow {
             items(items = list, key = { value ->
@@ -245,6 +245,29 @@ fun LazyVerticalGridFixed() {
             }
         )
     }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ListItemBase() {
+        ListItem(
+            icon = {
+                Icon(
+                    Icons.Outlined.Create,
+                    contentDescription = "",
+                )
+            },
+            secondaryText = {
+                Text(text = "secondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryText")
+            },
+            singleLineSecondaryText = false,
+            overlineText = { Text(text = "overlineText") },
+            trailing = { Text(text = "trailing") },
+            modifier = Modifier.clickable { }.background(Color.Blue)
+
+        ) {
+            Text(text = "关于应用")
+        }
 }
 
 @Preview
