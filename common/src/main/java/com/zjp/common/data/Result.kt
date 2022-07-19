@@ -1,5 +1,5 @@
 
-package com.zjp.compose_unit.data
+package com.zjp.common.data
 
 /**
  * A generic class that holds a value or an exception

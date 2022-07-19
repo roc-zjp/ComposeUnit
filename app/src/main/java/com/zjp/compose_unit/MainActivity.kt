@@ -1,6 +1,7 @@
 package com.zjp.compose_unit
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         //内容延伸到状态栏
         WindowCompat.setDecorFitsSystemWindows(window,false)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         setContent {
             Compose_unitTheme() {
                 // A surface container using the 'background' color from the theme

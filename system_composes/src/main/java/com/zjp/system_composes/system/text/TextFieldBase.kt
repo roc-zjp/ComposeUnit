@@ -1,9 +1,12 @@
 package com.zjp.system_composes.system.text
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
@@ -11,14 +14,19 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 //输入和修改文字
 /**
@@ -35,8 +43,10 @@ import androidx.compose.ui.unit.dp
  * 【keyboardActions】：onDone、onNext、onPrevious、onSearch、onSend、onGo 键盘按钮点击回调，对应着 keyboardOptions.imeAction的类型【KeyboardActions】
  * 【keyboardOptions】：首字母是否大小写、是否自动纠错、输入类型、键盘按钮类型【KeyboardOptions】
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SimpleFilledTextFieldSample() {
+
     var text by remember { mutableStateOf("Hello") }
 
     TextField(
@@ -80,6 +90,7 @@ fun SimpleFilledTextFieldSample() {
         ),
         readOnly = false
     )
+
 }
 
 /**
@@ -131,15 +142,26 @@ fun StyledTextField() {
 /**
  * 【visualTransformation】：改变输入框视觉输出【VisualTransformation】
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PasswordTextField() {
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val coroutineScope = rememberCoroutineScope()
+
     var password by rememberSaveable { mutableStateOf("") }
     TextField(
         value = password,
         onValueChange = { password = it },
         label = { Text("Enter password") },
         visualTransformation = PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        modifier = Modifier
+            .onFocusEvent {
+                coroutineScope.launch {
+                    delay(300)
+                    bringIntoViewRequester.bringIntoView()
+                }
+            },
     )
 }
 

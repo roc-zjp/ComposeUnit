@@ -18,3 +18,5 @@ rootProject.name = "compose_unit"
 include ':app'
 include ':core-database'
 include ':system_composes'
+include ':collection'
+include ':common'

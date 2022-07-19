@@ -3,12 +3,12 @@ package com.zjp.compose_unit.data.repository
 import android.annotation.SuppressLint
 import android.database.Cursor
 import com.apkfuns.logutils.LogUtils
-import com.zjp.compose_unit.data.Result
-import com.zjp.compose_unit.data.*
+import com.zjp.common.data.Result
+import com.zjp.core_database.ComposeEntry
 import com.zjp.core_database.DBManager
+import com.zjp.core_database.NodeEntry
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.Node
-import java.lang.Exception
 
 class ComposesRepository(private val dbManager: DBManager = DBManager.getInstance()) {
 
@@ -74,16 +74,6 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
     fun getLinkComposes(links: Array<String>): Result<List<Compose>> {
         LogUtils.d("links:${links.toList()}")
         try {
-//            val cursor =
-//                dbManager.mDB.query(
-//                    COMPOSE_TABLE_NAME,
-//                    compose,
-//                    composeSelection,
-//                    links,
-//                    null,
-//                    null,
-//                    sortOrder
-//                )
             var sqlBuffer = StringBuffer("SELECT * FROM $COMPOSE_TABLE_NAME WHERE id IN (")
             links.forEach { linkId ->
                 sqlBuffer.append("$linkId,")

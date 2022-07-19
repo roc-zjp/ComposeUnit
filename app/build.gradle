@@ -13,20 +13,12 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
         }
     }
 
-//    buildTypes {
-//        release {
-//            minifyEnabled false
-//            debugable false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
-//    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -47,6 +39,8 @@ android {
 dependencies {
 
     implementation 'androidx.compose.material:material:1.1.1'
+    implementation project(path: ':common')
+    implementation project(path: ':collection')
     def nav_version = "2.5.0"
 
     implementation "androidx.navigation:navigation-compose:$nav_version"

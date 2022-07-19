@@ -3,7 +3,7 @@ package com.zjp.compose_unit.data.repository
 import com.zjp.compose_unit.database.LocalDB
 import com.zjp.core_database.ComposeDatabase
 import com.zjp.core_database.model.LikeWidget
-import com.zjp.compose_unit.data.Result
+import com.zjp.common.data.Result
 
 class LikeRepository(private val db: ComposeDatabase = LocalDB.getDatabase()) {
 

@@ -13,13 +13,10 @@ class DBManager {
     lateinit var mDB: SQLiteDatabase
 
     companion object {
-        const val COMPOSE_TABLE_NAME = "compose"
-        const val NODE_TABLE_NAME = "Node"
 
         @Volatile
         private var INSTANCE: DBManager? = null
 
-        const val DATABASE_VERSION = 1
         private const val DATABASE_NAME = "compose_tem.db"
         private const val SP = "database_version"
         private const val DATABASE_VERSION_SP = "version_sp"

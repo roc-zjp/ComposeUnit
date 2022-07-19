@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.zjp.compose_unit.data.Result
+import com.zjp.common.data.Result
 import com.zjp.compose_unit.data.repository.ComposesRepository
 import com.zjp.compose_unit.data.repository.LikeRepository
 import com.zjp.core_database.model.Compose
@@ -21,7 +21,6 @@ class DetailViewModel(private val composeId: Int) : ViewModel() {
     var links by mutableStateOf<List<Compose>?>(null)
 
     var tips by mutableStateOf(false)
-
 
     init {
         viewModelScope.launch {
@@ -58,7 +57,7 @@ class DetailViewModel(private val composeId: Int) : ViewModel() {
         }
     }
 
-    suspend fun showLikeResult(like: Boolean) {
+    private suspend fun showLikeResult(like: Boolean) {
         tips = true
         delay(3000)
         tips = false

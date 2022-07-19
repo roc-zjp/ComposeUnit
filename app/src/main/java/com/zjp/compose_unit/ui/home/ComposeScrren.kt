@@ -10,7 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -33,10 +33,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.zjp.common.state.CommonUiState
 import com.zjp.compose_unit.R
 import com.zjp.compose_unit.common.Const
 import com.zjp.compose_unit.common.shape.TechnoShapeBorder
-import com.zjp.compose_unit.viewmodel.HomeUiState
 import com.zjp.compose_unit.viewmodel.HomeViewModel
 import com.zjp.core_database.BuildConfig
 import com.zjp.core_database.model.Compose
@@ -65,8 +65,8 @@ fun ComposesScreen(
         if (homeViewModel.uiState.isLoading) {
             LoadingCompose()
         } else {
-            if (uiState is HomeUiState.HasCompose) {
-                Composes(uiState.composes, onClick, homeViewModel.likeCollects) {
+            if (uiState is CommonUiState.HasData<*>) {
+                Composes(uiState.data as List<Compose>, onClick, homeViewModel.likeCollects) {
                     ComposesAppBar(selectIndex = homeViewModel.selectIndex, onItemSelected = {
                         homeViewModel.filter(index = it)
                     })

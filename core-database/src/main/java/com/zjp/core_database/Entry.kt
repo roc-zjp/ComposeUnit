@@ -1,4 +1,4 @@
-package com.zjp.compose_unit.data
+package com.zjp.core_database
 
 import android.provider.BaseColumns
 

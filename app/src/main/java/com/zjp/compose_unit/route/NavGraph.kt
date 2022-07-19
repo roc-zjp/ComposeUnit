@@ -3,6 +3,7 @@ package com.zjp.compose_unit.route
 import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import androidx.navigation.compose.composable
+import com.zjp.collection.ui.CollectionScreen
 import com.zjp.compose_unit.ui.SplashView
 import com.zjp.compose_unit.ui.detail.ComposeDetailPage
 import com.zjp.compose_unit.ui.developer.DeveloperScreen
@@ -58,6 +59,11 @@ fun NavGraphBuilder.unitNavGraph(
     ) {
         SplashPage(navController = navController)
     }
+    composable(
+        Screen.Debug.route,
+    ) {
+        DeveloperPage(navController = navController)
+    }
 }
 
 
@@ -70,7 +76,7 @@ fun NavGraphBuilder.addHomeGraph(
         })
     }
     composable(HomeSections.COLLECTION.route) { from ->
-        CollectionPage()
+        CollectionScreen()
     }
     composable(HomeSections.SAMPLE.route) { from ->
         SamplesPage()
