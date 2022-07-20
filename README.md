@@ -2,9 +2,7 @@
 
 ## 感谢
 
-首先要感谢[FlutterUnit]([GitHub - toly1994328/FlutterUnit: 【Flutter 集录指南 App】The unity of flutter, The unity of coder.](https://github.com/toly1994328/FlutterUnit)) ,感谢这个项目在刚开始学习flutter时给与的帮助，给了我很多参考。在入门了flutter之后，关注到了Android Compose，感觉他们很多组件使用相似，所以就萌发了做一个Flutter Unit Compose 版本的想法，希望也能帮到那些刚入门Compose的Android开发人。
-
-
+首先要感谢 [FlutterUnit](https://github.com/toly1994328/FlutterUnit) ,感谢这个项目在刚开始学习flutter时给与的帮助，给了我很多参考。在入门了flutter之后，关注到了Android Compose，感觉他们很多组件使用相似，所以就萌发了做一个Flutter Unit Compose 版本的想法，希望也能帮到那些刚入门Compose的Android开发人。
 
 ## 已完成：
 
@@ -16,8 +14,6 @@
    
    > 每个组合都带有效果和源码展示，可以实际查看效果，也可以查看具体代码实现。
 
-
-
 ## 目标：
 
-向 [FlutterUnit]([GitHub - toly1994328/FlutterUnit: 【Flutter 集录指南 App】The unity of flutter, The unity of coder.](https://github.com/toly1994328/FlutterUnit)) 看齐，该项目可以看做是FlutterUnit Compose 版本,后期的目标就是实现Flutter Unit的所有功能。
+向 [FlutterUnit](https://github.com/toly1994328/FlutterUnit)  看齐，该项目可以看做是FlutterUnit Compose 版本,后期的目标就是实现Flutter Unit的所有功能。
