@@ -8,6 +8,9 @@ sealed class Screen(val route: String) {
     object Collection : Screen(route = "collection")
     object Debug : Screen(route = "debug_screen")
     object Splash : Screen(route = "splash_screen")
+    object ThemeSetting : Screen(route = "theme_setting_screen")
+    object AppSetting : Screen(route = "app_setting_screen")
+    object FontSetting : Screen(route = "font_setting_screen")
 
     fun createComposeDetailRoute(id: Int): String {
         return "${ComposeDetailScreen.route}/${id}"

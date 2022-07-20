@@ -4,17 +4,24 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.zjp.collection.ui.CollectionScreen
+import com.zjp.compose_unit.ui.OnFontChange
+import com.zjp.compose_unit.ui.OnThemeColorChange
 import com.zjp.compose_unit.ui.SplashView
 import com.zjp.compose_unit.ui.detail.ComposeDetailPage
 import com.zjp.compose_unit.ui.developer.DeveloperScreen
-import com.zjp.compose_unit.ui.home.CollectionPage
 import com.zjp.compose_unit.ui.home.ComposesScreen
-import com.zjp.compose_unit.ui.home.ProfileScreen
+
 import com.zjp.compose_unit.ui.home.SamplesPage
+import com.zjp.compose_unit.ui.profile.AppSettingScreen
+import com.zjp.compose_unit.ui.profile.FontSettingScreen
+import com.zjp.compose_unit.ui.profile.ProfileScreen
+import com.zjp.compose_unit.ui.profile.ThemeColorSettingScreen
 
 
 fun NavGraphBuilder.unitNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    onThemeColorChange: OnThemeColorChange = {},
+    onFontChange: OnFontChange = {}
 ) {
     navigation(
         route = Screen.Home.route,
@@ -64,6 +71,26 @@ fun NavGraphBuilder.unitNavGraph(
     ) {
         DeveloperPage(navController = navController)
     }
+    composable(
+        Screen.ThemeSetting.route,
+    ) {
+        ThemeColorSettingScreen(onThemeColorChange)
+    }
+    composable(
+        Screen.AppSetting.route,
+    ) {
+        AppSettingScreen() { route ->
+            navController.navigate(route)
+        }
+    }
+    composable(
+        Screen.FontSetting.route,
+    ) {
+        FontSettingScreen(onFontChange) {
+            navController.popBackStack()
+        }
+
+    }
 }
 
 
@@ -100,7 +127,7 @@ fun DeveloperPage(
 
 @Composable
 fun ProfilePage(navigateToRoute: (String) -> Unit) {
-    ProfileScreen()
+    ProfileScreen(navigateToRoute)
 }
 
 @Composable

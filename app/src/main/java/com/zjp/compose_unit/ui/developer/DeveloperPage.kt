@@ -1,5 +1,6 @@
 package com.zjp.compose_unit.ui.developer
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -10,13 +11,18 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.apkfuns.logutils.LogUtils
+import com.zjp.compose_unit.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import java.security.Provider
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -40,133 +46,111 @@ fun DeveloperScreen(
             )
         },
         content = {
-            TwoButtonScreen()
+            Column {
+                Spacer(modifier = Modifier.height(50.dp))
+                CompositionLocal()
+                Spacer(modifier = Modifier.height(50.dp))
+                StaticCompositionLocal()
+            }
         }
     )
 }
 
-/**
- * 减少不必要的重构
- */
-@Composable
-fun DerivedState() {
-    LogUtils.d("re composed")
-    var counter by remember {
-        mutableStateOf(0)
-    }
-    val counterText by derivedStateOf {
-        "The counter is $counter"
-    }
-    Button(onClick = { counter++ }) {
-        Text(text = counterText)
-    }
-}
-
 
 @Composable
-fun SnapshotFlow(scaffoldState: ScaffoldState) {
-
-    var message by remember {
-        mutableStateOf(System.currentTimeMillis())
-    }
-    LaunchedEffect(key1 = scaffoldState.snackbarHostState) {
-        snapshotFlow { scaffoldState.snackbarHostState }
-            .mapNotNull { it.currentSnackbarData?.message }
-            .distinctUntilChanged()
-            .collect() { message ->
-                LogUtils.d("A Snackbar with message $message was shown")
-            }
-    }
-
-    var scope = rememberCoroutineScope()
-
-    Column() {
-        Button(onClick = {
-            scope.launch {
-                scaffoldState.snackbarHostState.showSnackbar("")
-            }
-        }) {
-            Text(text = "empty message")
-        }
-
-        Button(onClick = {
-            scope.launch {
-                scaffoldState.snackbarHostState.showSnackbar(message.toString())
-            }
-        }) {
-            Text(text = "same message")
-        }
-
-        Button(onClick = {
-            scope.launch {
-                scaffoldState.snackbarHostState.showSnackbar(System.currentTimeMillis().toString())
-            }
-        }) {
-            Text(text = "different message")
-        }
-    }
-}
-
-@Composable
-fun LandingScreen(onTimeout: () -> Unit) {
-
-    // This will always refer to the latest onTimeout function that
-    // LandingScreen was recomposed with
-    val currentOnTimeout by rememberUpdatedState(onTimeout)
-
-    // Create an effect that matches the lifecycle of LandingScreen.
-    // If LandingScreen recomposes, the delay shouldn't start again.
-    LaunchedEffect(true) {
-        delay(3000)
-        currentOnTimeout()
-    }
-
-    /* Landing screen content */
-}
-
-
-@Composable
-fun TwoButtonScreen() {
-    var buttonColour by remember {
-        mutableStateOf("Unknown")
-    }
+fun ProviderBase() {
     Column {
-        Button(
-            onClick = {
-                buttonColour = "Red"
-            },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.Red
-            )
-        ) {
-            Text("Red Button")
+        Text("Uses MaterialTheme's provided alpha")
+        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            Text("Medium value provided for LocalContentAlpha")
+            Text("This Text also uses the medium value")
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.disabled) {
+                DescendantExample()
+            }
         }
-        Spacer(Modifier.height(24.dp))
-        Button(
-            onClick = {
-                buttonColour = "Black"
-            },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.Black
-            )
-        ) {
-            Text("Black Button")
-        }
-        Timer(buttonColor = buttonColour)
     }
 }
 
-@Composable
-fun Timer(
-    buttonColor: String
-) {
-    LogUtils.d("re compose")
-    val timerDuration = 5000L
-    println("Composing timer with colour : $buttonColor")
-    LaunchedEffect(key1 = buttonColor, block = {
-        delay(timerDuration)
-        println("Timer ended")
-        println("Last pressed button color was $buttonColor")
-    })
 
+@Composable
+fun DescendantExample() {
+    // CompositionLocalProviders also work across composable functions
+
+//    val resources = LocalContext.current.resources
+//    val fruitText = remember(resources, fruitSize) {
+//        resources.getQuantityString(R.plurals.fruit_title, fruitSize)
+//    }
+    Text("This Text uses the disabled alpha now")
 }
+
+
+data class Elevations(val card: Dp = 0.dp, val default: Dp = 0.dp)
+
+// Define a CompositionLocal global object with a default
+// This instance can be accessed by all composables in the app
+val LocalElevations = compositionLocalOf { Elevations() }
+
+@Composable
+fun CustomProvider() {
+    val elevations = if (isSystemInDarkTheme()) {
+        Elevations(card = 1.dp, default = 1.dp)
+    } else {
+        Elevations(card = 0.dp, default = 0.dp)
+    }
+    CompositionLocalProvider(LocalElevations provides elevations) {
+        // ... Content goes here ...
+        // This part of Composition will see the `elevations` instance
+        // when accessing LocalElevations.current
+
+        Card(elevation = LocalElevations.current.card) {
+            // Content
+
+        }
+    }
+}
+
+
+@Composable
+fun CompositionLocal() {
+    val elevations =
+        Elevations(card = 1.dp, default = 1.dp)
+
+    CompositionLocalProvider(LocalElevations provides elevations) {
+
+        Card(elevation = LocalElevations.current.card) {
+            LogUtils.d("重组")
+            Button(onClick = {
+                LocalElevations.provides(Elevations(card = 0.dp, default = 0.dp))
+            }) {
+                Text(text = "Change Elevation")
+            }
+        }
+    }
+}
+
+val StaticLocalElevations = compositionLocalOf { Elevations() }
+
+@Composable
+fun StaticCompositionLocal() {
+    val elevations =
+        Elevations(card = 1.dp, default = 1.dp)
+
+    CompositionLocalProvider(StaticLocalElevations provides elevations) {
+        // ... Content goes here ...
+        // This part of Composition will see the `elevations` instance
+        // when accessing LocalElevations.current
+
+        Card(elevation = StaticLocalElevations.current.card) {
+            LogUtils.d("Static 重组")
+            Button(onClick = {
+                StaticLocalElevations.provides(Elevations(card = 10.dp, default = 10.dp))
+            }) {
+                Text(text = "Static Change Elevation")
+            }
+        }
+
+    }
+}
+
+
+

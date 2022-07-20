@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -48,6 +50,7 @@ fun ComposesScreen(
     homeViewModel: HomeViewModel = viewModel(),
     onClick: (compose: Compose) -> Unit,
 ) {
+    var context = LocalContext.current
     val uiState = homeViewModel.uiState
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -215,7 +218,7 @@ fun ComposeItemView(
             Icon(
                 painter = painterResource(id = R.drawable.collect),
                 contentDescription = "",
-                tint = Const.colorDarkBlue,
+                tint = MaterialTheme.colors.primary,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(end = 20.dp, top = 5.dp)

@@ -5,7 +5,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Typography
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -49,16 +48,28 @@ private val LightColorPalette = lightColors(
 
 
 @Composable
-fun Compose_unitTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun Compose_unitTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    primary: Color = Color.Blue,
+    font: FontFamily = local,
+    content: @Composable () -> Unit
+) {
     val colors = if (darkTheme) {
-        DarkColorPalette
+        DarkColorPalette.copy(primary = primary)
     } else {
-        LightColorPalette
+        LightColorPalette.copy(primary = primary)
     }
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = Typography(
+            body1 = TextStyle(
+                fontFamily = FontFamily.Default,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp
+            ),
+            defaultFontFamily = font
+        ),
         shapes = Shapes,
         content = content
     )

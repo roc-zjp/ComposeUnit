@@ -1,6 +1,7 @@
-package com.zjp.compose_unit.ui.home
+package com.zjp.compose_unit.ui.profile
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -19,11 +20,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zjp.compose_unit.R
+import com.zjp.compose_unit.route.Screen
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navigateToRoute: (String) -> Unit = {}) {
     Scaffold(
         topBar = {
             Image(
@@ -71,6 +73,8 @@ fun ProfileScreen() {
                         contentDescription = "",
                         tint = MaterialTheme.colors.primary
                     )
+                }, modifier = Modifier.clickable {
+                    navigateToRoute(Screen.AppSetting.route)
                 }) {
                     Text(text = "应用设置")
                 }
@@ -95,7 +99,7 @@ fun ProfileScreen() {
                 Divider()
                 ListItem(icon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.app_version),
+                        painter = painterResource(id = R.drawable.check_update),
                         contentDescription = "",
                         tint = MaterialTheme.colors.primary
                     )
@@ -119,5 +123,5 @@ fun ProfileScreen() {
 @Preview(showSystemUi = true)
 @Composable
 fun ProfileScreenPre() {
-    ProfileScreen()
+    ProfileScreen() {}
 }
