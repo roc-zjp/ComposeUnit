@@ -1,5 +1,6 @@
 package com.zjp.compose_unit.ui.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -21,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zjp.compose_unit.R
 import com.zjp.compose_unit.route.Screen
+import com.zjp.core_database.DBManager
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -45,11 +48,11 @@ fun ProfileScreen(navigateToRoute: (String) -> Unit = {}) {
                     .width(50.dp)
                     .height(50.dp)
                     .clip(CircleShape)
-
             )
 
         }
     ) { paddingValue ->
+        val context = LocalContext.current
         Box(modifier = Modifier.padding(paddingValue)) {
             Column(
                 modifier = Modifier
@@ -80,10 +83,12 @@ fun ProfileScreen(navigateToRoute: (String) -> Unit = {}) {
                 }
                 ListItem(icon = {
                     Icon(
-                        Icons.Outlined.Create,
+                        painter = painterResource(id = R.drawable.app),
                         contentDescription = "",
                         tint = MaterialTheme.colors.primary
                     )
+                }, modifier = Modifier.clickable {
+                    navigateToRoute(Screen.AboutApp.route)
                 }) {
                     Text(text = "关于应用")
                 }
@@ -93,6 +98,8 @@ fun ProfileScreen(navigateToRoute: (String) -> Unit = {}) {
                         contentDescription = "",
                         tint = MaterialTheme.colors.primary
                     )
+                }, modifier = Modifier.clickable {
+                    navigateToRoute(Screen.AboutMe.route)
                 }) {
                     Text(text = "关于我")
                 }
@@ -112,6 +119,12 @@ fun ProfileScreen(navigateToRoute: (String) -> Unit = {}) {
                         contentDescription = "",
                         tint = MaterialTheme.colors.primary
                     )
+                }, modifier = Modifier.clickable {
+                    Toast.makeText(
+                        context,
+                        "当前数据库版本${DBManager.getInstance().mDB.version}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }) {
                     Text(text = "检查数据库版本")
                 }

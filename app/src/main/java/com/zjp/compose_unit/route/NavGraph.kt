@@ -12,10 +12,7 @@ import com.zjp.compose_unit.ui.developer.DeveloperScreen
 import com.zjp.compose_unit.ui.home.ComposesScreen
 
 import com.zjp.compose_unit.ui.home.SamplesPage
-import com.zjp.compose_unit.ui.profile.AppSettingScreen
-import com.zjp.compose_unit.ui.profile.FontSettingScreen
-import com.zjp.compose_unit.ui.profile.ProfileScreen
-import com.zjp.compose_unit.ui.profile.ThemeColorSettingScreen
+import com.zjp.compose_unit.ui.profile.*
 
 
 fun NavGraphBuilder.unitNavGraph(
@@ -74,14 +71,19 @@ fun NavGraphBuilder.unitNavGraph(
     composable(
         Screen.ThemeSetting.route,
     ) {
-        ThemeColorSettingScreen(onThemeColorChange)
+        ThemeColorSettingScreen(onThemeColorChange) {
+            navController.popBackStack()
+        }
+
     }
     composable(
         Screen.AppSetting.route,
     ) {
-        AppSettingScreen() { route ->
+        AppSettingScreen(navigateToRoute = { route ->
             navController.navigate(route)
-        }
+        }, goBack = {
+            navController.popBackStack()
+        })
     }
     composable(
         Screen.FontSetting.route,
@@ -90,6 +92,20 @@ fun NavGraphBuilder.unitNavGraph(
             navController.popBackStack()
         }
 
+    }
+    composable(
+        Screen.AboutMe.route,
+    ) {
+        AboutMeScreen() {
+            navController.popBackStack()
+        }
+    }
+    composable(
+        Screen.AboutApp.route,
+    ) {
+        AboutAppScreen() {
+            navController.popBackStack()
+        }
     }
 }
 

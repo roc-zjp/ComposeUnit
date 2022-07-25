@@ -4,6 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -13,9 +15,15 @@ import com.zjp.compose_unit.route.Screen
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AppSettingScreen(navigateToRoute: (String) -> Unit = {}) {
+fun AppSettingScreen(navigateToRoute: (String) -> Unit = {}, goBack: () -> Unit = {}) {
     Scaffold(topBar = {
-        UnitTopAppBar(title = { Text(text = "应用设置") })
+        UnitTopAppBar(title = { Text(text = "应用设置") }, navigationIcon = {
+            IconButton(onClick = {
+                goBack()
+            }) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back")
+            }
+        })
     }) {
         Column(Modifier.padding(it)) {
             ListItem(icon = {

@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.apkfuns.logutils.BuildConfig
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -79,13 +80,15 @@ fun App() {
                     }
                 },
                 floatingActionButton = {
-                    FloatingActionButton(onClick = {
-                        navController.navigate(Screen.Debug.route)
-                    }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.debug),
-                            contentDescription = "debug"
-                        )
+                    if (BuildConfig.DEBUG) {
+                        FloatingActionButton(onClick = {
+                            navController.navigate(Screen.Debug.route)
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.debug),
+                                contentDescription = "debug"
+                            )
+                        }
                     }
                 }
             ) { innerPaddingModifier ->

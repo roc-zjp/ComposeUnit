@@ -9,8 +9,12 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,10 +31,16 @@ import com.zjp.compose_unit.ui.OnThemeColorChange
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ThemeColorSettingScreen(onThemeColorChange: OnThemeColorChange) {
+fun ThemeColorSettingScreen(onThemeColorChange: OnThemeColorChange, goBack: () -> Unit = {}) {
     Scaffold(
         topBar = {
-            UnitTopAppBar(title = { Text(text = "主题设置") })
+            UnitTopAppBar(title = { Text(text = "主题设置") }, navigationIcon = {
+                IconButton(onClick = {
+                    goBack()
+                }) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back")
+                }
+            })
         }
     ) {
         var currentColor = LocalThemeColor.current

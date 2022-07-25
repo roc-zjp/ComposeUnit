@@ -24,15 +24,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zjp.compose_unit.R
 import com.zjp.compose_unit.common.Const
+import com.zjp.compose_unit.common.LocalThemeColor
 import com.zjp.compose_unit.ui.theme.Compose_unitTheme
 
 @Composable
-fun NodeTitle(title: String, folded: Boolean = false, toggleFold: () -> Unit) {
+fun NodeTitle(
+    title: String,
+    folded: Boolean = false,
+    showLeft: Boolean = true,
+    modifier: Modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 10.dp),
+    toggleFold: () -> Unit = {}
+) {
+    val color = LocalThemeColor.current
     Column {
         Divider(modifier = Modifier.fillMaxWidth())
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 10.dp)
+            modifier = modifier
         ) {
             Canvas(
                 modifier = Modifier
@@ -42,7 +50,7 @@ fun NodeTitle(title: String, folded: Boolean = false, toggleFold: () -> Unit) {
                 val canvasWidth = size.width
                 val canvasHeight = size.height
                 drawCircle(
-                    color = Const.colorDarkBlue,
+                    color = color,
                     center = Offset(x = canvasWidth / 2, y = canvasHeight / 2),
                     radius = canvasWidth / 2
                 )
@@ -53,18 +61,20 @@ fun NodeTitle(title: String, folded: Boolean = false, toggleFold: () -> Unit) {
                 style = TextStyle(fontWeight = FontWeight.Black, fontSize = 18.sp)
             )
             Spacer(modifier = Modifier.weight(1.0f))
-            Icon(Icons.Sharp.Share, contentDescription = "share", tint = Const.colorDarkBlue)
-            Spacer(modifier = Modifier.padding(start = 10.dp))
-            Icon(
-                painter = painterResource(id = if (folded) R.drawable.ic_baseline_unfold_more_24 else R.drawable.ic_baseline_unfold_less_24),
-                contentDescription = "less",
-                tint = Const.colorDarkBlue,
-                modifier = Modifier
-                    .clickable(indication = null, interactionSource = remember {
-                        MutableInteractionSource()
-                    }) { toggleFold() }
-            )
-            Spacer(modifier = Modifier.padding(start = 10.dp))
+            if (showLeft) {
+                Icon(Icons.Sharp.Share, contentDescription = "share", tint = color)
+                Spacer(modifier = Modifier.padding(start = 10.dp))
+                Icon(
+                    painter = painterResource(id = if (folded) R.drawable.ic_baseline_unfold_more_24 else R.drawable.ic_baseline_unfold_less_24),
+                    contentDescription = "less",
+                    tint = color,
+                    modifier = Modifier
+                        .clickable(indication = null, interactionSource = remember {
+                            MutableInteractionSource()
+                        }) { toggleFold() }
+                )
+                Spacer(modifier = Modifier.padding(start = 10.dp))
+            }
         }
 
     }
