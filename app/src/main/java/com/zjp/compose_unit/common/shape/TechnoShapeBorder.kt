@@ -1,10 +1,7 @@
 package com.zjp.compose_unit.common.shape
 
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 
@@ -16,14 +13,16 @@ class TechnoShapeBorder(
     var storkWidth: Float = 1.0f
 
 ) : Shape {
+    private var outLinePath = Path()
+    private var innerLinePath = Path()
 
-    private var outLinePath = Path();
+
     override fun createOutline(
         size: Size,
         layoutDirection: LayoutDirection,
         density: Density
     ): Outline {
-        val width = size.width;
+        val width = size.width
         outLinePath.moveTo(cornerWidth, 0f)
         outLinePath.relativeLineTo(width - cornerWidth * 2, 0f)
         outLinePath.relativeLineTo(cornerWidth, cornerWidth)
@@ -44,9 +43,8 @@ class TechnoShapeBorder(
         outLinePath.lineTo(0f, cornerWidth)
         outLinePath.close()
 
-
-
         return Outline.Generic(outLinePath)
     }
+
 
 }

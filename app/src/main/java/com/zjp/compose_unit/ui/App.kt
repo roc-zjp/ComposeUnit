@@ -12,13 +12,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.apkfuns.logutils.BuildConfig
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -80,7 +78,7 @@ fun App() {
                     }
                 },
                 floatingActionButton = {
-                    if (BuildConfig.DEBUG) {
+                    if (com.zjp.compose_unit.BuildConfig.DEBUG)
                         FloatingActionButton(onClick = {
                             navController.navigate(Screen.Debug.route)
                         }) {
@@ -89,7 +87,6 @@ fun App() {
                                 contentDescription = "debug"
                             )
                         }
-                    }
                 }
             ) { innerPaddingModifier ->
                 NavHost(

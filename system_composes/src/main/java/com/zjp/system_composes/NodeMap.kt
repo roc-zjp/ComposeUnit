@@ -89,5 +89,10 @@ fun NodeMap(id: Int) {
         73 -> TriStateCheckboxBase()
         74 -> CheckBoxBase()
         75 -> ListItemBase()
+        76 -> CanvasBase()
+        77 -> CanvasInset()
+        78 -> CanvasRotate()
+        79 -> CanvasTransform()
+        80 -> DrawClock()
     }
 }

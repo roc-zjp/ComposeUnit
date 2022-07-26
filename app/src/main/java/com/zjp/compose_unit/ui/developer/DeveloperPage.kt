@@ -1,22 +1,30 @@
 package com.zjp.compose_unit.ui.developer
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.apkfuns.logutils.LogUtils
 import com.zjp.compose_unit.R
+import com.zjp.system_composes.system.widgets.DrawClock
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -46,12 +54,7 @@ fun DeveloperScreen(
             )
         },
         content = {
-            Column {
-                Spacer(modifier = Modifier.height(50.dp))
-                CompositionLocal()
-                Spacer(modifier = Modifier.height(50.dp))
-                StaticCompositionLocal()
-            }
+            DrawClock()
         }
     )
 }

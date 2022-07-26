@@ -18,9 +18,11 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
@@ -156,6 +158,7 @@ fun ComposeItemView(
                 .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
                 .fillMaxWidth()
                 .height(100.dp)
+
                 .clip(
                     TechnoShapeBorder(
                         storkWidth = 1.0f,
