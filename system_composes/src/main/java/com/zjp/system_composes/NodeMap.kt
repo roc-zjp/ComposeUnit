@@ -94,5 +94,9 @@ fun NodeMap(id: Int) {
         78 -> CanvasRotate()
         79 -> CanvasTransform()
         80 -> DrawClock()
+        81 -> LayoutBase()
+        82 -> HorizontalLayout()
+        83 -> VerticalLayout()
+        84 -> WrapLayout()
     }
 }

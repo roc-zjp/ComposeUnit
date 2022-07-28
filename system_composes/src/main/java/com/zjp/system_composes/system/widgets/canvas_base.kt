@@ -63,62 +63,7 @@ fun CanvasBase() {
     )
 }
 
-//@Composable
-//fun CanvasAnimation() {
-//    val deltaXAnim = rememberInfiniteTransition()
-//    val dx by deltaXAnim.animateFloat(
-//        initialValue = 0f,
-//        targetValue = 1f,
-//        animationSpec = infiniteRepeatable(
-//            animation = tween(500, easing = LinearEasing)
-//        )
-//    )
-//
-//    val screenWidthPx = with(LocalDensity.current) {
-//        (LocalConfiguration.current.screenHeightDp * density)
-//    }
-//    val animTranslate by animateFloatAsState(
-//        targetValue = screenWidthPx,
-//        animationSpec = TweenSpec(10000, easing = LinearEasing)
-//    )
-//
-//    val waveHeight by animateFloatAsState(
-//        targetValue = 0f,
-//        animationSpec = TweenSpec(10000, easing = LinearEasing)
-//    )
-//
-//    Canvas(
-//        modifier = Modifier.size(300.dp),
-//        onDraw = {
-//            translate(top = animTranslate) {
-//                drawPath(path = path, color = animColor)
-//                path.reset()
-//                val halfWaveWidth = waveWidth / 2
-//                path.moveTo(-waveWidth + (waveWidth * dx), originalY.dp.toPx())
-//
-//                for (i in -waveWidth..(size.width.toInt() + waveWidth) step waveWidth) {
-//                    path.relativeQuadraticBezierTo(
-//                        halfWaveWidth.toFloat() / 2,
-//                        -waveHeight,
-//                        halfWaveWidth.toFloat(),
-//                        0f
-//                    )
-//                    path.relativeQuadraticBezierTo(
-//                        halfWaveWidth.toFloat() / 2,
-//                        waveHeight,
-//                        halfWaveWidth.toFloat(),
-//                        0f
-//                    )
-//                }
-//
-//                path.lineTo(size.width, size.height)
-//                path.lineTo(0f, size.height)
-//                path.close()
-//            }
-//        }
-//    )
-//
-//}
+
 
 @Composable
 fun CanvasInset() {
