@@ -14,12 +14,8 @@ sealed class Screen(val route: String) {
     object AboutMe : Screen(route = "about_me_screen")
     object AboutApp : Screen(route = "about_app_screen")
 
-    fun createComposeDetailRoute(id: Int): String {
-        return "${ComposeDetailScreen.route}/${id}"
-    }
-
-    fun composeDetailRoute(): String {
-        return "${ComposeDetailScreen.route}/{composeId}"
+    fun createComposeDetailRoute(id: Int, type: String): String {
+        return "${ComposeDetailScreen.route}/${id}/${type}"
     }
 }
 

@@ -4,8 +4,10 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,12 +26,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zjp.common.LocalThemeColor
 import com.zjp.common.compose.UnitTopAppBar
-import com.zjp.compose_unit.common.LocalThemeColor
 import com.zjp.compose_unit.common.themeColorSupport
 import com.zjp.compose_unit.ui.OnThemeColorChange
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ThemeColorSettingScreen(onThemeColorChange: OnThemeColorChange, goBack: () -> Unit = {}) {
     Scaffold(
@@ -44,11 +45,13 @@ fun ThemeColorSettingScreen(onThemeColorChange: OnThemeColorChange, goBack: () -
         }
     ) {
         var currentColor = LocalThemeColor.current
-        LazyVerticalGrid(cells = GridCells.Fixed(count = 2), content = {
-            items(themeColorSupport.keys.toList()) { color ->
-                ThemeItem(color = color, currentColor == color, onThemeColorChange)
-            }
-        })
+        LazyVerticalGrid(columns = GridCells.Fixed(count = 2),
+            modifier = Modifier.padding(it),
+            content = {
+                items(themeColorSupport.keys.toList()) { color ->
+                    ThemeItem(color = color, currentColor == color, onThemeColorChange)
+                }
+            })
     }
 }
 

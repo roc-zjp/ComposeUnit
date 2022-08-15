@@ -66,6 +66,9 @@ fun ComposesScreen(
         }
     }
 
+
+
+
     Box() {
         if (homeViewModel.uiState.isLoading) {
             LoadingCompose()

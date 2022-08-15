@@ -1,48 +1,54 @@
 package com.zjp.compose_unit.ui.developer
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.Snapshot
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-import com.apkfuns.logutils.LogUtils
-import com.zjp.compose_unit.R
-import com.zjp.system_composes.system.widgets.DrawClock
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.launch
-import java.security.Provider
+import androidx.compose.ui.unit.sp
+import com.zjp.collection.R
+import com.zjp.collection.ui.CollectionItem
+import com.zjp.common.compose.UnitTopAppBar
+import com.zjp.common.state.CommonUiState
+import com.zjp.common.utils.recomposeHighlighter
+import com.zjp.core_database.model.Compose
+import kotlinx.coroutines.newFixedThreadPoolContext
 
-
-@OptIn(ExperimentalMaterialApi::class)
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DeveloperScreen(
     onBack: () -> Unit
 ) {
-    val scaffoldState = rememberScaffoldState()
+    val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
-        scaffoldState = scaffoldState,
+        scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
         topBar = {
-            TopAppBar(
+            UnitTopAppBar(
                 title = { Text(text = "开发者页面") },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -54,106 +60,137 @@ fun DeveloperScreen(
             )
         },
         content = {
-            DrawClock()
+            NestedScrollDispatcherTest()
         }
     )
 }
 
 
 @Composable
-fun ProviderBase() {
-    Column {
-        Text("Uses MaterialTheme's provided alpha")
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Text("Medium value provided for LocalContentAlpha")
-            Text("This Text also uses the medium value")
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.disabled) {
-                DescendantExample()
+fun NestedScrollDispatcherTest() {
+    val maxHeight = 200f;
+    val minHeight = 60f
+
+    val d = LocalDensity.current.density
+    val toolbarHeightPx = with(LocalDensity.current) {
+        maxHeight.dp.roundToPx().toFloat()
+    }
+    val toolbarMinHeightPx = with(LocalDensity.current) {
+        minHeight.dp.roundToPx().toFloat()
+    }
+    val toolbarOffsetHeightPx = remember { mutableStateOf(0f) }
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val delta = available.y
+                val newOffset = toolbarOffsetHeightPx.value + delta
+                toolbarOffsetHeightPx.value =
+                    newOffset.coerceIn(toolbarMinHeightPx - toolbarHeightPx, 0f)
+                return Offset.Zero
+            }
+        }
+    }
+    var progress by remember { mutableStateOf(0f) }
+    LaunchedEffect(key1 = toolbarOffsetHeightPx.value) {
+        progress =
+            ((toolbarHeightPx + toolbarOffsetHeightPx.value) / toolbarHeightPx - minHeight / maxHeight) / (1f - minHeight / maxHeight)
+    }
+    Box(
+        Modifier
+            .fillMaxSize()
+            .nestedScroll(nestedScrollConnection)
+    ) {
+        LazyColumn(contentPadding = PaddingValues(top = maxHeight.dp)) {
+            items(100) { index ->
+                Text(
+                    "I'm item $index", modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+            }
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(((toolbarHeightPx + toolbarOffsetHeightPx.value) / d).dp)
+                .background(
+                    Color.Red
+                )
+        ) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(modifier = Modifier.width(24.dp))
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(progress + 0.001f)
+                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(1f)
+                            .padding(vertical = 10.dp)
+                            .aspectRatio(1f)
+                            .clip(CircleShape)
+                            .background(Color.White)
+                    ) {
+                        Image(
+                            painter = painterResource(id = com.zjp.compose_unit.R.mipmap.ic_launcher),
+                            contentDescription = "",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                    Text(
+                        "Hello World",
+                        color = Color.White,
+                        modifier = Modifier
+                            .alpha(progress)
+                            .padding((8 * (progress * progress * progress)).dp),
+                        fontSize = (24 * (progress)).sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                Text(
+                    "Hello World",
+                    color = Color.White,
+                    modifier = Modifier
+                        .alpha(1f - progress)
+                        .weight(1.001f - progress)
+                        .padding(start = 20.dp),
+                    fontSize = (24 * (1f - progress)).sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
+                Spacer(modifier = Modifier.width(24.dp))
             }
         }
     }
 }
 
 
-@Composable
-fun DescendantExample() {
-    // CompositionLocalProviders also work across composable functions
-
-//    val resources = LocalContext.current.resources
-//    val fruitText = remember(resources, fruitSize) {
-//        resources.getQuantityString(R.plurals.fruit_title, fruitSize)
-//    }
-    Text("This Text uses the disabled alpha now")
-}
 
 
-data class Elevations(val card: Dp = 0.dp, val default: Dp = 0.dp)
-
-// Define a CompositionLocal global object with a default
-// This instance can be accessed by all composables in the app
-val LocalElevations = compositionLocalOf { Elevations() }
-
-@Composable
-fun CustomProvider() {
-    val elevations = if (isSystemInDarkTheme()) {
-        Elevations(card = 1.dp, default = 1.dp)
-    } else {
-        Elevations(card = 0.dp, default = 0.dp)
-    }
-    CompositionLocalProvider(LocalElevations provides elevations) {
-        // ... Content goes here ...
-        // This part of Composition will see the `elevations` instance
-        // when accessing LocalElevations.current
-
-        Card(elevation = LocalElevations.current.card) {
-            // Content
-
-        }
-    }
-}
 
 
-@Composable
-fun CompositionLocal() {
-    val elevations =
-        Elevations(card = 1.dp, default = 1.dp)
 
-    CompositionLocalProvider(LocalElevations provides elevations) {
 
-        Card(elevation = LocalElevations.current.card) {
-            LogUtils.d("重组")
-            Button(onClick = {
-                LocalElevations.provides(Elevations(card = 0.dp, default = 0.dp))
-            }) {
-                Text(text = "Change Elevation")
-            }
-        }
-    }
-}
 
-val StaticLocalElevations = compositionLocalOf { Elevations() }
 
-@Composable
-fun StaticCompositionLocal() {
-    val elevations =
-        Elevations(card = 1.dp, default = 1.dp)
 
-    CompositionLocalProvider(StaticLocalElevations provides elevations) {
-        // ... Content goes here ...
-        // This part of Composition will see the `elevations` instance
-        // when accessing LocalElevations.current
 
-        Card(elevation = StaticLocalElevations.current.card) {
-            LogUtils.d("Static 重组")
-            Button(onClick = {
-                StaticLocalElevations.provides(Elevations(card = 10.dp, default = 10.dp))
-            }) {
-                Text(text = "Static Change Elevation")
-            }
-        }
 
-    }
-}
+
 
 
 

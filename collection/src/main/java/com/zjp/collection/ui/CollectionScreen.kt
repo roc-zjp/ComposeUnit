@@ -1,13 +1,14 @@
 package com.zjp.collection.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -17,24 +18,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.apkfuns.logutils.LogUtils
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.zjp.collection.R
 import com.zjp.collection.viewmodel.CollectionViewModel
-import com.zjp.common.compose.UnitTopAppBar
+import com.zjp.common.LocalFont
+import com.zjp.common.LocalThemeColor
+import com.zjp.common.compose.FoldAppbar
 import com.zjp.common.state.CommonUiState
-import com.zjp.core_database.model.Collection
+import com.zjp.core_database.model.Compose
+import okhttp3.internal.wait
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CollectionScreen(viewModel: CollectionViewModel = viewModel()) {
+fun CollectionScreen(
+    viewModel: CollectionViewModel = viewModel(),
+    onClick: (compose: Compose) -> Unit,
+) {
     Scaffold(topBar = {
-        UnitTopAppBar(title = {
-            Text(text = "收藏集")
-        })
+
     }) { innerPadding ->
         var uiState = viewModel.uiState
-
         if (uiState is CommonUiState.NoData) {
             if (uiState.isLoading) {
                 Box(
@@ -54,23 +68,92 @@ fun CollectionScreen(viewModel: CollectionViewModel = viewModel()) {
                 }
             }
         } else {
-            var collections = (uiState as CommonUiState.HasData<List<Collection>>).data
+            val collections = (uiState as CommonUiState.HasData<List<Compose>>).data
 
-            LazyVerticalGrid(modifier = Modifier.padding(innerPadding),
-                cells = GridCells.Fixed(2), content = {
-                    items(collections) { item ->
-                        CollectionItem(item = item)
+            FoldAppbar(
+                minHeightPx = with(LocalDensity.current) { 80.dp.roundToPx().toFloat() },
+                maxHeightPx = with(LocalDensity.current) { 200.dp.roundToPx().toFloat() },
+                appBar = { min, max, progress ->
+                    Box(
+                        modifier = Modifier
+                            .height(with(LocalDensity.current) { (max - (max - min) * progress).toDp() })
+                            .fillMaxWidth()
+                    ) {
+
+                        val color = LocalThemeColor.current
+                        Image(
+                            painter = painterResource(id = com.zjp.common.R.drawable.caver),
+                            contentDescription = "caver",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color.copy(alpha = progress))
+                        )
+                        CollectionTitle(alpha = progress)
                     }
-                })
+                },
+            ) { innerPadding, scrollState ->
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(1),
+                    contentPadding = PaddingValues(top = with(LocalDensity.current) { innerPadding.toDp() }),
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    content = {
+                        items(collections) { item ->
+                            CollectionItem(item = item, onClick)
+                        }
+                    },
+                    state = scrollState
+                )
+            }
         }
-
     }
 }
 
 
 @Composable
-fun CollectionItem(item: Collection) {
-    Card(modifier = Modifier.padding(10.dp)) {
+fun CollectionTitle(alpha: Float = 1f) {
+    ProvideWindowInsets() {
+        val sbPaddingValues = rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars)
+        Box(
+            modifier = Modifier
+                .padding(sbPaddingValues)
+                .fillMaxWidth()
+        ) {
+            Image(
+                painter = painterResource(id = com.zjp.common.R.drawable.kobe),
+                contentScale = ContentScale.Crop,
+                contentDescription = "kobe",
+                modifier = Modifier
+                    .padding(start = 20.dp)
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .border(1.dp, color = Color.White, shape = CircleShape)
+            )
+
+            Text(
+                text = "收藏集",
+                color = Color.White.copy(alpha = alpha),
+                modifier = Modifier
+                    .align(Alignment.Center),
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                fontFamily = LocalFont.current
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun CollectionItem(item: Compose, onClick: (compose: Compose) -> Unit) {
+    Card(modifier = Modifier.padding(10.dp), onClick = {
+        onClick(item)
+        LogUtils.d("onclick")
+    }) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -116,6 +199,13 @@ fun CollectionItem(item: Collection) {
             )
         }
     }
+}
+
+
+@Preview
+@Composable
+fun TitlePre() {
+    CollectionTitle()
 }
 
 

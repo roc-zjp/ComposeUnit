@@ -5,8 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -25,30 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zjp.system_composes.R
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CollectionPage() {
-    Scaffold(topBar = {
-        Image(
-            painter = painterResource(id = R.drawable.caver),
-            contentScale = ContentScale.Crop,
-            contentDescription = "Header",
-            modifier = Modifier
-                .height(
-                    200.dp
-                )
-                .fillMaxWidth()
-        )
-    }) {
-        val items = List(3) { index ->
-            "item$index"
-        }
-        LazyVerticalGrid(cells = GridCells.Fixed(count = 2), content = {
-            items(items) {
-                CollectionItem()
-            }
-        })
-    }
+
+
 }
 
 

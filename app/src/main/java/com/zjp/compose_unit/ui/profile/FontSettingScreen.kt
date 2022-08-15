@@ -1,12 +1,11 @@
 package com.zjp.compose_unit.ui.profile
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -23,13 +22,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zjp.common.LocalFont
 import com.zjp.common.compose.UnitTopAppBar
 import com.zjp.compose_unit.ui.OnFontChange
-import com.zjp.compose_unit.ui.theme.LocalFont
 import com.zjp.compose_unit.ui.theme.fontMap
 import com.zjp.compose_unit.ui.theme.local
 
-@OptIn(ExperimentalFoundationApi::class)
+
 @Composable
 fun FontSettingScreen(onFontChange: OnFontChange, goBack: () -> Unit = {}) {
     Scaffold(
@@ -44,18 +43,18 @@ fun FontSettingScreen(onFontChange: OnFontChange, goBack: () -> Unit = {}) {
         }
     ) {
         var currentFont = LocalFont.current
-        LazyVerticalGrid(cells = GridCells.Fixed(count = 2), content = {
+        LazyVerticalGrid(columns = GridCells.Fixed(count = 2), modifier = Modifier.padding(it)) {
             items(fontMap.keys.toList()) { fontStr ->
-                FontItem(fontStr = fontStr, currentFont == fontStr, onFontChange)
+                FontItem(fontStr = fontStr, currentFont == fontMap[fontStr], onFontChange)
             }
-        })
+        }
     }
 }
 
 @Composable
 fun FontItem(fontStr: String, isSelected: Boolean = false, onFontChange: OnFontChange) {
     val colorList = arrayListOf(Color.White, Color.Red)
-    val font = if (fontMap[fontStr] == null) local else fontMap[fontStr]
+    val font = fontMap[fontStr] ?: local
     Box(
         modifier = Modifier
             .padding(10.dp)
@@ -65,7 +64,7 @@ fun FontItem(fontStr: String, isSelected: Boolean = false, onFontChange: OnFontC
                 brush = Brush.horizontalGradient(colorList),
                 shape = RoundedCornerShape(10.dp)
             )
-            .clickable { onFontChange(fontStr) }
+            .clickable { onFontChange(font) }
     ) {
         Box(
             modifier = Modifier
@@ -98,6 +97,5 @@ fun FontItem(fontStr: String, isSelected: Boolean = false, onFontChange: OnFontC
             color = Color.White,
             fontFamily = font
         )
-
     }
 }

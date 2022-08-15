@@ -32,7 +32,7 @@ fun ProfileScreen(navigateToRoute: (String) -> Unit = {}) {
     Scaffold(
         topBar = {
             Image(
-                painter = painterResource(id = com.zjp.system_composes.R.drawable.caver),
+                painter = painterResource(id = com.zjp.common.R.drawable.caver),
                 contentScale = ContentScale.Crop,
                 contentDescription = "Header",
                 modifier = Modifier

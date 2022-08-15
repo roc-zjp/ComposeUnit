@@ -10,7 +10,7 @@ class CommentParse(var code: AnnotatedString) {
     fun toAnnotatedString(): AnnotatedString {
         val commentRegex = Regex("\\*(.|\\n)*\\*/")
         val results = commentRegex.findAll(code)
-        results?.let {
+        results.let {
             it.forEach { match ->
                 builder.addStyle(SpanStyle(color = Color.Gray), match.range.first, match.range.last)
             }

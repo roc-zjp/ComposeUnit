@@ -102,7 +102,7 @@ fun VerticalLayout() {
 }
 
 @Composable
-fun WrapLayout() {
+fun WrapLayoutSample() {
 
     Layout(content = {
         Text("MyBasicColumn")

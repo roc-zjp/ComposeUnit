@@ -60,7 +60,7 @@ fun InfoHeader(compose: Compose) {
             Text(text = compose.info, maxLines = 3, overflow = TextOverflow.Ellipsis)
         }
         Image(
-            painter = painterResource(id = com.zjp.system_composes.R.drawable.caver),
+            painter = painterResource(id = com.zjp.common.R.drawable.caver),
             contentDescription = null,
             modifier = Modifier
                 .clip(

@@ -76,8 +76,8 @@ class CodeParse(val code: AnnotatedString) {
                 }
             }
 
-            val keywordRegex = Regex("\\w+");
-            val result = keywordRegex.find(code, startIndex + 1);
+            val keywordRegex = Regex("\\w+")
+            val result = keywordRegex.find(code, startIndex + 1)
             if (result != null) {
                 if (language.containsKeywords(result.value)) {
                     results.add(

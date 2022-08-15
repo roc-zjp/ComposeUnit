@@ -22,13 +22,13 @@ import com.zjp.system_composes.R
 fun IconBase() {
     Row {
         Icon(
-            painter = painterResource(id = R.drawable.cart),
+            painter = painterResource(id = com.zjp.common.R.drawable.cart),
             contentDescription = "cart",
             tint = Color.Red
         )
         Icon(Icons.Default.Menu, contentDescription = "Menu")
         Icon(
-            bitmap = ImageBitmap.imageResource(id = R.drawable.cart),
+            bitmap = ImageBitmap.imageResource(id = com.zjp.common.R.drawable.cart),
             contentDescription = "Menu"
         )
 

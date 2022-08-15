@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.zjp.common.compose.WrapLayout
 import com.zjp.system_composes.R
-import com.zjp.system_composes.custom_compose.WrapLayout
 import kotlin.math.roundToInt
 
 /**
@@ -32,7 +32,7 @@ import kotlin.math.roundToInt
 fun ImageBase() {
     Row {
         Image(
-            painter = painterResource(id = R.drawable.jetpack_compose),
+            painter = painterResource(id = com.zjp.common.R.drawable.jetpack_compose),
             contentDescription = "图标",
             modifier = Modifier
                 .height(100.dp)
@@ -122,7 +122,7 @@ fun ImageQuality() {
                 Image(
                     bitmap = ImageBitmap.imageResource(
                         context.resources,
-                        R.drawable.cart
+                        com.zjp.common.R.drawable.cart
                     ),
                     contentDescription = "图标",
                     filterQuality = value,
@@ -177,7 +177,7 @@ fun ImageBlendMode() {
                 modifier = Modifier.padding(horizontal = 10.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.cart),
+                    painter = painterResource(id = com.zjp.common.R.drawable.cart),
                     contentDescription = "图标",
                     modifier = Modifier
                         .height(100.dp)
@@ -193,7 +193,7 @@ fun ImageBlendMode() {
 @Composable
 fun CornerImage() {
     Image(
-        painter = painterResource(R.drawable.caver),
+        painter = painterResource(com.zjp.common.R.drawable.caver),
         contentDescription = "图标",
         contentScale = ContentScale.Crop,
         modifier = Modifier

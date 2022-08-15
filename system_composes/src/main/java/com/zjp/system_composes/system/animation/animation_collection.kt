@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.zjp.common.compose.WrapLayout
 import com.zjp.system_composes.R
-import com.zjp.system_composes.custom_compose.WrapLayout
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -100,7 +100,7 @@ fun AnimatedVisibilityBase() {
                             .align(Alignment.TopCenter),
                         content = {
                             Image(
-                                painter = painterResource(id = R.drawable.jetpack_compose),
+                                painter = painterResource(id = com.zjp.common.R.drawable.jetpack_compose),
                                 contentDescription = "icon",
                                 modifier = Modifier.align(Alignment.TopCenter)
                             )
@@ -305,7 +305,7 @@ fun AnimatedVisibilitySpring() {
                             .align(Alignment.TopCenter),
                         content = {
                             Image(
-                                painter = painterResource(id = R.drawable.jetpack_compose),
+                                painter = painterResource(id = com.zjp.common.R.drawable.jetpack_compose),
                                 contentDescription = "icon",
                                 modifier = Modifier.align(Alignment.TopCenter)
                             )
@@ -681,7 +681,7 @@ fun Gesture() {
 @Composable
 fun Circle(modifier: Modifier = Modifier, radius: Dp) {
     Image(
-        painter = painterResource(id = R.drawable.jetpack_compose),
+        painter = painterResource(id = com.zjp.common.R.drawable.jetpack_compose),
         contentDescription = "circe",
         modifier
             .width(100.dp)

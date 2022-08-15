@@ -24,8 +24,8 @@ import com.apkfuns.logutils.LogUtils
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsPadding
+import com.zjp.common.LocalThemeColor
 import com.zjp.compose_unit.R
-import com.zjp.compose_unit.common.LocalThemeColor
 import com.zjp.compose_unit.ui.detail.NodeTitle
 import com.zjp.compose_unit.ui.theme.IndieFlower
 
@@ -34,7 +34,7 @@ fun AboutAppScreen(goBack: () -> Unit = {}) {
     Scaffold(topBar = {
         ProvideWindowInsets() {
             Image(
-                painter = painterResource(id = com.zjp.system_composes.R.drawable.caver),
+                painter = painterResource(id = com.zjp.common.R.drawable.caver),
                 contentScale = ContentScale.Crop,
                 contentDescription = "Header",
                 modifier = Modifier

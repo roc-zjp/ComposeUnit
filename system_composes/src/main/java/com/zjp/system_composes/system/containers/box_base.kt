@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.zjp.system_composes.custom_compose.WrapLayout
+import com.zjp.common.compose.WrapLayout
 
 /**
  * Box基本使用

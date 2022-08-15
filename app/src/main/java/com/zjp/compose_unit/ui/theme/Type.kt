@@ -41,4 +41,4 @@ val fontMap = mapOf<String, FontFamily>(
 )
 
 
-val LocalFont = compositionLocalOf { "local" }
+

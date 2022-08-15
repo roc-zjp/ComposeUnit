@@ -1,16 +1,16 @@
 package com.zjp.compose_unit.data.repository
 
-import android.annotation.SuppressLint
-import android.database.Cursor
 import com.apkfuns.logutils.LogUtils
 import com.zjp.common.data.Result
+import com.zjp.compose_unit.data.utils.parseCompose
+import com.zjp.compose_unit.data.utils.parseNode
 import com.zjp.core_database.ComposeEntry
 import com.zjp.core_database.DBManager
 import com.zjp.core_database.NodeEntry
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.Node
 
-class ComposesRepository(private val dbManager: DBManager = DBManager.getInstance()) {
+class ComposesRepository(private val dbManager: DBManager = DBManager.getInstance()) : Repository {
 
     private val compose = arrayOf(
         ComposeEntry.ID,
@@ -45,7 +45,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
     }
 
 
-    fun getAllCompose(): Result<List<Compose>> {
+    override fun getAllCompose(): Result<List<Compose>> {
         try {
             val cursor =
                 dbManager.mDB.query(
@@ -71,7 +71,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
         }
     }
 
-    fun getLinkComposes(links: Array<String>): Result<List<Compose>> {
+    override fun getLinkComposes(links: Array<String>): Result<List<Compose>> {
         LogUtils.d("links:${links.toList()}")
         try {
             var sqlBuffer = StringBuffer("SELECT * FROM $COMPOSE_TABLE_NAME WHERE id IN (")
@@ -94,7 +94,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
         }
     }
 
-    fun getComposeById(id: Int): Compose? {
+    override fun getComposeById(id: Int): Compose? {
         try {
             val cursor =
                 dbManager.mDB.query(
@@ -119,7 +119,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
     }
 
 
-    fun getNodesByWidgetId(composeId: Int): List<Node> {
+    override fun getNodesByWidgetId(composeId: Int): List<Node> {
         val cursor =
             dbManager.mDB.query(
                 NODE_TABLE_NAME,
@@ -139,32 +139,5 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
         return nodes
     }
 
-    @SuppressLint("Range")
-    fun parseCompose(cursor: Cursor): Compose {
-        val compose = Compose(
-            id = cursor.getInt(cursor.getColumnIndex(ComposeEntry.ID)),
-            name = cursor.getString(cursor.getColumnIndex(ComposeEntry.NAME)),
-            nameCN = cursor.getString(cursor.getColumnIndex(ComposeEntry.NAME_CN)),
-            level = cursor.getFloat(cursor.getColumnIndex(ComposeEntry.LEVEL)),
-            family = cursor.getInt(cursor.getColumnIndex(ComposeEntry.FAMILY)),
-            info = cursor.getString(cursor.getColumnIndex(ComposeEntry.INFO)),
-            linkWidget = cursor.getString(cursor.getColumnIndex(ComposeEntry.LINK_WIDGET)),
-        )
-
-        return compose
-    }
-
-    @SuppressLint("Range")
-    fun parseNode(cursor: Cursor): Node {
-
-        return Node(
-            id = cursor.getInt(cursor.getColumnIndex(NodeEntry.ID)),
-            name = cursor.getString(cursor.getColumnIndex(NodeEntry.NAME)),
-            code = cursor.getString(cursor.getColumnIndex(NodeEntry.CODE)),
-            widgetId = cursor.getInt(cursor.getColumnIndex(NodeEntry.WIDGET_ID)),
-            subtitle = cursor.getString(cursor.getColumnIndex(NodeEntry.SUBTITLE)),
-            priority = cursor.getInt(cursor.getColumnIndex(NodeEntry.PRIORITY))
-        )
-    }
 
 }

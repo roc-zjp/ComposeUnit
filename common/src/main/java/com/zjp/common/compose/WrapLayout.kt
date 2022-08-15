@@ -1,9 +1,10 @@
-package com.zjp.system_composes.custom_compose
+package com.zjp.common.compose
 
 import android.graphics.Point
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
+
 @Composable
 fun WrapLayout(
     modifier: Modifier = Modifier,
@@ -19,7 +20,7 @@ fun WrapLayout(
             // Measure each children
             measurable.measure(constraints)
         }
-        var withd = 0
+        var width = 0
         var height = 0
 
         var yPosition = 0
@@ -38,12 +39,12 @@ fun WrapLayout(
 
             locations.add(Point(xPosition, yPosition))
             xPosition += placeable.width
-            withd = maxOf(withd, xPosition)
+            width = maxOf(width, xPosition)
             maxHeight = maxOf(maxHeight, placeable.height)
         }
         height = maxOf(height, yPosition + maxHeight)
 
-        layout(withd, height) {
+        layout(width, height) {
             placeables.forEachIndexed() { index, placeable ->
                 val point = locations[index]
 

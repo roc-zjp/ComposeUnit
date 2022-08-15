@@ -11,12 +11,11 @@ class KeyWordParse(val code: AnnotatedString) {
     fun toAnnotatedString(): AnnotatedString {
         val keyWordRegex = Regex("\\w+'")
         val results = keyWordRegex.findAll(code)
-        results?.let {
+        results.let {
             it.forEach { match ->
                 val commentEndRegex = Regex(".*\\n")
                 val commentEnd = commentEndRegex.find(code, match.range.first)
-                var endIndex = 0
-                endIndex = commentEnd?.range?.last ?: code.length
+                var endIndex = commentEnd?.range?.last ?: code.length
                 builder.addStyle(
                     SpanStyle(color = Color.Green),
                     match.range.first,
@@ -34,7 +33,7 @@ fun AnnotatedString.highlightCommend(): AnnotatedString {
     val builder: AnnotatedString.Builder = AnnotatedString.Builder(this)
     val commentRegex = Regex("\\*(.|\\n)*\\*/")
     val results = commentRegex.findAll(this)
-    results?.let {
+    results.let {
         it.forEach { match ->
             builder.addStyle(
                 SpanStyle(color = Color.Green),
@@ -50,12 +49,11 @@ fun AnnotatedString.highlightLineCommend(): AnnotatedString {
     val builder: AnnotatedString.Builder = AnnotatedString.Builder(this)
     val keyWordRegex = Regex("//")
     val results = keyWordRegex.findAll(this)
-    results?.let {
+    results.let {
         it.forEach { match ->
             val commentEndRegex = Regex(".*\\n")
             val commentEnd = commentEndRegex.find(this, match.range.first)
-            var endIndex = 0
-            endIndex = commentEnd?.range?.last ?: this.length
+            var endIndex = commentEnd?.range?.last ?: this.length
             builder.addStyle(
                 SpanStyle(color = Color.Green),
                 match.range.first,
@@ -71,22 +69,22 @@ fun AnnotatedString.highlightKeyWord(): AnnotatedString {
     val keyWordRegex = Regex("\\w+")
     val results = keyWordRegex.findAll(this)
     val language = KotlinLanguage()
-    Log.d(TAG, "${results?.count() ?: 0}")
-    results?.let {
+    Log.d(TAG, "${results.count()}")
 
-        Log.d(TAG, "first range =${results.first().range}")
 
-        it.forEach { match ->
-            Log.d(TAG, match.value)
-            if (language.containsKeywords(match.value)) {
-                builder.addStyle(
-                    SpanStyle(color = Color.Red),
-                    match.range.first,
-                    match.range.last + 1
-                )
-            }
+    Log.d(TAG, "first range =${results.first().range}")
+
+    results.forEach { match ->
+        Log.d(TAG, match.value)
+        if (language.containsKeywords(match.value)) {
+            builder.addStyle(
+                SpanStyle(color = Color.Red),
+                match.range.first,
+                match.range.last + 1
+            )
         }
     }
+
     return builder.toAnnotatedString()
 }
 

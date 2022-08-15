@@ -1,5 +1,4 @@
-package com.zjp.collection.repository
-
+package com.zjp.compose_unit.data.repository
 
 import com.apkfuns.logutils.LogUtils
 import com.zjp.common.data.Result
@@ -10,7 +9,6 @@ import com.zjp.core_database.DBManager
 import com.zjp.core_database.NodeEntry
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.Node
-import com.zjp.core_database.repository.Repository
 
 class CollectionRepository(private val dbManager: DBManager = DBManager.getInstance()) :
     Repository {
@@ -77,7 +75,7 @@ class CollectionRepository(private val dbManager: DBManager = DBManager.getInsta
         LogUtils.d("links:${links.toList()}")
         try {
             var sqlBuffer =
-                StringBuffer("SELECT * FROM ${COMPOSE_TABLE_NAME} WHERE id IN (")
+                StringBuffer("SELECT * FROM $COMPOSE_TABLE_NAME WHERE id IN (")
             links.forEach { linkId ->
                 sqlBuffer.append("$linkId,")
             }

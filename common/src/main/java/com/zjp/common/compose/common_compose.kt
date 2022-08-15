@@ -1,25 +1,31 @@
 package com.zjp.common.compose
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import android.util.Log
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.*
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 @Composable
 fun UnitTopAppBar(
@@ -90,3 +96,97 @@ fun CustomIndicator(
             )
     )
 }
+
+
+@Composable
+fun rememberNestedScrollConnection(onOffsetChanged: (Float) -> Unit, appBarHeight: Float) =
+    remember {
+        var currentHeight = appBarHeight
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                Log.d("AVAILABLE", "$available")
+                currentHeight = (currentHeight + available.y).coerceIn(
+                    minimumValue = 0f,
+                    maximumValue = appBarHeight
+                )
+                return if (abs(currentHeight) == appBarHeight || abs(currentHeight) == 0f) {
+                    super.onPreScroll(available, source)
+                } else {
+                    onOffsetChanged(currentHeight)
+                    available
+                }
+            }
+
+            override suspend fun onPreFling(available: Velocity): Velocity {
+                if (available.y < 0) {
+                    onOffsetChanged(0f)
+                } else {
+                    onOffsetChanged(appBarHeight)
+                }
+                return super.onPreFling(available)
+            }
+        }
+    }
+
+@Composable
+fun FoldAppbar(
+    minHeightPx: Float,
+    maxHeightPx: Float,
+    contentScrollState: LazyGridState = rememberLazyGridState(),
+    modifier: Modifier = Modifier,
+    appBar: @Composable (min: Float, max: Float, progress: Float) -> Unit,
+    content: @Composable (Float, LazyGridState) -> Unit,
+) {
+
+    var toolbarOffsetHeightPx by remember { mutableStateOf(maxHeightPx) }
+    val progress =
+        (maxHeightPx - toolbarOffsetHeightPx) / (maxHeightPx - minHeightPx).toFloat()
+
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                val delta = available.y
+                if (contentScrollState.firstVisibleItemIndex == 0 && contentScrollState.firstVisibleItemScrollOffset <= maxHeightPx - minHeightPx) {
+                    val newOffset = toolbarOffsetHeightPx + delta
+                    val newHeight = newOffset.coerceIn(minHeightPx, maxHeightPx)
+
+                    val consumed = newHeight - toolbarOffsetHeightPx
+                    toolbarOffsetHeightPx = newHeight
+
+                    return Offset(0f, consumed)
+                }
+
+                return Offset.Zero
+            }
+
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                val consumedDelta = consumed.y
+                val availableDelta = available.y
+                Log.d(
+                    "FoldAppbar",
+                    "onPostScroll consumedDelta=$consumedDelta,availableDelta=${availableDelta}"
+                )
+                return super.onPostScroll(consumed, available, source)
+            }
+        }
+    }
+
+    Box(modifier = modifier.nestedScroll(nestedScrollConnection)) {
+        content(toolbarOffsetHeightPx, contentScrollState)
+        appBar(minHeightPx, maxHeightPx, progress)
+    }
+}
+
+
+
+
+
+
+

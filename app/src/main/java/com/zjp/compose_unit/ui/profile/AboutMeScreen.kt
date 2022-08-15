@@ -37,7 +37,7 @@ fun AboutMeScreen(goBack: () -> Unit = {}) {
     Scaffold(topBar = {
         ProvideWindowInsets() {
             Image(
-                painter = painterResource(id = com.zjp.system_composes.R.drawable.caver),
+                painter = painterResource(id = com.zjp.common.R.drawable.caver),
                 contentScale = ContentScale.Crop,
                 contentDescription = "Header",
                 modifier = Modifier

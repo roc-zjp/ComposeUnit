@@ -1,9 +1,13 @@
 package com.zjp.compose_unit.ui.detail
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -20,28 +24,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
+import com.zjp.collection.CollectionNodeMap
+import com.zjp.common.compose.UnitTopAppBar
+import com.zjp.common.compose.WrapLayout
+import com.zjp.common.state.CommonUiState
 import com.zjp.compose_unit.R
 import com.zjp.compose_unit.common.Const
-import com.zjp.common.compose.UnitTopAppBar
 import com.zjp.compose_unit.ui.detail.code.CodeView
 import com.zjp.compose_unit.ui.home.ComposeHeadView
 import com.zjp.compose_unit.viewmodel.DetailViewModel
 import com.zjp.compose_unit.viewmodel.DetailViewModelFactory
+import com.zjp.compose_unit.viewmodel.PageType
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.Node
 import com.zjp.system_composes.NodeMap
-import com.zjp.system_composes.custom_compose.WrapLayout
 
 @Composable
 fun ComposeDetailPage(
     composeId: Int = -1,
-    viewModel: DetailViewModel = viewModel(factory = DetailViewModelFactory(composeId)),
+    type: PageType = PageType.COMPOSE,
+    viewModel: DetailViewModel = viewModel(factory = DetailViewModelFactory(composeId, type)),
     goBack: () -> Unit = {},
     goHome: () -> Unit = {},
     toComposeDetail: (id: Int) -> Unit = {}
 ) {
+
+
+
+
     Scaffold(
         topBar = {
             UnitTopAppBar(
@@ -74,25 +85,25 @@ fun ComposeDetailPage(
             )
         }) {
 
-        ProvideWindowInsets(windowInsetsAnimationsEnabled = true, consumeWindowInsets = false) {
-            Box(
-                modifier = Modifier
-                    .padding(it)
-                    .fillMaxSize()
+        Box(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+        ) {
+            val scrollState = rememberScrollState()
+            LazyColumn(
+                Modifier
+                    .padding(bottom = 20.dp)
+                    .navigationBarsWithImePadding()
             ) {
-                val scrollState = rememberScrollState()
-                Column(
-                    Modifier
-                        .verticalScroll(scrollState)
-                        .padding(bottom = 20.dp)
-                        .navigationBarsWithImePadding()
-
-                ) {
+                item {
                     ComposeHeadView(viewModel.compose)
                     LinkComposes(links = viewModel.links, onItemClick = { id ->
                         toComposeDetail(id)
                     })
-                    if (viewModel.nodes.isEmpty()) {
+                }
+                if (viewModel.nodes.isEmpty()) {
+                    item {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -101,47 +112,76 @@ fun ComposeDetailPage(
                         ) {
                             Text(text = "待收录", modifier = Modifier.align(Alignment.Center))
                         }
-                    } else {
-                        viewModel.nodes.mapIndexed { _, node ->
-                            ComposeNode(node = node)
-                        }
+                    }
+                } else {
+                    items(viewModel.nodes) { node: Node ->
+                        ComposeNode(node = node, type = type)
                     }
                 }
 
-                AnimatedVisibility(
-                    visible = viewModel.tips,
-                    modifier = Modifier.align(Alignment.BottomStart),
-                    enter = slideInVertically(initialOffsetY = {
-                        30.dp.value.toInt()
-                    }),
-                    exit = slideOutVertically(
-                        targetOffsetY = { 30.dp.value.toInt() }
-                    )
+            }
+
+//            Column(
+//                Modifier
+//                    .verticalScroll(scrollState)
+//                    .padding(bottom = 20.dp)
+//                    .navigationBarsWithImePadding()
+//
+//            ) {
+//                ComposeHeadView(viewModel.compose)
+//                LinkComposes(links = viewModel.links, onItemClick = { id ->
+//                    toComposeDetail(id)
+//                })
+//                if (viewModel.nodes.isEmpty()) {
+//                    Box(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .background(color = Color.Gray)
+//                            .height(500.dp)
+//                    ) {
+//                        Text(text = "待收录", modifier = Modifier.align(Alignment.Center))
+//                    }
+//                } else {
+//                    viewModel.nodes.mapIndexed { _, node ->
+//                        ComposeNode(node = node, type = type)
+//                    }
+//                }
+//            }
+
+            AnimatedVisibility(
+                visible = viewModel.tips,
+                modifier = Modifier.align(Alignment.BottomStart),
+                enter = slideInVertically(initialOffsetY = {
+                    30.dp.value.toInt()
+                }),
+                exit = slideOutVertically(
+                    targetOffsetY = { 30.dp.value.toInt() }
+                )
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(30.dp)
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colors.primary)
                 ) {
-                    Box(
+                    Text(
+                        text = if (viewModel.likeStatus) "收藏成功" else "取消成功",
+                        color = Color.White,
                         modifier = Modifier
-                            .height(30.dp)
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colors.primary)
-                    ) {
-                        Text(
-                            text = if (viewModel.likeStatus) "收藏成功" else "取消成功",
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterStart)
-                                .padding(start = 10.dp)
-                        )
-                    }
+                            .align(Alignment.CenterStart)
+                            .padding(start = 10.dp)
+                    )
                 }
             }
         }
+
     }
 }
 
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ComposeNode(node: Node) {
+fun ComposeNode(node: Node, type: PageType) {
     var folded by remember {
         mutableStateOf(true)
     }
@@ -162,9 +202,14 @@ fun ComposeNode(node: Node) {
         Box(
             modifier = Modifier
                 .align(alignment = Alignment.CenterHorizontally)
+                .padding(10.dp)
                 .heightIn(20.dp, 500.dp)
         ) {
-            NodeMap(id = node.id!!)
+            if (type == PageType.COMPOSE) {
+                NodeMap(id = node.id!!)
+            } else {
+                CollectionNodeMap(id = node.id!!)
+            }
         }
         Box(
             modifier = Modifier
@@ -185,7 +230,6 @@ fun ComposeNode(node: Node) {
 
 @Composable
 fun LinkComposes(links: List<Compose>?, onItemClick: (id: Int) -> Unit) {
-
     Column {
         Divider()
         Row(

@@ -2,7 +2,7 @@ package com.zjp.compose_unit.common
 
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
-import com.zjp.compose_unit.ui.developer.Elevations
+
 
 class Const {
     companion object {
@@ -50,5 +50,4 @@ val themeColorSupport = mapOf<Color, String>(
 
 val colorBlue = Color(0xFF2196F3)
 
-val LocalThemeColor = compositionLocalOf { Color.Blue }
 

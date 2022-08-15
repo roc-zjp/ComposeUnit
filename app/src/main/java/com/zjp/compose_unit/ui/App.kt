@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.SystemFontFamily
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -20,15 +22,15 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.zjp.common.LocalFont
+import com.zjp.common.LocalThemeColor
 import com.zjp.common.compose.CustomIndicator
 import com.zjp.compose_unit.R
-import com.zjp.compose_unit.common.LocalThemeColor
 import com.zjp.compose_unit.common.colorBlue
 import com.zjp.compose_unit.route.HomeSections
 import com.zjp.compose_unit.route.Screen
 import com.zjp.compose_unit.route.unitNavGraph
 import com.zjp.compose_unit.ui.theme.Compose_unitTheme
-import com.zjp.compose_unit.ui.theme.LocalFont
 import com.zjp.compose_unit.ui.theme.fontMap
 import com.zjp.compose_unit.ui.theme.local
 import kotlinx.coroutines.launch
@@ -45,7 +47,7 @@ fun App() {
     }
 
     var currentFont by remember {
-        mutableStateOf(getFont(context))
+        mutableStateOf(local)
     }
 
 
@@ -65,15 +67,20 @@ fun App() {
         LocalThemeColor provides themeColor,
         LocalFont provides currentFont,
     ) {
-        Compose_unitTheme(primary = themeColor, font = fontMap[currentFont] ?: local) {
+        Compose_unitTheme(primary = themeColor, font = currentFont) {
             Scaffold(
                 bottomBar = {
                     BottomBar(
                         navController,
-                        tabs = arrayOf(HomeSections.COMPOSE, HomeSections.PROFILE)
+                        tabs = arrayOf(
+                            HomeSections.COMPOSE,
+                            HomeSections.COLLECTION,
+                            HomeSections.PROFILE
+                        )
                     ) {
                         navController.navigate(it.route) {
                             popUpTo(HomeSections.COMPOSE.route)
+                            launchSingleTop = true
                         }
                     }
                 },
@@ -87,7 +94,8 @@ fun App() {
                                 contentDescription = "debug"
                             )
                         }
-                }
+                },
+                floatingActionButtonPosition = FabPosition.Center
             ) { innerPaddingModifier ->
                 NavHost(
                     navController = navController,
@@ -109,7 +117,7 @@ fun App() {
 
 
 typealias OnThemeColorChange = (color: Color) -> Unit
-typealias OnFontChange = (fontStr: String) -> Unit
+typealias OnFontChange = (fontStr: FontFamily) -> Unit
 
 @Composable
 fun BottomBar(
@@ -185,14 +193,17 @@ private fun getThemeColor(context: Context): Color {
 }
 
 
-private suspend fun saveFont(context: Context, fontStr: String) {
+private suspend fun saveFont(context: Context, font: FontFamily) {
+    val index = fontMap.values.indexOf(font)
     context.getSharedPreferences("custom_setting", Context.MODE_PRIVATE).edit()
-        .putString("font", fontStr).commit()
+        .putString("font", fontMap.keys.elementAt(index)).commit()
 }
 
-private fun getFont(context: Context): String {
-    return context.getSharedPreferences("custom_setting", Context.MODE_PRIVATE)
+private fun getFont(context: Context): FontFamily {
+    val fontStr = context.getSharedPreferences("custom_setting", Context.MODE_PRIVATE)
         .getString("font", "") ?: "local"
+
+    return fontMap[fontStr] ?: local
 }
 
 

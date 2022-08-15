@@ -40,6 +40,8 @@ android {
 
 dependencies {
 
+    implementation project(path: ':common')
+
     implementation 'androidx.core:core-ktx:1.7.0'
 
     implementation 'androidx.room:room-testing:2.4.2'
@@ -51,6 +53,5 @@ dependencies {
 
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-
-    implementation 'com.apkfuns.logutils:library:1.7.5'
+    implementation "com.apkfuns.logutils:library:$logutils_version"
 }

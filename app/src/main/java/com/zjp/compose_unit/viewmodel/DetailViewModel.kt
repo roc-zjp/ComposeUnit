@@ -5,14 +5,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.zjp.common.data.Result
+import com.zjp.compose_unit.data.repository.CollectionRepository
 import com.zjp.compose_unit.data.repository.ComposesRepository
 import com.zjp.compose_unit.data.repository.LikeRepository
+import com.zjp.compose_unit.data.repository.Repository
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.Node
 import kotlinx.coroutines.*
 
-class DetailViewModel(private val composeId: Int) : ViewModel() {
-    private val repository = ComposesRepository()
+class DetailViewModel(private val composeId: Int, private val type: PageType) : ViewModel() {
+    private val repository: Repository =
+        if (type == PageType.COLLECTION) CollectionRepository() else ComposesRepository()
     private val likeRepository = LikeRepository()
 
     var likeStatus by mutableStateOf(false)
@@ -23,6 +26,7 @@ class DetailViewModel(private val composeId: Int) : ViewModel() {
     var tips by mutableStateOf(false)
 
     init {
+
         viewModelScope.launch {
             compose = repository.getComposeById(composeId)
             links = queryLinkComposes(compose?.linkWidget)
@@ -65,13 +69,37 @@ class DetailViewModel(private val composeId: Int) : ViewModel() {
 }
 
 
-class DetailViewModelFactory constructor(private val composeId: Int) :
+class DetailViewModelFactory constructor(private val composeId: Int, private val type: PageType) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
-            return DetailViewModel(composeId) as T
+            return DetailViewModel(composeId, type) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+
+
+enum class PageType {
+    COMPOSE, COLLECTION
+}
+
+
+fun PageType.name(): String {
+    return if (this == PageType.COLLECTION) {
+        "Collection"
+    } else {
+        "Compose"
+    }
+}
+
+fun String.toPageType(): PageType {
+    return if (this == "Collection") {
+        PageType.COLLECTION
+    } else {
+        PageType.COMPOSE
+    }
+}
+
+
 
