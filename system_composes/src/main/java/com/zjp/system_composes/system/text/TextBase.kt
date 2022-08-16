@@ -147,7 +147,7 @@ fun AnnotatedClickableText() {
     )
 }
 
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun DefaultPre() {
     Column {

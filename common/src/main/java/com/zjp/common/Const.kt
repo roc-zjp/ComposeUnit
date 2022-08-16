@@ -7,4 +7,4 @@ import androidx.compose.ui.text.font.FontFamily
 
 val LocalThemeColor = compositionLocalOf { Color.Blue }
 
-val LocalFont = compositionLocalOf { FontFamily.Default as FontFamily }
+val LocalFont = compositionLocalOf { FontFamily.Default as FontFamily  }

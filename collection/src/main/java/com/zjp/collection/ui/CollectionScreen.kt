@@ -1,14 +1,12 @@
 package com.zjp.collection.ui
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -22,10 +20,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.widget.Guideline
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
 import com.google.accompanist.insets.LocalWindowInsets
@@ -109,6 +109,14 @@ fun CollectionScreen(
                     state = scrollState
                 )
             }
+
+
+//            Scaffold() {
+//                BoxWithConstraints(modifier = Modifier.padding(it)) {
+//
+//                }
+//            }
+
         }
     }
 }
@@ -150,62 +158,89 @@ fun CollectionTitle(alpha: Float = 1f) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CollectionItem(item: Compose, onClick: (compose: Compose) -> Unit) {
-    Card(modifier = Modifier.padding(10.dp), onClick = {
-        onClick(item)
-        LogUtils.d("onclick")
-    }) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.height(40.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .padding(start = 5.dp)
-                        .width(30.dp)
-                        .height(30.dp)
-                        .clip(CircleShape)
-                        .background(Color.Gray)
-                        .border(5.dp, color = Color.White, CircleShape)
 
-                ) {
-                    Text(text = "18", modifier = Modifier.align(Alignment.Center))
-                }
-                Text(text = item.name, modifier = Modifier.weight(1f))
-                Icon(Icons.Default.Delete, contentDescription = "delete")
-            }
-            Divider()
-            Box(
+//    Column {
+//        Row(
+//            modifier = Modifier
+//                .padding(start = 15.dp, end = 15.dp, top = 15.dp, bottom = 15.dp)
+//                .height(163.dp)
+//                .fillMaxWidth()
+//                .clickable { onClick(item) },
+//        ) {
+//            Image(
+//                painter = painterResource(id = R.drawable.images),
+//                contentScale = ContentScale.Crop,
+//                contentDescription = "kobe",
+//                modifier = Modifier
+//                    .width(120.dp)
+//                    .height(60.dp)
+//                    .align(Alignment.CenterVertically)
+//                    .clip(RoundedCornerShape(5.dp))
+//
+//            )
+//            Spacer(modifier = Modifier.width(10.dp))
+//            Column {
+//                Text(text = item.name, fontSize = 25.sp, color = Color(0xFF482BE7))
+//                Text(
+//                    text = item.info,
+//                    fontSize = 20.sp,
+//                    color = Color(0xFFBFBFBF),
+//                    maxLines = 3,
+//                )
+//            }
+//
+//        }
+//        Divider(
+//            modifier = Modifier
+//                .height(0.5.dp)
+//                .padding(start = 15.dp, end = 15.dp)
+//                .background(Color(0xFFDDDDDD))
+//        )
+//    }
+
+    Card(
+        modifier = Modifier.padding(15.dp),
+        shape = RoundedCornerShape(16.dp),
+        onClick = { onClick(item) }) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Image(
+                painter = painterResource(R.drawable.images),
+                contentDescription = "image",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .padding(start = 5.dp, top = 5.dp)
-                    .height(200.dp)
                     .fillMaxWidth()
-            ) {
-                Text(text = item.info)
-                Icon(
-                    Icons.Default.Edit,
-                    contentDescription = "edit",
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(bottom = 5.dp, end = 5.dp)
-                )
-            }
-            Divider()
-            Text(
-                text = "创建于10291291-12121",
-                modifier = Modifier
-                    .height(30.dp),
-                textAlign = TextAlign.Center
+                    .aspectRatio(2f)
+
             )
+
+            Box(modifier = Modifier.padding(16.dp)) {
+                Column() {
+                    Text(
+                        text = item.name,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Normal,
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = item.info,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+
         }
     }
+
 }
 
 
-@Preview
+@Preview(widthDp = 360)
 @Composable
 fun TitlePre() {
-    CollectionTitle()
+    CollectionItem(item = Compose(1, "name", "nameCn", 1, 1, 3.0f, "s", "info"), onClick = {})
 }
+
 
 

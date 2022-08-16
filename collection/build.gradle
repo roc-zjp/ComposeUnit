@@ -30,18 +30,20 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        freeCompilerArgs = ['-Xjvm-default=enable']
     }
     buildFeatures {
         compose true
     }
+
+
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }
+
 }
 
 dependencies {
-
+    implementation 'androidx.activity:activity-compose:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
     implementation project(path: ':common')
     implementation project(path: ':core-database')
@@ -51,18 +53,23 @@ dependencies {
 
     implementation 'androidx.compose.material:material:1.1.1'
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation "androidx.compose.animation:animation:$compose_version"
+//    implementation "androidx.compose.ui:ui:$compose_version"
+//    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
 
     implementation "com.apkfuns.logutils:library:$logutils_version"
     implementation("io.coil-kt:coil-compose:2.1.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0")
 
     // https://mvnrepository.com/artifact/com.google.accompanist/accompanist-insets
     implementation "com.google.accompanist:accompanist-insets:$insets_systemuicontroller_version"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$insets_systemuicontroller_version"
+
+    //零时解决不能预览的问题
+    debugImplementation "androidx.customview:customview:1.2.0-alpha01"
+    debugImplementation "androidx.customview:customview-poolingcontainer:1.0.0-alpha01"
+
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 
 }
