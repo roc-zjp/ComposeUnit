@@ -63,13 +63,6 @@ fun NavGraphBuilder.unitNavGraph(
             goHome = {
                 navController.popBackStack(HomeSections.COMPOSE.route, false)
             },
-            toComposeDetail = { id ->
-                navController.navigate(
-                    Screen.ComposeDetailScreen.createCollectionDetailRoute(
-                        id
-                    )
-                )
-            }
         )
     }
     composable(

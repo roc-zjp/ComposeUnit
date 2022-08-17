@@ -1,12 +1,12 @@
 package com.zjp.collection.ui
 
+import android.graphics.BitmapFactory
+import android.util.Base64
 import androidx.compose.animation.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -16,24 +16,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.zjp.collection.CollectionNodeMap
 import com.zjp.collection.viewmodel.CollectionDetailViewModel
 import com.zjp.collection.viewmodel.DetailViewModelFactory
-import com.zjp.common.Const
 import com.zjp.common.code.CodeView
-import com.zjp.common.compose.ComposeHeadView
-import com.zjp.common.compose.NodeTitle
-import com.zjp.common.compose.UnitTopAppBar
-import com.zjp.common.compose.WrapLayout
-import com.zjp.core_database.model.Collection
+import com.zjp.common.compose.*
 import com.zjp.core_database.model.CollectionNode
 
 @Composable
@@ -42,7 +35,6 @@ fun CollectionDetailPage(
     viewModel: CollectionDetailViewModel = viewModel(factory = DetailViewModelFactory(composeId)),
     goBack: () -> Unit = {},
     goHome: () -> Unit = {},
-    toComposeDetail: (id: Int) -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -76,17 +68,22 @@ fun CollectionDetailPage(
             )
         }) {
 
-        Box(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
-        ) {
 
-            LazyColumn(
-                Modifier
-                    .padding(bottom = 20.dp)
-                    .navigationBarsWithImePadding()
-            ) {
+        BoxWithConstraints(modifier = Modifier.padding(it)) {
+
+            FoldAppbar(
+                minHeightDp = 0.dp,
+                maxHeightDp = maxWidth / 2,
+                appBar = {
+                    if (viewModel.compose != null) {
+                        Image(
+                            bitmap = base64ToBitmap(viewModel.compose!!.img),
+                            contentDescription = "title",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                }) {
                 item {
                     ComposeHeadView(viewModel.compose?.name, viewModel.compose?.info)
                 }
@@ -106,9 +103,7 @@ fun CollectionDetailPage(
                         ComposeNode(node = node)
                     }
                 }
-
             }
-
 
             AnimatedVisibility(
                 visible = viewModel.tips,
@@ -136,7 +131,6 @@ fun CollectionDetailPage(
                 }
             }
         }
-
     }
 }
 
@@ -188,58 +182,12 @@ fun ComposeNode(node: CollectionNode) {
 }
 
 
-@Composable
-fun LinkComposes(links: List<Collection>?, onItemClick: (id: Int) -> Unit) {
-    Column {
-        Divider()
-        Row(
-            modifier = Modifier.padding(
-                top = 10.dp, bottom = 10.dp, start = 10.dp
-            )
-        ) {
-            Icon(
-                painter = painterResource(id = com.zjp.common.R.drawable.link),
-                contentDescription = "",
-                tint = Const.colorDarkBlue
-            )
-            Spacer(modifier = Modifier.padding(start = 10.dp))
-            Text(
-                text = "相关组合",
-                style = TextStyle(fontWeight = FontWeight.Black, fontSize = 18.sp)
-            )
-        }
-        Spacer(modifier = Modifier.width(10.dp))
-        if (links != null && links.isNotEmpty()) {
-            WrapLayout(
-                Modifier
-                    .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
-            ) {
-                links.forEach { compose ->
-                    Button(
-                        onClick = { onItemClick(compose.id) },
-                        shape = CircleShape,
-                        modifier = Modifier.padding(
-                            start = 2.dp,
-                            end = 2.dp,
-                        )
-                    ) {
-                        Text(text = compose.name)
-                    }
-                }
-            }
-        } else {
-            Button(
-                onClick = { },
-                enabled = false,
-                shape = CircleShape,
-                modifier = Modifier
-                    .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
-            ) {
-                Text(text = "暂无链接组合")
-            }
-        }
-    }
+fun base64ToBitmap(base64: String): ImageBitmap {
+    val bytes = Base64.decode(base64, Base64.DEFAULT)
+    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+    return bitmap.asImageBitmap()
 }
+
 
 @Preview
 @Composable

@@ -2,26 +2,21 @@ package com.zjp.collection.ui
 
 import android.graphics.BitmapFactory
 import android.util.Base64
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -69,20 +64,12 @@ fun CollectionPage(
         } else {
             val collections = (uiState as CommonUiState.HasData<List<Collection>>).data
 
-            FoldAppbar(
-                minHeightPx = with(LocalDensity.current) { 80.dp.roundToPx().toFloat() },
-                maxHeightPx = with(LocalDensity.current) { 200.dp.roundToPx().toFloat() },
-                appBar = { min, max, progress ->
-
-                    val animatedHeight by animateDpAsState(
-                        targetValue = with(LocalDensity.current) { (max - (max - min) * progress).toDp() }
-                    )
-
-                    Box(
-                        modifier = Modifier
-                            .height(animatedHeight)
-                            .fillMaxWidth()
-                    ) {
+            BoxWithConstraints() {
+                val vertical = maxWidth < maxHeight
+                FoldAppbar(
+                    minHeightDp = 80.dp,
+                    maxHeightDp = 200.dp,
+                    appBar = { progress ->
                         val color = LocalThemeColor.current
                         Image(
                             painter = painterResource(id = com.zjp.common.R.drawable.caver),
@@ -97,38 +84,16 @@ fun CollectionPage(
                         )
                         CollectionTitle(alpha = progress)
                     }
-                },
-            ) { innerPadding, scrollState ->
 
-                val animatedHeight by animateDpAsState(
-                    targetValue = with(LocalDensity.current) { innerPadding.toDp() }
-                )
+                ) {
+                    items(collections) { item ->
 
-                BoxWithConstraints {
-                    val vertical = maxWidth < maxHeight
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(1),
-                        contentPadding = PaddingValues(top = animatedHeight),
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        content = {
-                            items(collections) { item ->
-                                CollectionItem(item = item, isVertical = vertical, onClick)
-                            }
-                        },
-                        state = scrollState
-                    )
+                        CollectionItem(item = item, isVertical = vertical, onClick)
+
+                    }
+
                 }
-
             }
-
-
-//            Scaffold() {
-//                BoxWithConstraints(modifier = Modifier.padding(it)) {
-//
-//                }
-//            }
-
         }
     }
 }

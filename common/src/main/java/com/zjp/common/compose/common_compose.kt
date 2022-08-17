@@ -8,8 +8,7 @@ import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -130,15 +129,18 @@ fun rememberNestedScrollConnection(onOffsetChanged: (Float) -> Unit, appBarHeigh
         }
     }
 
+
 @Composable
 fun FoldAppbar(
-    minHeightPx: Float,
-    maxHeightPx: Float,
+    minHeightDp: Dp,
+    maxHeightDp: Dp,
     contentScrollState: LazyGridState = rememberLazyGridState(),
     modifier: Modifier = Modifier,
-    appBar: @Composable (min: Float, max: Float, progress: Float) -> Unit,
-    content: @Composable (Float, LazyGridState) -> Unit,
+    appBar: @Composable BoxScope.(progress: Float) -> Unit,
+    content: LazyGridScope.() -> Unit
 ) {
+    val minHeightPx = with(LocalDensity.current) { minHeightDp.roundToPx().toFloat() }
+    val maxHeightPx = with(LocalDensity.current) { maxHeightDp.roundToPx().toFloat() }
     var toolbarOffsetHeightPx by remember { mutableStateOf(maxHeightPx) }
 
     val progress =
@@ -164,25 +166,13 @@ fun FoldAppbar(
                 return Offset.Zero
             }
 
-            override fun onPostScroll(
-                consumed: Offset,
-                available: Offset,
-                source: NestedScrollSource
-            ): Offset {
-                val delta = available.y
-                val newOffset = toolbarOffsetHeightPx + delta
-                val newHeight = newOffset.coerceIn(minHeightPx, maxHeightPx)
-                val consumed = newHeight - toolbarOffsetHeightPx
-                toolbarOffsetHeightPx = newHeight
-                return Offset(0f, consumed)
-            }
 
             override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
                 Log.d(
                     "Fling",
                     "消费了的速度：${consumed.y},可消费的速度：${available.y}"
                 )
-                val delta = available.y
+                val delta = available.y / 10f
                 val newOffset = toolbarOffsetHeightPx + delta
                 val newHeight = newOffset.coerceIn(minHeightPx, maxHeightPx)
                 val consumed = newHeight - toolbarOffsetHeightPx
@@ -199,13 +189,29 @@ fun FoldAppbar(
             }
         }
     }
-
-
     Box(modifier = modifier.nestedScroll(nestedScrollConnection)) {
-        content(toolbarOffsetHeightPx, contentScrollState)
-        appBar(minHeightPx, maxHeightPx, progress)
+        val animatedHeight by animateDpAsState(
+            targetValue = with(LocalDensity.current) { toolbarOffsetHeightPx.toDp() }
+        )
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(1),
+            state = contentScrollState,
+            contentPadding = PaddingValues(top = animatedHeight)
+        ) {
+            content()
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(animatedHeight)
+        ) {
+            appBar(progress)
+        }
     }
 }
+
+
 
 
 
