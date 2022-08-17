@@ -5,7 +5,6 @@ import com.zjp.compose_unit.R
 sealed class Screen(val route: String) {
     object ComposeDetailScreen : Screen(route = "compose_detail_screen")
     object Home : Screen(route = "home_screen")
-    object Collection : Screen(route = "collection")
     object Debug : Screen(route = "debug_screen")
     object Splash : Screen(route = "splash_screen")
     object ThemeSetting : Screen(route = "theme_setting_screen")
@@ -13,9 +12,14 @@ sealed class Screen(val route: String) {
     object FontSetting : Screen(route = "font_setting_screen")
     object AboutMe : Screen(route = "about_me_screen")
     object AboutApp : Screen(route = "about_app_screen")
+    object CollectionDetailScreen : Screen(route = "collection_detail_screen")
 
-    fun createComposeDetailRoute(id: Int, type: String): String {
-        return "${ComposeDetailScreen.route}/${id}/${type}"
+    fun createComposeDetailRoute(id: Int): String {
+        return "${ComposeDetailScreen.route}/${id}"
+    }
+
+    fun createCollectionDetailRoute(id: Int): String {
+        return "${CollectionDetailScreen.route}/${id}"
     }
 }
 

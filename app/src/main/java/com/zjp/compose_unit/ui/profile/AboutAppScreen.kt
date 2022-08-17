@@ -25,8 +25,8 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsPadding
 import com.zjp.common.LocalThemeColor
+import com.zjp.common.compose.NodeTitle
 import com.zjp.compose_unit.R
-import com.zjp.compose_unit.ui.detail.NodeTitle
 import com.zjp.compose_unit.ui.theme.IndieFlower
 
 @Composable

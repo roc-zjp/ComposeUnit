@@ -1,45 +1,43 @@
 package com.zjp.collection.repository
 
-
 import com.apkfuns.logutils.LogUtils
 import com.zjp.common.data.Result
-import com.zjp.compose_unit.data.utils.parseCompose
-import com.zjp.compose_unit.data.utils.parseNode
-import com.zjp.core_database.ComposeEntry
+import com.zjp.core_database.CollectEntry
+import com.zjp.core_database.CollectionNodeEntry
 import com.zjp.core_database.DBManager
-import com.zjp.core_database.NodeEntry
-import com.zjp.core_database.model.Compose
-import com.zjp.core_database.model.Node
-import com.zjp.core_database.repository.Repository
+import com.zjp.core_database.model.Collection
+import com.zjp.core_database.model.CollectionNode
+import com.zjp.core_database.utils.parseCollection
+import com.zjp.core_database.utils.parseCollectionNode
 
-class CollectionRepository(private val dbManager: DBManager = DBManager.getInstance()) :
-    Repository {
+class CollectionRepository(private val dbManager: DBManager = DBManager.getInstance()) {
 
-    private val compose = arrayOf(
-        ComposeEntry.ID,
-        ComposeEntry.NAME,
-        ComposeEntry.NAME_CN,
-        ComposeEntry.DEPRECATED,
-        ComposeEntry.INFO,
-        ComposeEntry.LEVEL,
-        ComposeEntry.LINK_WIDGET,
-        ComposeEntry.FAMILY
+    private val collection = arrayOf(
+        CollectEntry.ID,
+        CollectEntry.NAME,
+        CollectEntry.NAME_CN,
+        CollectEntry.DEPRECATED,
+        CollectEntry.INFO,
+        CollectEntry.LEVEL,
+        CollectEntry.LINK_WIDGET,
+        CollectEntry.FAMILY,
+        CollectEntry.IMG,
     )
 
     private val node = arrayOf(
-        NodeEntry.ID,
-        NodeEntry.NAME,
-        NodeEntry.WIDGET_ID,
-        NodeEntry.CODE,
-        NodeEntry.SUBTITLE,
-        NodeEntry.PRIORITY,
+        CollectionNodeEntry.ID,
+        CollectionNodeEntry.NAME,
+        CollectionNodeEntry.WIDGET_ID,
+        CollectionNodeEntry.CODE,
+        CollectionNodeEntry.SUBTITLE,
+        CollectionNodeEntry.PRIORITY,
     )
 
 
-    private val sortOrder = "${ComposeEntry.ID} ASC"
+    private val sortOrder = "${CollectEntry.ID} ASC"
 
-    private val composeSelection = "${ComposeEntry.ID} = ?"
-    private val nodeSelection = "${NodeEntry.WIDGET_ID} = ?"
+    private val collectionSelection = "${CollectEntry.ID} = ?"
+    private val nodeSelection = "${CollectionNodeEntry.WIDGET_ID} = ?"
 
 
     companion object {
@@ -47,37 +45,35 @@ class CollectionRepository(private val dbManager: DBManager = DBManager.getInsta
         const val NODE_TABLE_NAME = "collection_node"
     }
 
-    override fun getAllCompose(): Result<List<Compose>> {
+    fun getAllCompose(): Result<List<Collection>> {
         try {
             val cursor =
                 dbManager.mDB.query(
                     COMPOSE_TABLE_NAME,
-                    compose,
+                    collection,
                     null,
                     null,
                     null,
                     null,
                     sortOrder
                 )
-            val composes = mutableListOf<Compose>()
+            val collections = mutableListOf<Collection>()
 
             while (cursor.moveToNext()) {
-                composes.add(parseCompose(cursor))
+                collections.add(parseCollection(cursor))
             }
             cursor.close()
-            LogUtils.d("获取数据成功")
-            LogUtils.d(composes)
-            return Result.Success(data = composes)
+            return Result.Success(data = collections)
         } catch (e: Exception) {
             return Result.Error(e)
         }
     }
 
-    override fun getLinkComposes(links: Array<String>): Result<List<Compose>> {
+    fun getLinkComposes(links: Array<String>): Result<List<Collection>> {
         LogUtils.d("links:${links.toList()}")
         try {
             var sqlBuffer =
-                StringBuffer("SELECT * FROM ${COMPOSE_TABLE_NAME} WHERE id IN (")
+                StringBuffer("SELECT * FROM $COMPOSE_TABLE_NAME WHERE id IN (")
             links.forEach { linkId ->
                 sqlBuffer.append("$linkId,")
             }
@@ -85,9 +81,9 @@ class CollectionRepository(private val dbManager: DBManager = DBManager.getInsta
             sqlBuffer.delete(sqlBuffer.lastIndexOf(","), sqlBuffer.lastIndexOf(",") + 1)
             LogUtils.d(sqlBuffer)
             val cursor = dbManager.mDB.rawQuery(sqlBuffer.toString(), null)
-            val composes = mutableListOf<Compose>()
+            val composes = mutableListOf<Collection>()
             while (cursor.moveToNext()) {
-                composes.add(parseCompose(cursor))
+                composes.add(parseCollection(cursor))
             }
             cursor.close()
             return Result.Success(data = composes)
@@ -97,20 +93,20 @@ class CollectionRepository(private val dbManager: DBManager = DBManager.getInsta
         }
     }
 
-    override fun getComposeById(id: Int): Compose? {
+    fun getComposeById(id: Int): Collection? {
         try {
             val cursor =
                 dbManager.mDB.query(
                     COMPOSE_TABLE_NAME,
-                    compose,
-                    composeSelection,
+                    collection,
+                    collectionSelection,
                     arrayOf("$id"),
                     null,
                     null,
                     sortOrder
                 )
             if (cursor.moveToNext()) {
-                val compose = parseCompose(cursor)
+                val compose = parseCollection(cursor)
                 cursor.close()
                 return compose
             }
@@ -122,7 +118,7 @@ class CollectionRepository(private val dbManager: DBManager = DBManager.getInsta
     }
 
 
-    override fun getNodesByWidgetId(composeId: Int): List<Node> {
+    fun getNodesByWidgetId(composeId: Int): List<CollectionNode> {
         val cursor =
             dbManager.mDB.query(
                 NODE_TABLE_NAME,
@@ -134,9 +130,9 @@ class CollectionRepository(private val dbManager: DBManager = DBManager.getInsta
                 sortOrder
             )
 
-        val nodes = mutableListOf<Node>()
+        val nodes = mutableListOf<CollectionNode>()
         while (cursor.moveToNext()) {
-            nodes.add(parseNode(cursor))
+            nodes.add(parseCollectionNode(cursor))
         }
         cursor.close()
         return nodes

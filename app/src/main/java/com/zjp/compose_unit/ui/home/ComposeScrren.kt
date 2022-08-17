@@ -11,16 +11,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
@@ -37,12 +33,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.zjp.common.Const
 import com.zjp.common.state.CommonUiState
+import com.zjp.compose_unit.BuildConfig
 import com.zjp.compose_unit.R
-import com.zjp.compose_unit.common.Const
 import com.zjp.compose_unit.common.shape.TechnoShapeBorder
 import com.zjp.compose_unit.viewmodel.HomeViewModel
-import com.zjp.core_database.BuildConfig
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.LikeWidget
 
@@ -52,7 +48,7 @@ fun ComposesScreen(
     homeViewModel: HomeViewModel = viewModel(),
     onClick: (compose: Compose) -> Unit,
 ) {
-    var context = LocalContext.current
+
     val uiState = homeViewModel.uiState
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->

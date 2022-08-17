@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -137,11 +139,10 @@ fun FoldAppbar(
     appBar: @Composable (min: Float, max: Float, progress: Float) -> Unit,
     content: @Composable (Float, LazyGridState) -> Unit,
 ) {
-
     var toolbarOffsetHeightPx by remember { mutableStateOf(maxHeightPx) }
+
     val progress =
         (maxHeightPx - toolbarOffsetHeightPx) / (maxHeightPx - minHeightPx).toFloat()
-
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(
@@ -149,16 +150,17 @@ fun FoldAppbar(
                 source: NestedScrollSource
             ): Offset {
                 val delta = available.y
-                if (contentScrollState.firstVisibleItemIndex == 0 && contentScrollState.firstVisibleItemScrollOffset <= maxHeightPx - minHeightPx) {
+                if (contentScrollState.firstVisibleItemIndex == 0 && contentScrollState.firstVisibleItemScrollOffset == 0) {
                     val newOffset = toolbarOffsetHeightPx + delta
                     val newHeight = newOffset.coerceIn(minHeightPx, maxHeightPx)
-
                     val consumed = newHeight - toolbarOffsetHeightPx
                     toolbarOffsetHeightPx = newHeight
-
                     return Offset(0f, consumed)
                 }
-
+                Log.d(
+                    "FoldAppbar",
+                    "delta=${delta},toolbarOffsetHeightPx=${toolbarOffsetHeightPx},firstVisibleItemIndex=${contentScrollState.firstVisibleItemIndex},firstVisibleItemScrollOffset=${contentScrollState.firstVisibleItemScrollOffset}"
+                )
                 return Offset.Zero
             }
 
@@ -167,22 +169,45 @@ fun FoldAppbar(
                 available: Offset,
                 source: NestedScrollSource
             ): Offset {
-                val consumedDelta = consumed.y
-                val availableDelta = available.y
+                val delta = available.y
+                val newOffset = toolbarOffsetHeightPx + delta
+                val newHeight = newOffset.coerceIn(minHeightPx, maxHeightPx)
+                val consumed = newHeight - toolbarOffsetHeightPx
+                toolbarOffsetHeightPx = newHeight
+                return Offset(0f, consumed)
+            }
+
+            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
                 Log.d(
-                    "FoldAppbar",
-                    "onPostScroll consumedDelta=$consumedDelta,availableDelta=${availableDelta}"
+                    "Fling",
+                    "消费了的速度：${consumed.y},可消费的速度：${available.y}"
                 )
-                return super.onPostScroll(consumed, available, source)
+                val delta = available.y
+                val newOffset = toolbarOffsetHeightPx + delta
+                val newHeight = newOffset.coerceIn(minHeightPx, maxHeightPx)
+                val consumed = newHeight - toolbarOffsetHeightPx
+                toolbarOffsetHeightPx = newHeight
+                return Velocity(0f, consumed)
+            }
+
+            override suspend fun onPreFling(available: Velocity): Velocity {
+                Log.d(
+                    "Fling",
+                    "初始速度：${available.y}"
+                )
+                return Velocity.Zero
             }
         }
     }
+
 
     Box(modifier = modifier.nestedScroll(nestedScrollConnection)) {
         content(toolbarOffsetHeightPx, contentScrollState)
         appBar(minHeightPx, maxHeightPx, progress)
     }
 }
+
+
 
 
 

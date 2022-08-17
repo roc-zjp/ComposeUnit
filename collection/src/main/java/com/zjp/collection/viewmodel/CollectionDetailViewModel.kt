@@ -1,29 +1,33 @@
-package com.zjp.compose_unit.viewmodel
+package com.zjp.collection.viewmodel
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.zjp.collection.repository.CollectionLikeRepository
+import com.zjp.collection.repository.CollectionRepository
 import com.zjp.common.data.Result
-import com.zjp.compose_unit.data.repository.ComposesRepository
-import com.zjp.compose_unit.data.repository.LikeRepository
-import com.zjp.core_database.model.Compose
-import com.zjp.core_database.model.Node
-import kotlinx.coroutines.*
+import com.zjp.core_database.model.Collection
+import com.zjp.core_database.model.CollectionNode
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class DetailViewModel(private val composeId: Int) : ViewModel() {
-    private val repository = ComposesRepository()
-    private val likeRepository = LikeRepository()
-
+class CollectionDetailViewModel(private val composeId: Int) :
+    ViewModel() {
+    private val repository = CollectionRepository()
+    private val likeRepository = CollectionLikeRepository()
     var likeStatus by mutableStateOf(false)
-    var compose by mutableStateOf<Compose?>(null)
-    var nodes by mutableStateOf(listOf<Node>())
-    var links by mutableStateOf<List<Compose>?>(null)
+    var compose by mutableStateOf<Collection?>(null)
+    var nodes by mutableStateOf(listOf<CollectionNode>())
+    var links by mutableStateOf<List<Collection>?>(null)
 
     var tips by mutableStateOf(false)
 
     init {
-
         viewModelScope.launch {
             compose = repository.getComposeById(composeId)
             links = queryLinkComposes(compose?.linkWidget)
@@ -32,12 +36,12 @@ class DetailViewModel(private val composeId: Int) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val result = likeRepository.getLikeStatus(composeId)
             withContext(Dispatchers.Main) {
-                likeStatus = (result.isNotEmpty())
+                likeStatus = (result != null && result.isNotEmpty())
             }
         }
     }
 
-    private fun queryLinkComposes(linkWidget: String?): List<Compose>? {
+    private fun queryLinkComposes(linkWidget: String?): List<Collection>? {
         if (linkWidget == null || linkWidget.isEmpty()) {
             return null
         }
@@ -54,11 +58,11 @@ class DetailViewModel(private val composeId: Int) : ViewModel() {
     fun toggleLike() {
         viewModelScope.launch(Dispatchers.IO) {
             likeStatus = likeRepository.toggleLike(composeId = composeId)
-            showLikeResult()
+            showLikeResult(likeStatus)
         }
     }
 
-    private suspend fun showLikeResult() {
+    private suspend fun showLikeResult(like: Boolean) {
         tips = true
         delay(3000)
         tips = false
@@ -69,34 +73,9 @@ class DetailViewModel(private val composeId: Int) : ViewModel() {
 class DetailViewModelFactory constructor(private val composeId: Int) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
-            return DetailViewModel(composeId) as T
+        if (modelClass.isAssignableFrom(CollectionDetailViewModel::class.java)) {
+            return CollectionDetailViewModel(composeId) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
-
-
-enum class PageType {
-    COMPOSE, COLLECTION
-}
-
-
-fun PageType.name(): String {
-    return if (this == PageType.COLLECTION) {
-        "Collection"
-    } else {
-        "Compose"
-    }
-}
-
-fun String.toPageType(): PageType {
-    return if (this == "Collection") {
-        PageType.COLLECTION
-    } else {
-        PageType.COMPOSE
-    }
-}
-
-
-

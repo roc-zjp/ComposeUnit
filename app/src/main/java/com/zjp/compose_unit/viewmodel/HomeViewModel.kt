@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zjp.compose_unit.data.repository.ComposesRepository
-import com.zjp.compose_unit.database.LocalDB
 import com.zjp.core_database.DBManager
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.LikeWidget
@@ -16,6 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.zjp.common.data.Result
 import com.zjp.common.state.CommonUiState
+import com.zjp.core_database.LocalDB
 
 
 data class HomeState(
@@ -53,7 +53,7 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             when (val result = repository.getAllCompose()) {
                 is Result.Success -> {
-                    composes = result.data as List<Compose>
+                    composes = result.data
                     viewModelState.value = HomeState(
                         composes = composes,
                         isLoading = false

@@ -13,10 +13,8 @@ class DBManager {
     lateinit var mDB: SQLiteDatabase
 
     companion object {
-
         @Volatile
         private var INSTANCE: DBManager? = null
-
         private const val DATABASE_NAME = "compose_tem.db"
         private const val SP = "database_version"
         private const val DATABASE_VERSION_SP = "version_sp"
@@ -46,10 +44,6 @@ class DBManager {
             DB_PATH = context.getDatabasePath(DATABASE_NAME).path
         }
 
-        fun close() {
-            INSTANCE?.mDB?.close()
-            INSTANCE = null
-        }
 
         private fun copyAssets2Data(context: Context) {
             val inputStream = context.assets.open("compose.db")

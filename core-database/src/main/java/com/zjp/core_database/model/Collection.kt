@@ -16,4 +16,5 @@ data class Collection(
     @ColumnInfo(name = "level") val level: Float,
     @ColumnInfo(name = "linkWidget") val linkWidget: String?,
     @ColumnInfo(name = "info") val info: String,
+    @ColumnInfo(name = "img") val img: String,
 ) : Serializable

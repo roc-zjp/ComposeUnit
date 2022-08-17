@@ -1,4 +1,4 @@
-package com.zjp.compose_unit.ui.detail
+package com.zjp.common.compose
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
@@ -21,8 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zjp.common.LocalThemeColor
-import com.zjp.compose_unit.R
-import com.zjp.compose_unit.ui.theme.Compose_unitTheme
+import com.zjp.common.R
 
 @Composable
 fun NodeTitle(
@@ -81,9 +80,9 @@ fun NodeTitle(
 @Preview(showBackground = true)
 @Composable
 fun ComposeItemPreview() {
-    Compose_unitTheme(darkTheme = false) {
-        NodeTitle("标题") {
 
-        }
+    NodeTitle("标题") {
+
     }
+
 }

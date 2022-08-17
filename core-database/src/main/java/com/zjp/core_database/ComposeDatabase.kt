@@ -1,23 +1,21 @@
 package com.zjp.core_database
 
 import android.content.Context
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.zjp.core_database.dao.ComposeDao
+import com.zjp.core_database.dao.CollectionLikeDao
 import com.zjp.core_database.dao.LikeDao
-import com.zjp.core_database.dao.NodeDao
-import com.zjp.core_database.model.Compose
+import com.zjp.core_database.model.CollectionLike
 import com.zjp.core_database.model.LikeWidget
-import com.zjp.core_database.model.Node
 
 @Database(
-    entities = [LikeWidget::class], version = 1
+    entities = [LikeWidget::class, CollectionLike::class], version = 2
 )
 abstract class ComposeDatabase : RoomDatabase() {
 
     abstract fun likeDao(): LikeDao
+    abstract fun collectionLikeDao(): CollectionLikeDao
 
     companion object {
         @Volatile
@@ -33,7 +31,8 @@ abstract class ComposeDatabase : RoomDatabase() {
                 ComposeDatabase::class.java,
                 "like.db"
             )
+                .addMigrations(MIGRATION_1_2)
+                .fallbackToDestructiveMigration()
                 .build()
     }
-
 }

@@ -1,6 +1,11 @@
 package com.zjp.collection.ui
 
-import androidx.compose.foundation.*
+import android.graphics.BitmapFactory
+import android.util.Base64
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -8,42 +13,36 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.widget.Guideline
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.apkfuns.logutils.LogUtils
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.zjp.collection.R
 import com.zjp.collection.viewmodel.CollectionViewModel
 import com.zjp.common.LocalFont
 import com.zjp.common.LocalThemeColor
 import com.zjp.common.compose.FoldAppbar
 import com.zjp.common.state.CommonUiState
-import com.zjp.core_database.model.Compose
-import okhttp3.internal.wait
+import com.zjp.core_database.model.Collection
 
 @Composable
-fun CollectionScreen(
+fun CollectionPage(
     viewModel: CollectionViewModel = viewModel(),
-    onClick: (compose: Compose) -> Unit,
+    onClick: (compose: Collection) -> Unit,
 ) {
     Scaffold(topBar = {
 
@@ -68,18 +67,22 @@ fun CollectionScreen(
                 }
             }
         } else {
-            val collections = (uiState as CommonUiState.HasData<List<Compose>>).data
+            val collections = (uiState as CommonUiState.HasData<List<Collection>>).data
 
             FoldAppbar(
                 minHeightPx = with(LocalDensity.current) { 80.dp.roundToPx().toFloat() },
                 maxHeightPx = with(LocalDensity.current) { 200.dp.roundToPx().toFloat() },
                 appBar = { min, max, progress ->
+
+                    val animatedHeight by animateDpAsState(
+                        targetValue = with(LocalDensity.current) { (max - (max - min) * progress).toDp() }
+                    )
+
                     Box(
                         modifier = Modifier
-                            .height(with(LocalDensity.current) { (max - (max - min) * progress).toDp() })
+                            .height(animatedHeight)
                             .fillMaxWidth()
                     ) {
-
                         val color = LocalThemeColor.current
                         Image(
                             painter = painterResource(id = com.zjp.common.R.drawable.caver),
@@ -96,18 +99,27 @@ fun CollectionScreen(
                     }
                 },
             ) { innerPadding, scrollState ->
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(1),
-                    contentPadding = PaddingValues(top = with(LocalDensity.current) { innerPadding.toDp() }),
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    content = {
-                        items(collections) { item ->
-                            CollectionItem(item = item, onClick)
-                        }
-                    },
-                    state = scrollState
+
+                val animatedHeight by animateDpAsState(
+                    targetValue = with(LocalDensity.current) { innerPadding.toDp() }
                 )
+
+                BoxWithConstraints {
+                    val vertical = maxWidth < maxHeight
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(1),
+                        contentPadding = PaddingValues(top = animatedHeight),
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        content = {
+                            items(collections) { item ->
+                                CollectionItem(item = item, isVertical = vertical, onClick)
+                            }
+                        },
+                        state = scrollState
+                    )
+                }
+
             }
 
 
@@ -155,92 +167,123 @@ fun CollectionTitle(alpha: Float = 1f) {
     }
 }
 
+
+@Composable
+fun VerItem() {
+
+}
+
+@Composable
+fun HorItem() {
+
+}
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CollectionItem(item: Compose, onClick: (compose: Compose) -> Unit) {
+fun CollectionItem(item: Collection, isVertical: Boolean, onClick: (compose: Collection) -> Unit) {
 
-//    Column {
-//        Row(
-//            modifier = Modifier
-//                .padding(start = 15.dp, end = 15.dp, top = 15.dp, bottom = 15.dp)
-//                .height(163.dp)
-//                .fillMaxWidth()
-//                .clickable { onClick(item) },
-//        ) {
-//            Image(
-//                painter = painterResource(id = R.drawable.images),
-//                contentScale = ContentScale.Crop,
-//                contentDescription = "kobe",
-//                modifier = Modifier
-//                    .width(120.dp)
-//                    .height(60.dp)
-//                    .align(Alignment.CenterVertically)
-//                    .clip(RoundedCornerShape(5.dp))
-//
-//            )
-//            Spacer(modifier = Modifier.width(10.dp))
-//            Column {
-//                Text(text = item.name, fontSize = 25.sp, color = Color(0xFF482BE7))
-//                Text(
-//                    text = item.info,
-//                    fontSize = 20.sp,
-//                    color = Color(0xFFBFBFBF),
-//                    maxLines = 3,
-//                )
-//            }
-//
-//        }
-//        Divider(
-//            modifier = Modifier
-//                .height(0.5.dp)
-//                .padding(start = 15.dp, end = 15.dp)
-//                .background(Color(0xFFDDDDDD))
-//        )
-//    }
+    if (isVertical) {
+        Card(
+            modifier = Modifier.padding(15.dp),
+            shape = RoundedCornerShape(16.dp),
+            onClick = { onClick(item) }) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                val bytes = Base64.decode(item.img, Base64.DEFAULT)
+                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 
-    Card(
-        modifier = Modifier.padding(15.dp),
-        shape = RoundedCornerShape(16.dp),
-        onClick = { onClick(item) }) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Image(
-                painter = painterResource(R.drawable.images),
-                contentDescription = "image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(2f)
+                Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = "image",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(2f)
+                )
+                Box(modifier = Modifier.padding(16.dp)) {
+                    Column() {
+                        Text(
+                            text = item.name,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Normal,
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = item.info,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Normal,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
 
-            )
+            }
+        }
+    } else {
+        Card(
+            modifier = Modifier.padding(15.dp),
+            shape = RoundedCornerShape(16.dp),
+            onClick = { onClick(item) }) {
 
-            Box(modifier = Modifier.padding(16.dp)) {
-                Column() {
-                    Text(
-                        text = item.name,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Normal,
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = item.info,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+            Row(modifier = Modifier.height(130.dp)) {
+                val bytes = Base64.decode(item.img, Base64.DEFAULT)
+                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = "image",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .width(260.dp)
+                        .aspectRatio(2f)
+                )
+                Box(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .weight(1f)
+                ) {
+                    Column {
+                        Text(
+                            text = item.name,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Normal,
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = item.info,
+                            fontSize = 16.sp,
+                            maxLines = 3,
+                            fontWeight = FontWeight.Normal,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
             }
-
         }
     }
 
+
 }
 
 
-@Preview(widthDp = 360)
+@Preview()
 @Composable
-fun TitlePre() {
-    CollectionItem(item = Compose(1, "name", "nameCn", 1, 1, 3.0f, "s", "info"), onClick = {})
+fun ItemVertical() {
+    CollectionItem(
+        item = Collection(1, "name", "nameCn", 1, 1, 3.0f, "s", "info", ""),
+        isVertical = true,
+        onClick = {})
 }
+
+
+@Preview()
+@Composable
+fun ItemHorizontal() {
+    CollectionItem(
+        item = Collection(1, "name", "nameCn", 1, 1, 3.0f, "s", "info", ""),
+        isVertical = false,
+        onClick = {})
+}
+
+
 
 
 

@@ -1,20 +1,24 @@
-package com.zjp.compose_unit.data.repository
+package com.zjp.collection.repository
+
 
 import com.zjp.core_database.ComposeDatabase
 import com.zjp.core_database.model.LikeWidget
 import com.zjp.common.data.Result
 import com.zjp.core_database.LocalDB
+import com.zjp.core_database.model.CollectionLike
 
-class LikeRepository(private val db: ComposeDatabase = LocalDB.getDatabase()) {
+class CollectionLikeRepository(private val db: ComposeDatabase = LocalDB.getDatabase()) {
 
-    fun getAllLike(): Result<List<LikeWidget>> {
+    fun getAllLike(): Result<List<CollectionLike>> {
         return try {
-            val list = LocalDB.getDatabase().likeDao().getAll()
+            val list = LocalDB.getDatabase().collectionLikeDao().getAll()
             Result.Success(list)
         } catch (e: Exception) {
             Result.Error(Exception("获取收藏数据失败"))
         }
+        db.collectionLikeDao().getAll()
     }
+
 
     fun toggleLike(composeId: Int): Boolean {
         val likeWidgets = getLikeStatus(composeId)
@@ -28,12 +32,12 @@ class LikeRepository(private val db: ComposeDatabase = LocalDB.getDatabase()) {
     }
 
 
-    fun getLikeStatus(widgetId: Int): List<LikeWidget> {
-        return db.likeDao().getAllById(widgetId)
+    fun getLikeStatus(widgetId: Int): List<CollectionLike> {
+        return db.collectionLikeDao().getAllById(widgetId)
     }
 
-    private fun delete(widget: LikeWidget): Int {
-        return db.likeDao().delete(widget)
+    private fun delete(widget: CollectionLike): Int {
+        return db.collectionLikeDao().delete(widget)
     }
 
 

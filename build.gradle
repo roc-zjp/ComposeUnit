@@ -4,6 +4,7 @@ buildscript {
         accompanist_version = '0.24.12-rc'
         logutils_version = '1.7.5'
         insets_systemuicontroller_version = '0.23.1'
+        room_version = '2.4.2'
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

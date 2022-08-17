@@ -8,11 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.zjp.collection.repository.CollectionRepository
 import com.zjp.common.data.Result
 import com.zjp.common.state.CommonUiState
+import com.zjp.core_database.model.Collection
 import com.zjp.core_database.model.Compose
 import kotlinx.coroutines.launch
 
 data class CollectionState(
-    val composes: List<Compose> = listOf(),
+    val composes: List<Collection> = listOf(),
     val isLoading: Boolean = false,
     val errorMessages: List<String?> = emptyList(),
 ) {
@@ -36,7 +37,7 @@ class CollectionViewModel : ViewModel() {
         refreshCollection()
     }
 
-    private var collections = listOf<Compose>()
+    private var collections = listOf<Collection>()
 
     private fun refreshCollection() {
 

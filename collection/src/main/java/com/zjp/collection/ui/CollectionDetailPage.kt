@@ -1,10 +1,11 @@
-package com.zjp.compose_unit.ui.detail
+package com.zjp.collection.ui
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -25,18 +26,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.zjp.collection.CollectionNodeMap
 import com.zjp.collection.viewmodel.CollectionDetailViewModel
+import com.zjp.collection.viewmodel.DetailViewModelFactory
 import com.zjp.common.Const
 import com.zjp.common.code.CodeView
 import com.zjp.common.compose.ComposeHeadView
 import com.zjp.common.compose.NodeTitle
 import com.zjp.common.compose.UnitTopAppBar
 import com.zjp.common.compose.WrapLayout
-import com.zjp.compose_unit.viewmodel.DetailViewModelFactory
 import com.zjp.core_database.model.Collection
 import com.zjp.core_database.model.CollectionNode
 
 @Composable
-fun ComposeDetailPage(
+fun CollectionDetailPage(
     composeId: Int = -1,
     viewModel: CollectionDetailViewModel = viewModel(factory = DetailViewModelFactory(composeId)),
     goBack: () -> Unit = {},
@@ -80,6 +81,7 @@ fun ComposeDetailPage(
                 .padding(it)
                 .fillMaxSize()
         ) {
+
             LazyColumn(
                 Modifier
                     .padding(bottom = 20.dp)
@@ -87,9 +89,6 @@ fun ComposeDetailPage(
             ) {
                 item {
                     ComposeHeadView(viewModel.compose?.name, viewModel.compose?.info)
-                    LinkComposes(links = viewModel.links, onItemClick = { id ->
-                        toComposeDetail(id)
-                    })
                 }
                 if (viewModel.nodes.isEmpty()) {
                     item {
@@ -109,6 +108,7 @@ fun ComposeDetailPage(
                 }
 
             }
+
 
             AnimatedVisibility(
                 visible = viewModel.tips,
@@ -167,6 +167,7 @@ fun ComposeNode(node: CollectionNode) {
                 .padding(10.dp)
                 .heightIn(20.dp, 500.dp)
         ) {
+
             CollectionNodeMap(id = node.id!!)
 
         }
@@ -245,4 +246,3 @@ fun LinkComposes(links: List<Collection>?, onItemClick: (id: Int) -> Unit) {
 fun ItemPre() {
 
 }
-

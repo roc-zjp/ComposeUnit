@@ -4,7 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.apkfuns.logutils.LogUtils
-import com.zjp.collection.ui.CollectionScreen
+import com.zjp.collection.ui.CollectionDetailPage
+import com.zjp.collection.ui.CollectionPage
 import com.zjp.compose_unit.ui.OnFontChange
 import com.zjp.compose_unit.ui.OnThemeColorChange
 import com.zjp.compose_unit.ui.SplashView
@@ -36,13 +37,8 @@ fun NavGraphBuilder.unitNavGraph(
             navArgument("type") { type = NavType.StringType })
     ) {
         val composeId = it.arguments?.getInt("composeId")
-        val type = it.arguments?.getString("type", "Compose")?.let { value ->
-            value
-        } ?: "Compose"
-        LogUtils.d("type=$type")
         ComposeDetailPage(
             composeId = composeId!!,
-            type = type.toPageType(),
             goBack = { navController.popBackStack() },
             goHome = {
                 navController.popBackStack(HomeSections.COMPOSE.route, false)
@@ -50,19 +46,18 @@ fun NavGraphBuilder.unitNavGraph(
             toComposeDetail = { id ->
                 navController.navigate(
                     Screen.ComposeDetailScreen.createComposeDetailRoute(
-                        id,
-                        type
+                        id
                     )
                 )
             }
         )
     }
     composable(
-        Screen.Collection.route + "/{composeId}",
+        Screen.CollectionDetailScreen.route + "/{composeId}",
         arguments = listOf(navArgument("composeId") { type = NavType.IntType })
     ) {
         val composeId = it.arguments?.getInt("composeId")
-        ComposeDetailPage(
+        CollectionDetailPage(
             composeId = composeId!!,
             goBack = { navController.popBackStack() },
             goHome = {
@@ -70,9 +65,8 @@ fun NavGraphBuilder.unitNavGraph(
             },
             toComposeDetail = { id ->
                 navController.navigate(
-                    Screen.ComposeDetailScreen.createComposeDetailRoute(
-                        id,
-                        PageType.COLLECTION.name()
+                    Screen.ComposeDetailScreen.createCollectionDetailRoute(
+                        id
                     )
                 )
             }
@@ -137,18 +131,17 @@ fun NavGraphBuilder.addHomeGraph(
         ComposesScreen(onClick = {
             navController.navigate(
                 Screen.ComposeDetailScreen.createComposeDetailRoute(
-                    it.id,
-                    PageType.COMPOSE.name()
+                    it.id
+
                 )
             )
         })
     }
     composable(HomeSections.COLLECTION.route) { _ ->
-        CollectionScreen() {
+        CollectionPage() {
             navController.navigate(
-                Screen.ComposeDetailScreen.createComposeDetailRoute(
-                    it.id,
-                    PageType.COLLECTION.name()
+                Screen.ComposeDetailScreen.createCollectionDetailRoute(
+                    it.id
                 )
             )
         }

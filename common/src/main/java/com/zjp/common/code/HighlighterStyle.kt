@@ -1,4 +1,4 @@
-package com.zjp.compose_unit.ui.detail.code
+package com.zjp.common.code
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle

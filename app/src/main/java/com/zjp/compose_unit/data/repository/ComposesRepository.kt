@@ -2,15 +2,15 @@ package com.zjp.compose_unit.data.repository
 
 import com.apkfuns.logutils.LogUtils
 import com.zjp.common.data.Result
-import com.zjp.compose_unit.data.utils.parseCompose
-import com.zjp.compose_unit.data.utils.parseNode
+import com.zjp.core_database.utils.parseCompose
+import com.zjp.core_database.utils.parseNode
 import com.zjp.core_database.ComposeEntry
 import com.zjp.core_database.DBManager
 import com.zjp.core_database.NodeEntry
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.Node
 
-class ComposesRepository(private val dbManager: DBManager = DBManager.getInstance()) : Repository {
+class ComposesRepository(private val dbManager: DBManager = DBManager.getInstance()) {
 
     private val compose = arrayOf(
         ComposeEntry.ID,
@@ -45,7 +45,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
     }
 
 
-    override fun getAllCompose(): Result<List<Compose>> {
+    fun getAllCompose(): Result<List<Compose>> {
         try {
             val cursor =
                 dbManager.mDB.query(
@@ -71,7 +71,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
         }
     }
 
-    override fun getLinkComposes(links: Array<String>): Result<List<Compose>> {
+    fun getLinkComposes(links: Array<String>): Result<List<Compose>> {
         LogUtils.d("links:${links.toList()}")
         try {
             var sqlBuffer = StringBuffer("SELECT * FROM $COMPOSE_TABLE_NAME WHERE id IN (")
@@ -94,7 +94,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
         }
     }
 
-    override fun getComposeById(id: Int): Compose? {
+    fun getComposeById(id: Int): Compose? {
         try {
             val cursor =
                 dbManager.mDB.query(
@@ -119,7 +119,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
     }
 
 
-    override fun getNodesByWidgetId(composeId: Int): List<Node> {
+    fun getNodesByWidgetId(composeId: Int): List<Node> {
         val cursor =
             dbManager.mDB.query(
                 NODE_TABLE_NAME,

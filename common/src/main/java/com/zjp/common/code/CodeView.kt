@@ -1,4 +1,4 @@
-package com.zjp.compose_unit.ui.detail.code
+package com.zjp.common.code
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll

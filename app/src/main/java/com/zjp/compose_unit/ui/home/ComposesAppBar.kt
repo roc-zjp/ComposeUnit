@@ -17,7 +17,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.zjp.compose_unit.common.Const
+import com.zjp.common.Const
+
 import com.zjp.compose_unit.common.palettes
 
 @Composable
