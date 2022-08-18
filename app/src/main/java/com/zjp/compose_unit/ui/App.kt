@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.SystemFontFamily
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -25,8 +24,11 @@ import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.zjp.common.LocalFont
 import com.zjp.common.LocalThemeColor
 import com.zjp.common.compose.CustomIndicator
+import com.zjp.common.compose.SystemBroadcastReceiver
 import com.zjp.compose_unit.R
 import com.zjp.compose_unit.common.colorBlue
+import com.zjp.compose_unit.common.color_change_broadcast_action
+import com.zjp.compose_unit.common.font_change_broadcast_action
 import com.zjp.compose_unit.route.HomeSections
 import com.zjp.compose_unit.route.Screen
 import com.zjp.compose_unit.route.unitNavGraph
@@ -37,6 +39,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun App() {
+
     val navController = rememberNavController()
     var context = LocalContext.current
     var scope = rememberCoroutineScope()
@@ -51,16 +54,17 @@ fun App() {
     }
 
 
-    val onThemeColorChange: OnThemeColorChange = { color ->
-        themeColor = color
-        scope.launch { saveThemeColor(context, color) }
+    SystemBroadcastReceiver(systemAction = color_change_broadcast_action) { intent ->
+        val colorStr = intent?.getIntExtra("color", 0xFF2196F3.toInt()) ?: 0xFF2196F3.toInt()
+        themeColor = Color(colorStr)
+        scope.launch { saveThemeColor(context, themeColor) }
     }
-
-    val onFontChange: OnFontChange = { font ->
+    SystemBroadcastReceiver(systemAction = font_change_broadcast_action) { intent ->
+        val fontStr = intent?.getStringExtra("font") ?: "local"
+        val font = fontMap[fontStr] ?: local
         currentFont = font
         scope.launch { saveFont(context, font) }
     }
-
 
 
     CompositionLocalProvider(
@@ -104,7 +108,7 @@ fun App() {
                         .padding(innerPaddingModifier)
 
                 ) {
-                    unitNavGraph(navController, onThemeColorChange, onFontChange)
+                    unitNavGraph(navController)
                 }
 
             }
@@ -112,12 +116,6 @@ fun App() {
     }
 
 }
-
-
-
-
-typealias OnThemeColorChange = (color: Color) -> Unit
-typealias OnFontChange = (fontStr: FontFamily) -> Unit
 
 @Composable
 fun BottomBar(

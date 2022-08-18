@@ -3,26 +3,17 @@ package com.zjp.compose_unit.route
 import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import androidx.navigation.compose.composable
-import com.apkfuns.logutils.LogUtils
 import com.zjp.collection.ui.CollectionDetailPage
 import com.zjp.collection.ui.CollectionPage
-import com.zjp.compose_unit.ui.OnFontChange
-import com.zjp.compose_unit.ui.OnThemeColorChange
 import com.zjp.compose_unit.ui.SplashView
 import com.zjp.compose_unit.ui.detail.ComposeDetailPage
 import com.zjp.compose_unit.ui.developer.DeveloperScreen
 import com.zjp.compose_unit.ui.home.ComposesScreen
-
 import com.zjp.compose_unit.ui.home.SamplesPage
 import com.zjp.compose_unit.ui.profile.*
-import com.zjp.compose_unit.viewmodel.PageType
-import com.zjp.compose_unit.viewmodel.name
-import com.zjp.compose_unit.viewmodel.toPageType
 
 fun NavGraphBuilder.unitNavGraph(
     navController: NavHostController,
-    onThemeColorChange: OnThemeColorChange = {},
-    onFontChange: OnFontChange = {}
 ) {
     navigation(
         route = Screen.Home.route,
@@ -30,11 +21,12 @@ fun NavGraphBuilder.unitNavGraph(
     ) {
         addHomeGraph(navController = navController)
     }
+
+
     composable(
-        Screen.ComposeDetailScreen.route + "/{composeId}/{type}",
+        Screen.ComposeDetailScreen.route + "/{composeId}",
         arguments = listOf(
-            navArgument("composeId") { type = NavType.IntType },
-            navArgument("type") { type = NavType.StringType })
+            navArgument("composeId") { type = NavType.IntType })
     ) {
         val composeId = it.arguments?.getInt("composeId")
         ComposeDetailPage(
@@ -78,7 +70,7 @@ fun NavGraphBuilder.unitNavGraph(
     composable(
         Screen.ThemeSetting.route,
     ) {
-        ThemeColorSettingScreen(onThemeColorChange) {
+        ThemeColorSettingScreen() {
             navController.popBackStack()
         }
 
@@ -95,7 +87,7 @@ fun NavGraphBuilder.unitNavGraph(
     composable(
         Screen.FontSetting.route,
     ) {
-        FontSettingScreen(onFontChange) {
+        FontSettingScreen() {
             navController.popBackStack()
         }
 

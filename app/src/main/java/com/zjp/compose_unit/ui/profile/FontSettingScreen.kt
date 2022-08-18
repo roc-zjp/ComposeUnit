@@ -1,5 +1,6 @@
 package com.zjp.compose_unit.ui.profile
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,17 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zjp.common.LocalFont
 import com.zjp.common.compose.UnitTopAppBar
-import com.zjp.compose_unit.ui.OnFontChange
+import com.zjp.compose_unit.common.font_change_broadcast_action
 import com.zjp.compose_unit.ui.theme.fontMap
 import com.zjp.compose_unit.ui.theme.local
 
 
 @Composable
-fun FontSettingScreen(onFontChange: OnFontChange, goBack: () -> Unit = {}) {
+fun FontSettingScreen(goBack: () -> Unit = {}) {
     Scaffold(
         topBar = {
             UnitTopAppBar(title = { Text(text = "字体设置 - Roc") }, navigationIcon = {
@@ -45,16 +47,17 @@ fun FontSettingScreen(onFontChange: OnFontChange, goBack: () -> Unit = {}) {
         var currentFont = LocalFont.current
         LazyVerticalGrid(columns = GridCells.Fixed(count = 2), modifier = Modifier.padding(it)) {
             items(fontMap.keys.toList()) { fontStr ->
-                FontItem(fontStr = fontStr, currentFont == fontMap[fontStr], onFontChange)
+                FontItem(fontStr = fontStr, currentFont == fontMap[fontStr])
             }
         }
     }
 }
 
 @Composable
-fun FontItem(fontStr: String, isSelected: Boolean = false, onFontChange: OnFontChange) {
+fun FontItem(fontStr: String, isSelected: Boolean = false) {
     val colorList = arrayListOf(Color.White, Color.Red)
     val font = fontMap[fontStr] ?: local
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .padding(10.dp)
@@ -64,7 +67,11 @@ fun FontItem(fontStr: String, isSelected: Boolean = false, onFontChange: OnFontC
                 brush = Brush.horizontalGradient(colorList),
                 shape = RoundedCornerShape(10.dp)
             )
-            .clickable { onFontChange(font) }
+            .clickable {
+                context.sendBroadcast(Intent(font_change_broadcast_action).apply {
+                    putExtra("font", fontStr)
+                })
+            }
     ) {
         Box(
             modifier = Modifier

@@ -29,3 +29,7 @@ val themeColorSupport = mapOf<Color, String>(
 val colorBlue = Color(0xFF2196F3)
 
 
+val color_change_broadcast_action = "application_color_change"
+val font_change_broadcast_action = "application_font_change"
+
+

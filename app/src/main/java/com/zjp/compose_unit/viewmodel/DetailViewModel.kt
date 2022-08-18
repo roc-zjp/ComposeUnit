@@ -77,26 +77,8 @@ class DetailViewModelFactory constructor(private val composeId: Int) :
 }
 
 
-enum class PageType {
-    COMPOSE, COLLECTION
-}
 
 
-fun PageType.name(): String {
-    return if (this == PageType.COLLECTION) {
-        "Collection"
-    } else {
-        "Compose"
-    }
-}
-
-fun String.toPageType(): PageType {
-    return if (this == "Collection") {
-        PageType.COLLECTION
-    } else {
-        PageType.COMPOSE
-    }
-}
 
 
 

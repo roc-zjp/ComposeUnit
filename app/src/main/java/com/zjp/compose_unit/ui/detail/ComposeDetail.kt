@@ -24,21 +24,21 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.zjp.collection.CollectionNodeMap
-import com.zjp.collection.viewmodel.CollectionDetailViewModel
 import com.zjp.common.Const
 import com.zjp.common.code.CodeView
 import com.zjp.common.compose.ComposeHeadView
 import com.zjp.common.compose.NodeTitle
 import com.zjp.common.compose.UnitTopAppBar
 import com.zjp.common.compose.WrapLayout
+import com.zjp.compose_unit.viewmodel.DetailViewModel
 import com.zjp.compose_unit.viewmodel.DetailViewModelFactory
-import com.zjp.core_database.model.Collection
-import com.zjp.core_database.model.CollectionNode
+import com.zjp.core_database.model.Compose
+import com.zjp.core_database.model.Node
 
 @Composable
 fun ComposeDetailPage(
     composeId: Int = -1,
-    viewModel: CollectionDetailViewModel = viewModel(factory = DetailViewModelFactory(composeId)),
+    viewModel: DetailViewModel = viewModel(factory = DetailViewModelFactory(composeId)),
     goBack: () -> Unit = {},
     goHome: () -> Unit = {},
     toComposeDetail: (id: Int) -> Unit = {}
@@ -103,7 +103,7 @@ fun ComposeDetailPage(
                         }
                     }
                 } else {
-                    items(viewModel.nodes) { node: CollectionNode ->
+                    items(viewModel.nodes) { node: Node ->
                         ComposeNode(node = node)
                     }
                 }
@@ -143,7 +143,7 @@ fun ComposeDetailPage(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ComposeNode(node: CollectionNode) {
+fun ComposeNode(node: Node) {
     var folded by remember {
         mutableStateOf(true)
     }
@@ -188,7 +188,7 @@ fun ComposeNode(node: CollectionNode) {
 
 
 @Composable
-fun LinkComposes(links: List<Collection>?, onItemClick: (id: Int) -> Unit) {
+fun LinkComposes(links: List<Compose>?, onItemClick: (id: Int) -> Unit) {
     Column {
         Divider()
         Row(

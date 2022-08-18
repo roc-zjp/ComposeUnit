@@ -27,7 +27,6 @@ fun ComposeHeadView(name: String?, info: String?) {
     } else {
         InfoHeader(name, info)
     }
-
 }
 
 @Composable

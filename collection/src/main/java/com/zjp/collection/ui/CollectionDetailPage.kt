@@ -68,7 +68,6 @@ fun CollectionDetailPage(
             )
         }) {
 
-
         BoxWithConstraints(modifier = Modifier.padding(it)) {
 
             FoldAppbar(
@@ -91,9 +90,9 @@ fun CollectionDetailPage(
                     item {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .width(maxWidth)
+                                .height(maxHeight)
                                 .background(color = Color.Gray)
-                                .height(500.dp)
                         ) {
                             Text(text = "待收录", modifier = Modifier.align(Alignment.Center))
                         }

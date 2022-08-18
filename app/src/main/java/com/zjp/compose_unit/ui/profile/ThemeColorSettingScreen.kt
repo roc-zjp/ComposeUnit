@@ -1,5 +1,6 @@
 package com.zjp.compose_unit.ui.profile
 
+import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,15 +25,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zjp.common.LocalThemeColor
 import com.zjp.common.compose.UnitTopAppBar
+import com.zjp.compose_unit.common.color_change_broadcast_action
 import com.zjp.compose_unit.common.themeColorSupport
-import com.zjp.compose_unit.ui.OnThemeColorChange
+
 
 @Composable
-fun ThemeColorSettingScreen(onThemeColorChange: OnThemeColorChange, goBack: () -> Unit = {}) {
+fun ThemeColorSettingScreen(goBack: () -> Unit = {}) {
     Scaffold(
         topBar = {
             UnitTopAppBar(title = { Text(text = "主题设置") }, navigationIcon = {
@@ -49,15 +52,16 @@ fun ThemeColorSettingScreen(onThemeColorChange: OnThemeColorChange, goBack: () -
             modifier = Modifier.padding(it),
             content = {
                 items(themeColorSupport.keys.toList()) { color ->
-                    ThemeItem(color = color, currentColor == color, onThemeColorChange)
+                    ThemeItem(color = color, currentColor == color)
                 }
             })
     }
 }
 
 @Composable
-fun ThemeItem(color: Color, isSelected: Boolean = false, onThemeColorChange: OnThemeColorChange) {
+fun ThemeItem(color: Color, isSelected: Boolean = false) {
     val colorList = arrayListOf(color.copy(alpha = 0.1f), color.copy(alpha = 1.0f))
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .padding(10.dp)
@@ -67,7 +71,11 @@ fun ThemeItem(color: Color, isSelected: Boolean = false, onThemeColorChange: OnT
                 brush = Brush.horizontalGradient(colorList),
                 shape = RoundedCornerShape(10.dp)
             )
-            .clickable { onThemeColorChange(color) }
+            .clickable {
+                context.sendBroadcast(Intent(color_change_broadcast_action).apply {
+                    putExtra("color", color.toArgb())
+                })
+            }
     ) {
         Box(
             modifier = Modifier
