@@ -49,5 +49,6 @@ object CollectionNodeEntry : BaseColumns {
     const val PRIORITY = "priority"
     const val SUBTITLE = "subtitle"
     const val CODE = "code"
+    const val SUMMARY = "summary"
 
 }

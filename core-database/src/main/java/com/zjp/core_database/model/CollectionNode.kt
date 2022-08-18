@@ -22,6 +22,9 @@ data class CollectionNode(
     @ColumnInfo(name = "subtitle")
     val subtitle: String,
 
+    @ColumnInfo(name = "summary")
+    val summary: String?,
+
     @ColumnInfo(name = "code")
     val code: String,
 ) : Serializable

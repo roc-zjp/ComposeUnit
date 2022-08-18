@@ -1,12 +1,13 @@
 package com.zjp.collection.ui
 
-import android.graphics.BitmapFactory
-import android.util.Base64
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -15,18 +16,24 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zjp.collection.CollectionNodeMap
 import com.zjp.collection.viewmodel.CollectionDetailViewModel
 import com.zjp.collection.viewmodel.DetailViewModelFactory
+import com.zjp.common.R
 import com.zjp.common.code.CodeView
-import com.zjp.common.compose.*
+import com.zjp.common.compose.FoldAppbar
+import com.zjp.common.compose.NodeTitle
+import com.zjp.common.compose.UnitTopAppBar
+import com.zjp.common.utils.base64ToBitmap
 import com.zjp.core_database.model.CollectionNode
 
 @Composable
@@ -84,7 +91,11 @@ fun CollectionDetailPage(
                     }
                 }) {
                 item {
-                    ComposeHeadView(viewModel.compose?.name, viewModel.compose?.info)
+                    Text(
+                        text = viewModel.compose?.info ?: "",
+                        modifier = Modifier.padding(10.dp),
+                        fontSize = 20.sp
+                    )
                 }
                 if (viewModel.nodes.isEmpty()) {
                     item {
@@ -159,10 +170,20 @@ fun ComposeNode(node: CollectionNode) {
                 .align(alignment = Alignment.CenterHorizontally)
                 .padding(10.dp)
                 .heightIn(20.dp, 500.dp)
+                .fillMaxWidth()
+                .border(0.5.dp, Color.Black)
         ) {
-
             CollectionNodeMap(id = node.id!!)
-
+            Button(
+                onClick = { },
+                enabled = false,
+                shape = CircleShape,
+                modifier = Modifier
+                    .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+                    .align(Alignment.TopEnd)
+            ) {
+                Text(text = "示例")
+            }
         }
         Box(
             modifier = Modifier
@@ -181,10 +202,32 @@ fun ComposeNode(node: CollectionNode) {
 }
 
 
-fun base64ToBitmap(base64: String): ImageBitmap {
-    val bytes = Base64.decode(base64, Base64.DEFAULT)
-    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-    return bitmap.asImageBitmap()
+@Composable
+fun InfoHeader(name: String, info: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 10.dp)
+
+        ) {
+            Text(text = info, maxLines = 3, overflow = TextOverflow.Ellipsis)
+        }
+        Image(
+            painter = painterResource(id = R.drawable.caver),
+            contentDescription = null,
+            modifier = Modifier
+                .clip(
+                    RoundedCornerShape(4.dp)
+                )
+                .width(100.dp)
+                .height(66.dp)
+        )
+    }
 }
 
 

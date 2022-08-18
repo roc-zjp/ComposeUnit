@@ -13,7 +13,8 @@ import com.zjp.core_database.model.Node
 
 @SuppressLint("Range")
 fun parseCompose(cursor: Cursor): Compose {
-    val compose = Compose(
+
+    return Compose(
         id = cursor.getInt(cursor.getColumnIndex(ComposeEntry.ID)),
         name = cursor.getString(cursor.getColumnIndex(ComposeEntry.NAME)),
         nameCN = cursor.getString(cursor.getColumnIndex(ComposeEntry.NAME_CN)),
@@ -22,8 +23,6 @@ fun parseCompose(cursor: Cursor): Compose {
         info = cursor.getString(cursor.getColumnIndex(ComposeEntry.INFO)),
         linkWidget = cursor.getString(cursor.getColumnIndex(ComposeEntry.LINK_WIDGET)),
     )
-
-    return compose
 }
 
 @SuppressLint("Range")
@@ -63,6 +62,7 @@ fun parseCollectionNode(cursor: Cursor): CollectionNode {
         code = cursor.getString(cursor.getColumnIndex(CollectionNodeEntry.CODE)),
         widgetId = cursor.getInt(cursor.getColumnIndex(CollectionNodeEntry.WIDGET_ID)),
         subtitle = cursor.getString(cursor.getColumnIndex(CollectionNodeEntry.SUBTITLE)),
-        priority = cursor.getInt(cursor.getColumnIndex(CollectionNodeEntry.PRIORITY))
+        priority = cursor.getInt(cursor.getColumnIndex(CollectionNodeEntry.PRIORITY)),
+        summary = cursor.getString(cursor.getColumnIndex(CollectionNodeEntry.SUMMARY))
     )
 }

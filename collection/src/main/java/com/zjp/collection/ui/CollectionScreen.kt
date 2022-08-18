@@ -14,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -151,7 +153,9 @@ fun CollectionItem(item: Collection, isVertical: Boolean, onClick: (compose: Col
         Card(
             modifier = Modifier.padding(15.dp),
             shape = RoundedCornerShape(16.dp),
-            onClick = { onClick(item) }) {
+            onClick = { onClick(item) },
+
+            ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 val bytes = Base64.decode(item.img, Base64.DEFAULT)
                 val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
@@ -162,7 +166,7 @@ fun CollectionItem(item: Collection, isVertical: Boolean, onClick: (compose: Col
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .aspectRatio(2f)
+                        .aspectRatio(2f),
                 )
                 Box(modifier = Modifier.padding(16.dp)) {
                     Column() {

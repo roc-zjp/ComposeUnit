@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -26,6 +27,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 /**
  * 减少不必要的重构
@@ -86,24 +88,6 @@ fun SnapshotFlow(scaffoldState: ScaffoldState) {
             Text(text = "different message")
         }
     }
-}
-
-
-@Composable
-fun LandingScreen(onTimeout: () -> Unit) {
-
-    // This will always refer to the latest onTimeout function that
-    // LandingScreen was recomposed with
-    val currentOnTimeout by rememberUpdatedState(onTimeout)
-
-    // Create an effect that matches the lifecycle of LandingScreen.
-    // If LandingScreen recomposes, the delay shouldn't start again.
-    LaunchedEffect(true) {
-        delay(3000)
-        currentOnTimeout()
-    }
-
-    /* Landing screen content */
 }
 
 
@@ -185,7 +169,9 @@ fun LaunchedEffectBase() {
                 Text(text = "Press me")
             }
         }) {
-
+            Box(Modifier.fillMaxSize()) {
+                Text(text = "点击Press me,弹出错误提示", modifier = Modifier.align(Alignment.Center))
+            }
         }
     }
 
@@ -217,22 +203,30 @@ fun RememberUpdatedStateBase() {
     var count by remember {
         mutableStateOf(0)
     }
-    var show by remember {
-        mutableStateOf(true)
-    }
-    LogUtils.d("RememberUpdatedStateBase重构")
 
-    Column {
-        Text(text = "点击Increase，count值增加。5S后弹初始值为0的Toast,6S后弹当前最新值的Toast")
-        if (show) {
-            Button(onClick = { count++ }) {
-                Text(text = "Increase $count")
-            }
-            NormalToast(text = count)
-            UpdateToast(text = count)
-        } else {
-            Button(onClick = { show = !show }) {
+    var start by remember {
+        mutableStateOf(false)
+    }
+
+
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(text = "点击开始，1S后更改count的值。\n2S后弹出没有rememberUpdatedState的值的Toast\n3S后弹出rememberUpdatedState的值得Toast,")
+        if (!start) {
+            Button(onClick = { start = true }) {
                 Text(text = "开始")
+            }
+        } else {
+            LaunchedEffect(true) {
+                delay(1000)
+                count = Random.nextInt()
+            }
+            Column {
+                NormalToast(text = count)
+                UpdateToast(text = count)
+                Button(onClick = { start = false }) {
+                    Text(text = "再来一次")
+                }
             }
         }
     }
@@ -242,38 +236,66 @@ fun RememberUpdatedStateBase() {
 fun NormalToast(text: Int) {
     val context = LocalContext.current
     LaunchedEffect(Unit) {
-        delay(5000)
-        Toast.makeText(context, "Normal当前值：$text", Toast.LENGTH_LONG).show()
+        delay(2000)
+        Toast.makeText(context, "没有rememberUpdatedState的值：$text", Toast.LENGTH_LONG).show()
     }
 }
 
 @Composable
 fun UpdateToast(text: Int) {
-
     val updateCount = rememberUpdatedState(newValue = text)
     val context = LocalContext.current
     LaunchedEffect(Unit) {
-        delay(6000)
-        Toast.makeText(context, "rememberUpdatedState当前值：${updateCount.value}", Toast.LENGTH_LONG)
+        delay(3000)
+        Toast.makeText(context, "rememberUpdatedState的值：${updateCount.value}", Toast.LENGTH_LONG)
             .show()
     }
-
 }
 
 
 @Composable
 fun DisposableEffectBase() {
 
+    var removed by remember {
+        mutableStateOf(true)
+    }
+    var lifeStr by remember {
+        mutableStateOf("")
+    }
+
+
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(text = lifeStr)
+
+        if (removed) {
+            Button(onClick = {
+                removed = false
+            }) {
+                Text(text = "添加")
+            }
+        } else {
+            Column {
+                LifecycleBase() {
+                    lifeStr += it
+                }
+                Button(onClick = { removed = true }) {
+                    Text(text = "移除")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun LifecycleBase(onLifecycle: (name: String) -> Unit) {
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 
-    // If `lifecycleOwner` changes, dispose and reset the effect
     DisposableEffect(lifecycleOwner) {
         // Create an observer that triggers our remembered callbacks
         // for sending analytics events
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
-            } else if (event == Lifecycle.Event.ON_STOP) {
-            }
+            onLifecycle("\n${event.name}")
         }
         // Add the observer to the lifecycle
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -283,20 +305,30 @@ fun DisposableEffectBase() {
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
-
-    Box(
-        modifier = Modifier
-            .size(150.dp)
-            .background(Color.Red)
-    ) {
-        Text(text = "感知当前组合的生命周期，当组合移除时，取消生命周期的监听")
-    }
-
 }
 
 @Composable
 fun SideEffectBase() {
-    Text(text = "SideEffect 将 Compose 状态发布为非 Compose 代码,暂时没想到具体的使用场景，带收录")
+
+    var count by remember {
+        mutableStateOf(1)
+    }
+    Column {
+        SideEffectReComposition(count = count)
+
+        Button(onClick = { count++ }) {
+            Text(text = "重组")
+        }
+    }
+}
+
+@Composable
+fun SideEffectReComposition(count: Int) {
+    val context = LocalContext.current
+    SideEffect {
+        Toast.makeText(context, "重组了", Toast.LENGTH_SHORT).show()
+    }
+    Text(text = "重组：$count 次")
 }
 
 @Composable
@@ -304,30 +336,39 @@ fun ProduceStateBase() {
     var show by remember {
         mutableStateOf(false)
     }
-    if (show) {
-        val compose = produceState<CommonUiState>(
-            initialValue = CommonUiState.NoData(isLoading = true, emptyList()),
-            key1 = true
-        ) {
-            delay(5000)
-            value = CommonUiState.NoData(isLoading = false, emptyList())
 
-            awaitDispose {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
+        if (show) {
+            val compose = produceState<CommonUiState>(
+                initialValue = CommonUiState.NoData(isLoading = true, emptyList()),
+                key1 = true
+            ) {
+                delay(5000)
+                value = CommonUiState.NoData(isLoading = false, emptyList())
 
+                awaitDispose {
+
+                }
+
+            }
+            if (compose.value.isLoading) {
+                CircularProgressIndicator(Modifier.align(Alignment.Center))
+            } else {
+                Text(text = "load complete", Modifier.align(Alignment.Center))
+            }
+        } else {
+
+            Button(onClick = { show = true }, Modifier.align(Alignment.Center)) {
+                Text(text = "开始加载")
             }
 
         }
-
-        if (compose.value.isLoading) {
-            CircularProgressIndicator()
-        } else {
-            Text(text = "load complete")
-        }
-    } else {
-        Button(onClick = { show = true }) {
-            Text(text = "开始加载")
-        }
     }
+
 }
 
 @Composable
@@ -375,9 +416,23 @@ fun DerivedStateOfBase(
 fun SnapshotFlowBase() {
     val listState = rememberLazyListState()
 
-    LazyColumn(state = listState) {
-        items(50) { index ->
-            Text(text = "item $index")
+    var backToTop by remember {
+        mutableStateOf(false)
+    }
+
+    val scope = rememberCoroutineScope()
+    Box {
+        LazyColumn(state = listState) {
+            items(50) { index ->
+                Text(text = "item $index", modifier = Modifier.fillMaxWidth())
+            }
+        }
+        if (backToTop) {
+            Button(onClick = {
+                scope.launch { listState.scrollToItem(index = 0) }
+            }, modifier = Modifier.align(Alignment.BottomEnd)) {
+                Text(text = "返回顶部")
+            }
         }
     }
 
@@ -385,10 +440,9 @@ fun SnapshotFlowBase() {
         snapshotFlow { listState.firstVisibleItemIndex }
             .map { index -> index > 0 }
             .distinctUntilChanged()//直到发生改变才再次发送
-            .filter { it }
             .collect {
                 //value:第一个Item是否可见
-                Log.d("TAG", "当第一个Item不可见时触发")
+                backToTop = it
             }
     }
 }

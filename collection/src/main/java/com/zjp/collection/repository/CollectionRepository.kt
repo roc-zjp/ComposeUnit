@@ -31,6 +31,7 @@ class CollectionRepository(private val dbManager: DBManager = DBManager.getInsta
         CollectionNodeEntry.CODE,
         CollectionNodeEntry.SUBTITLE,
         CollectionNodeEntry.PRIORITY,
+        CollectionNodeEntry.SUMMARY,
     )
 
 

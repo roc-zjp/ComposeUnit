@@ -42,7 +42,7 @@ class CollectionLikeRepository(private val db: ComposeDatabase = LocalDB.getData
 
 
     private fun add(widgetId: Int): Long {
-        return db.likeDao().insertAll(LikeWidget(widgetId = widgetId, id = 0))
+        return db.collectionLikeDao().insertAll(CollectionLike(widgetId = widgetId, id = 0))
     }
 
 

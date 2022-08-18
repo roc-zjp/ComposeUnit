@@ -57,6 +57,7 @@ dependencies {
     //零时解决不能预览的问题
     debugImplementation "androidx.customview:customview:1.2.0-alpha01"
     debugImplementation "androidx.customview:customview-poolingcontainer:1.0.0-alpha01"
+    implementation 'androidx.activity:activity-compose:1.5.0'
 
 
 }

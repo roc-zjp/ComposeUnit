@@ -23,7 +23,6 @@ class DetailViewModel(private val composeId: Int) : ViewModel() {
     var tips by mutableStateOf(false)
 
     init {
-
         viewModelScope.launch {
             compose = repository.getComposeById(composeId)
             links = queryLinkComposes(compose?.linkWidget)

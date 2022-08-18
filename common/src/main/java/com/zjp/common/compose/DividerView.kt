@@ -54,10 +54,12 @@ fun NodeTitle(
             Spacer(modifier = Modifier.padding(start = 10.dp))
             Text(
                 text = title,
-                style = TextStyle(fontWeight = FontWeight.Black, fontSize = 18.sp)
+                style = TextStyle(fontWeight = FontWeight.Black, fontSize = 18.sp),
+                modifier = Modifier.weight(1f)
             )
-            Spacer(modifier = Modifier.weight(1.0f))
+
             if (showLeft) {
+                Spacer(modifier = Modifier.padding(start = 10.dp))
                 Icon(Icons.Sharp.Share, contentDescription = "share", tint = color)
                 Spacer(modifier = Modifier.padding(start = 10.dp))
                 Icon(
@@ -81,7 +83,7 @@ fun NodeTitle(
 @Composable
 fun ComposeItemPreview() {
 
-    NodeTitle("标题") {
+    NodeTitle("标题标题标题标题标题标题标题标题标题标题标题标题标题") {
 
     }
 
