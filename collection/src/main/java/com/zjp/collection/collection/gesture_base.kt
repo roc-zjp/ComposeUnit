@@ -28,10 +28,11 @@ fun ClickableSample() {
     // content that you want to make clickable
     Text(
         text = count.value.toString(),
-        modifier = Modifier.clickable { count.value += 1 }
+        modifier = Modifier
+            .clickable { count.value += 1 }
+            .size(30.dp)
     )
 }
-
 
 @Composable
 fun ScrollBoxes() {
@@ -81,11 +82,13 @@ fun AutoNestScroll() {
             .padding(32.dp)
     ) {
         Column {
+
             repeat(6) {
                 Box(
                     modifier = Modifier
                         .height(128.dp)
                         .verticalScroll(rememberScrollState())
+
                 ) {
                     Text(
                         "Scroll here",
