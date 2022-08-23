@@ -83,7 +83,7 @@ fun ScrollableSample() {
 
 @Composable
 fun AutoNestScroll() {
-    val gradient = Brush.verticalGradient(0f to Color.Gray, 1000f to Color.White)
+    val gradient = Brush.verticalGradient(0f to Color.Red, 1000f to Color.White)
     Box(
         modifier = Modifier
             .background(Color.LightGray)
@@ -237,6 +237,7 @@ fun TransformableSample() {
     var scale by remember { mutableStateOf(1f) }
     var rotation by remember { mutableStateOf(0f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
+
     val state = rememberTransformableState { zoomChange, offsetChange, rotationChange ->
         scale *= zoomChange
         rotation += rotationChange
@@ -244,6 +245,7 @@ fun TransformableSample() {
     }
     Box(
         Modifier
+
             // apply other transformations like rotation and zoom
             // on the pizza slice emoji
             .graphicsLayer(

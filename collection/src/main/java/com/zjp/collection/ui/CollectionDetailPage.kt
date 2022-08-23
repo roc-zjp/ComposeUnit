@@ -1,9 +1,8 @@
 package com.zjp.collection.ui
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
@@ -17,17 +16,25 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.statusBarsPadding
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import com.zjp.collection.CollectionNodeMap
 import com.zjp.collection.viewmodel.CollectionDetailViewModel
 import com.zjp.collection.viewmodel.DetailViewModelFactory
+import com.zjp.common.LocalThemeColor
 import com.zjp.common.R
 import com.zjp.common.code.CodeView
 import com.zjp.common.compose.FoldAppbar
@@ -36,6 +43,7 @@ import com.zjp.common.compose.UnitTopAppBar
 import com.zjp.common.utils.base64ToBitmap
 import com.zjp.core_database.model.CollectionNode
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CollectionDetailPage(
     composeId: Int = -1,
@@ -43,74 +51,81 @@ fun CollectionDetailPage(
     goBack: () -> Unit = {},
     goHome: () -> Unit = {},
 ) {
+    val nodes = viewModel.nodes.toMutableStateList()
     Scaffold(
         topBar = {
-            UnitTopAppBar(
-                title = { viewModel.compose?.name?.let { Text(text = it) } },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        goBack()
-                    }) {
-                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = {
-                        goHome()
-                    }) {
-                        Icon(imageVector = Icons.Filled.Home, contentDescription = "Home")
-                    }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            ) {
+                if (viewModel.compose != null) {
+                    Image(
+                        bitmap = base64ToBitmap(viewModel.compose!!.img),
+                        contentDescription = "title",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    )
+                    ProvideWindowInsets {
+                        val color = LocalThemeColor.current
+                        Row(
+                            modifier = Modifier
+                                .background(color.copy(alpha = 0.3f))
+                                .statusBarsPadding()
+                        ) {
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = viewModel.compose!!.name,
+                                color = Color.White,
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            IconButton(onClick = {
+                                goHome()
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Home,
+                                    contentDescription = "Home"
+                                )
+                            }
 
-                    IconButton(onClick = {
-                        viewModel.toggleLike()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            contentDescription = "Home",
-                            tint = if (viewModel.likeStatus) Color.Red else Color.Gray
-                        )
+                            IconButton(onClick = {
+                                viewModel.toggleLike()
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Favorite,
+                                    contentDescription = "Home",
+                                    tint = if (viewModel.likeStatus) Color.Red else Color.Gray
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
+                        }
                     }
+                }
+            }
 
-                },
-            )
         }) {
 
         BoxWithConstraints(modifier = Modifier.padding(it)) {
 
-            FoldAppbar(
-                minHeightDp = 0.dp,
-                maxHeightDp = maxWidth / 2,
-                appBar = {
-                    if (viewModel.compose != null) {
-                        Image(
-                            bitmap = base64ToBitmap(viewModel.compose!!.img),
-                            contentDescription = "title",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                }) {
-                item {
-                    Text(
-                        text = viewModel.compose?.info ?: "",
-                        modifier = Modifier.padding(10.dp),
-                        fontSize = 20.sp
-                    )
+            if (nodes.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = Color.Gray)
+
+                ) {
+                    Text(text = "待收录", modifier = Modifier.align(Alignment.Center))
                 }
-                if (viewModel.nodes.isEmpty()) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .width(maxWidth)
-                                .height(maxHeight)
-                                .background(color = Color.Gray)
-                        ) {
-                            Text(text = "待收录", modifier = Modifier.align(Alignment.Center))
+            } else {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    HorizontalPager(count = nodes.size, modifier = Modifier.fillMaxSize()) { page ->
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            ComposeNode(node = nodes[page])
                         }
-                    }
-                } else {
-                    items(viewModel.nodes) { node: CollectionNode ->
-                        ComposeNode(node = node)
                     }
                 }
             }
@@ -151,7 +166,7 @@ fun ComposeNode(node: CollectionNode) {
     var folded by remember {
         mutableStateOf(true)
     }
-    Column {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         NodeTitle(title = node.name, folded = folded) {
             folded = !folded
         }
@@ -172,8 +187,11 @@ fun ComposeNode(node: CollectionNode) {
                 .heightIn(20.dp, 500.dp)
                 .fillMaxWidth()
                 .border(0.5.dp, Color.Black)
+                .clipToBounds()
         ) {
-            CollectionNodeMap(id = node.id!!)
+            Box(modifier = Modifier.align(Alignment.Center)) {
+                CollectionNodeMap(id = node.id!!)
+            }
             Button(
                 onClick = { },
                 enabled = false,
