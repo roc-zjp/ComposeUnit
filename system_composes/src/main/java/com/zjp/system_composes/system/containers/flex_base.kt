@@ -1,28 +1,37 @@
 package com.zjp.system_composes.system.containers
 
+import android.content.ClipData
+import android.widget.Space
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.outlined.Create
-import androidx.compose.runtime.Composable
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.zjp.system_composes.R
+import org.intellij.lang.annotations.JdkConstants
 
 /**
  * 【verticalAlignment】：竖直方向对齐模式【Alignment】
@@ -42,6 +51,88 @@ fun RowBase() {
     }
 }
 
+@Composable
+fun RowArrangement() {
+
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+        var unfold by remember {
+            mutableStateOf(true)
+        }
+        val maxWidth = (LocalConfiguration.current.screenWidthDp - 40).dp
+        val minWidth = 90.dp
+        val width: Dp by animateDpAsState(if (unfold) maxWidth else minWidth)
+
+
+        Button(onClick = { unfold = !unfold }) {
+            Text(text = "显示动画")
+        }
+
+
+
+
+        Column(modifier = Modifier.width(width)) {
+            RowItem(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(10.dp))
+            RowItem(horizontalArrangement = Arrangement.SpaceBetween)
+            Spacer(modifier = Modifier.height(10.dp))
+
+            RowItem(horizontalArrangement = Arrangement.SpaceAround)
+            Spacer(modifier = Modifier.height(10.dp))
+
+            RowItem(horizontalArrangement = Arrangement.SpaceEvenly)
+            Spacer(modifier = Modifier.height(10.dp))
+
+            RowItem(horizontalArrangement = Arrangement.Start)
+            Spacer(modifier = Modifier.height(10.dp))
+
+            RowItem(horizontalArrangement = Arrangement.Center)
+            Spacer(modifier = Modifier.height(10.dp))
+
+            RowItem(horizontalArrangement = Arrangement.End)
+        }
+    }
+}
+
+@Composable
+fun RowItem(
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        horizontalArrangement = horizontalArrangement,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                Color.Gray
+            )
+    ) {
+        Item(title = "A", modifier = modifier)
+        Item(title = "B", modifier = modifier)
+        Item(title = "C", modifier = modifier)
+    }
+}
+
+@Composable
+fun Item(title: String, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .padding(5.dp)
+            .height(20.dp)
+            .defaultMinSize(minWidth = 20.dp, minHeight = 20.dp)
+            .clip(RoundedCornerShape(5.dp))
+            .background(Color.White)
+
+    ) {
+        Text(
+            text = title, modifier = Modifier
+                .align(Alignment.Center)
+        )
+    }
+}
+
+
 /**
  * 【horizontalAlignment】：竖直方向对齐模式【Alignment】
  * 【verticalArrangement】：水平排列方式【Arrangement.Vertical】
@@ -57,6 +148,86 @@ fun ColumnBase() {
         Text(text = "水平布局第一个子组合")
         Spacer(modifier = Modifier.weight(1f))
         Icon(Icons.Default.ArrowForward, contentDescription = "第二个子组合")
+    }
+}
+
+
+@Composable
+fun ColumnArrangement() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        var unfold by remember {
+            mutableStateOf(true)
+        }
+        val maxWidth = 300.dp
+        val minWidth = 90.dp
+        val height: Dp by animateDpAsState(if (unfold) maxWidth else minWidth)
+
+
+        Button(onClick = { unfold = !unfold }) {
+            Text(text = "显示动画")
+        }
+
+
+        Row(
+            modifier = Modifier
+                .height(height),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ColumnItem(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(10.dp))
+            ColumnItem(verticalArrangement = Arrangement.SpaceBetween)
+            Spacer(modifier = Modifier.width(10.dp))
+            ColumnItem(verticalArrangement = Arrangement.SpaceAround)
+            Spacer(modifier = Modifier.width(10.dp))
+
+            ColumnItem(verticalArrangement = Arrangement.SpaceEvenly)
+            Spacer(modifier = Modifier.width(10.dp))
+
+            ColumnItem(verticalArrangement = Arrangement.Top)
+            Spacer(modifier = Modifier.width(10.dp))
+
+            ColumnItem(verticalArrangement = Arrangement.Center)
+            Spacer(modifier = Modifier.width(10.dp))
+
+            ColumnItem(verticalArrangement = Arrangement.Bottom)
+        }
+    }
+}
+
+@Composable
+fun ColumnItem(
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        verticalArrangement = verticalArrangement,
+        modifier = Modifier
+            .fillMaxHeight()
+            .background(
+                Color.Gray
+            )
+    ) {
+        Item(title = "A", modifier = modifier)
+        Item(title = "B", modifier = modifier)
+        Item(title = "C", modifier = modifier)
+    }
+}
+
+@Composable
+fun BoxItem(title: String, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .padding(5.dp)
+            .height(20.dp)
+            .defaultMinSize(minWidth = 20.dp, minHeight = 20.dp)
+            .clip(RoundedCornerShape(5.dp))
+            .background(Color.White)
+
+    ) {
+        Text(
+            text = title, modifier = Modifier
+                .align(Alignment.Center)
+        )
     }
 }
 
@@ -252,28 +423,37 @@ fun LazyVerticalGridFixed() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ListItemBase() {
-        ListItem(
-            icon = {
-                Icon(
-                    Icons.Outlined.Create,
-                    contentDescription = "",
-                )
-            },
-            secondaryText = {
-                Text(text = "secondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryText")
-            },
-            singleLineSecondaryText = false,
-            overlineText = { Text(text = "overlineText") },
-            trailing = { Text(text = "trailing") },
-            modifier = Modifier.clickable { }.background(Color.Blue)
+    ListItem(
+        icon = {
+            Icon(
+                Icons.Outlined.Create,
+                contentDescription = "",
+            )
+        },
+        secondaryText = {
+            Text(text = "secondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryText")
+        },
+        singleLineSecondaryText = false,
+        overlineText = { Text(text = "overlineText") },
+        trailing = { Text(text = "trailing") },
+        modifier = Modifier
+            .clickable { }
+            .background(Color.Blue)
 
-        ) {
-            Text(text = "关于应用")
-        }
+    ) {
+        Text(text = "关于应用")
+    }
 }
 
 @Preview
 @Composable
 fun Preview() {
-    LazyColumnBase()
+    RowArrangement()
+
+}
+
+@Preview
+@Composable
+fun ColumnPreview() {
+    ColumnArrangement()
 }

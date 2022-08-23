@@ -34,6 +34,7 @@ import com.zjp.compose_unit.viewmodel.DetailViewModel
 import com.zjp.compose_unit.viewmodel.DetailViewModelFactory
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.Node
+import com.zjp.system_composes.NodeMap
 
 @Composable
 fun ComposeDetailPage(
@@ -167,8 +168,7 @@ fun ComposeNode(node: Node) {
                 .padding(10.dp)
                 .heightIn(20.dp, 500.dp)
         ) {
-            CollectionNodeMap(id = node.id!!)
-
+            NodeMap(id = node.id!!)
         }
         Box(
             modifier = Modifier

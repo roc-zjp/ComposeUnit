@@ -73,6 +73,7 @@ fun DeveloperScreen(
         },
         content = {
             AutoNestScroll()
+
         }
     )
 }

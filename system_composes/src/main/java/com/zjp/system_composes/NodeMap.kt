@@ -98,5 +98,7 @@ fun NodeMap(id: Int) {
         82 -> HorizontalLayout()
         83 -> VerticalLayout()
         84 -> WrapLayoutSample()
+        85 -> RowArrangement()
+        86 -> ColumnArrangement()
     }
 }
