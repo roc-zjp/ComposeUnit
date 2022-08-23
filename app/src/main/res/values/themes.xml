@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Compose_unit" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.Compose_unit" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="colorPrimary">#ffff00</item>
+        <item name="colorPrimaryDark">#ff00ff</item>
+        <item name="colorAccent">#ff0000</item>
     </style>
 </resources>

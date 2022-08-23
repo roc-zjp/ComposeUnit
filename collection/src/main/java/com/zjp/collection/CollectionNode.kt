@@ -20,5 +20,9 @@ fun CollectionNodeMap(id: Int) {
         12 -> AutoNestScroll()
         13 -> NestedScrollBase()
         14 -> NestedScrollDispatcherBase()
+        15 -> DragPointInput()
+        16 -> DragAble()
+        17 -> Swipeable()
+        18 -> TransformableSample()
     }
 }

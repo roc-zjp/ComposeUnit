@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.*
 import com.zjp.collection.R
 import com.zjp.collection.collection.AutoNestScroll
 import com.zjp.collection.collection.CollapsingToolbarLayout
+import com.zjp.collection.collection.ComposeWithAndroidView
 import com.zjp.collection.ui.CollectionItem
 import com.zjp.common.compose.UnitTopAppBar
 import com.zjp.common.state.CommonUiState
@@ -56,26 +57,28 @@ import kotlin.math.sin
 fun DeveloperScreen(
     onBack: () -> Unit
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    Scaffold(
-        scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
-        topBar = {
-            UnitTopAppBar(
-                title = { Text(text = "开发者页面") },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        onBack()
-                    }) {
-                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-            )
-        },
-        content = {
-            AutoNestScroll()
+//    val snackbarHostState = remember { SnackbarHostState() }
+//    Scaffold(
+//        scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
+//        topBar = {
+//            UnitTopAppBar(
+//                title = { Text(text = "开发者页面") },
+//                navigationIcon = {
+//                    IconButton(onClick = {
+//                        onBack()
+//                    }) {
+//                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+//                    }
+//                },
+//            )
+//        },
+//        content = {
+//            AutoNestScroll()
+//
+//        }
+//    )
 
-        }
-    )
+    ComposeWithAndroidView()
 }
 
 
