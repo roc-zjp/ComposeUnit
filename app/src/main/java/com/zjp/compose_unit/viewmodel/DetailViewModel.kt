@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.zjp.common.data.Result
-import com.zjp.compose_unit.data.repository.ComposesRepository
-import com.zjp.compose_unit.data.repository.LikeRepository
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.model.Node
+import com.zjp.core_database.repository.ComposesRepository
+import com.zjp.core_database.repository.LikeRepository
 import kotlinx.coroutines.*
 
 class DetailViewModel(private val composeId: Int) : ViewModel() {

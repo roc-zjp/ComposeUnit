@@ -2,14 +2,11 @@ package com.zjp.collection.ui
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.*
@@ -20,7 +17,6 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,9 +33,7 @@ import com.zjp.collection.viewmodel.DetailViewModelFactory
 import com.zjp.common.LocalThemeColor
 import com.zjp.common.R
 import com.zjp.common.code.CodeView
-import com.zjp.common.compose.FoldAppbar
 import com.zjp.common.compose.NodeTitle
-import com.zjp.common.compose.UnitTopAppBar
 import com.zjp.common.utils.base64ToBitmap
 import com.zjp.core_database.model.CollectionNode
 

@@ -33,6 +33,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }
+    dynamicFeatures = []
 
     applicationVariants.all { variant ->
         variant.outputs.all {
@@ -56,10 +57,6 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
 
     implementation 'androidx.activity:activity-compose:1.5.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 
     implementation(project(":core-database"))
     implementation(project(":system_composes"))
@@ -77,5 +74,14 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.accompanist/accompanist-insets
     implementation "com.google.accompanist:accompanist-insets:$insets_systemuicontroller_version"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$insets_systemuicontroller_version"
+
+
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+
+
 
 }

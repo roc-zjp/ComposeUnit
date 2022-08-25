@@ -1,4 +1,4 @@
-package com.zjp.compose_unit.data.repository
+package com.zjp.core_database.repository
 
 import com.apkfuns.logutils.LogUtils
 import com.zjp.common.data.Result

@@ -46,7 +46,7 @@ import com.zjp.core_database.model.LikeWidget
 fun ComposesScreen(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     homeViewModel: HomeViewModel = viewModel(),
-    onClick: (compose: Compose) -> Unit,
+    onClick: (compose: Compose) -> Unit={},
 ) {
 
     val uiState = homeViewModel.uiState

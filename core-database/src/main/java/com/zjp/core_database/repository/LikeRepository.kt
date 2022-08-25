@@ -1,4 +1,4 @@
-package com.zjp.compose_unit.data.repository
+package com.zjp.core_database.repository
 
 import com.zjp.core_database.ComposeDatabase
 import com.zjp.core_database.model.LikeWidget
