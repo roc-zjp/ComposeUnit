@@ -570,8 +570,7 @@ fun IconToggleButtonBase() {
 @Composable
 fun ButtonBasePreview() {
     Column {
-        ButtonBase()
-        TextButtonBase()
+        IconToggleButtonBase()
     }
 }
 

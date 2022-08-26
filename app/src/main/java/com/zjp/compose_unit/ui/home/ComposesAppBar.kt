@@ -35,8 +35,9 @@ fun ComposesAppBar(selectIndex: Int, onItemSelected: (index: Int) -> Unit) {
                     .weight(1f)
                     .background(Color.Transparent)
                     .shadow(elevation = 0.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+                horizontalAlignment = Alignment.CenterHorizontally,
+
+                ) {
                 val boxSize by animateDpAsState(
                     targetValue = if (selectIndex == index) 100.dp else 75.dp
                 )

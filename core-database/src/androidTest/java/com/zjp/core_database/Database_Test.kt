@@ -25,5 +25,13 @@ class Database_Test {
         assertTrue(composesRepository.getAllCompose() is Result.Success)
     }
 
+    @Test
+    fun search() {
+        val ids = composesRepository.search("icon").map {
+            it.id
+        }
+        assertEquals(ids, listOf(15, 55))
+    }
+
 
 }

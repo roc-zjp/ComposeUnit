@@ -1,18 +1,33 @@
 package com.zjp.compose_unit.ui
 
 import android.content.Context
+import android.graphics.RectF
+import android.widget.TableRow
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -20,6 +35,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.zjp.common.LocalFont
 import com.zjp.common.LocalThemeColor
@@ -54,6 +70,13 @@ fun App() {
     }
 
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+        ?: Screen.Splash.route
+    val routes = remember { HomeSections.values().map { it.route } }
+
+
+
     SystemBroadcastReceiver(systemAction = color_change_broadcast_action) { intent ->
         val colorStr = intent?.getIntExtra("color", 0xFF2196F3.toInt()) ?: 0xFF2196F3.toInt()
         themeColor = Color(colorStr)
@@ -73,25 +96,13 @@ fun App() {
     ) {
         Compose_unitTheme(primary = themeColor, font = currentFont) {
             Scaffold(
-                bottomBar = {
-                    BottomBar(
-                        navController,
-                        tabs = arrayOf(
-                            HomeSections.COMPOSE,
-                            HomeSections.COLLECTION,
-                            HomeSections.PROFILE
-                        )
-                    ) {
-                        navController.navigate(it.route) {
-                            popUpTo(HomeSections.COMPOSE.route)
-                            launchSingleTop = true
-                        }
-                    }
-                },
+                backgroundColor = Color.Transparent,
+                contentColor = Color.Transparent,
+
                 floatingActionButton = {
                     if (com.zjp.compose_unit.BuildConfig.DEBUG)
                         FloatingActionButton(onClick = {
-                            navController.navigate(Screen.Debug.route)
+                            navController.navigate(Screen.Search.route)
                         }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.debug),
@@ -99,17 +110,44 @@ fun App() {
                             )
                         }
                 },
-                floatingActionButtonPosition = FabPosition.Center
+                floatingActionButtonPosition = FabPosition.Center,
+                isFloatingActionButtonDocked = true,
             ) { innerPaddingModifier ->
-                NavHost(
-                    navController = navController,
-                    startDestination = Screen.Splash.route,
-                    modifier = Modifier
-                        .padding(innerPaddingModifier)
 
-                ) {
-                    unitNavGraph(navController)
+
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+                    ?: Screen.Splash.route
+                val routes = remember { HomeSections.values().map { it.route } }
+
+                ProvideWindowInsets() {
+                    val sbPaddingValues =
+                        rememberInsetsPaddingValues(LocalWindowInsets.current.navigationBars)
+                    Box(
+                        modifier = Modifier
+
+//                            .padding(innerPaddingModifier)
+                            .fillMaxSize()
+                            .padding(sbPaddingValues)
+
+                    ) {
+                        NavHost(
+                            navController = navController,
+                            startDestination = Screen.Splash.route,
+                            modifier = Modifier
+                        ) {
+                            unitNavGraph(navController)
+                        }
+                        if (currentRoute in routes) {
+                            HomeBottomAppBar(
+                                modifier = Modifier
+                                    .align(Alignment.BottomStart)
+                                    .fillMaxWidth()
+                            )
+                        }
+                    }
                 }
+
 
             }
         }
@@ -117,59 +155,36 @@ fun App() {
 
 }
 
+
 @Composable
-fun BottomBar(
-    navController: NavController,
-    tabs: Array<HomeSections> = HomeSections.values(),
+fun TableRowItem(
+    homeSection: HomeSections,
+    currentRoute: String,
     onTabChange: (HomeSections) -> Unit
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-        ?: Screen.Splash.route
-    val routes = remember { tabs.map { it.route } }
-
-    if (currentRoute in routes) {
-        ProvideWindowInsets() {
-            val navPaddingValues =
-                rememberInsetsPaddingValues(LocalWindowInsets.current.navigationBars)
-            BottomAppBar(Modifier.padding(navPaddingValues)) {
-                TabRow(
-                    selectedTabIndex = routes.indexOf(currentRoute),
-                    indicator = {
-                        CustomIndicator(it, selectIndex = routes.indexOf(currentRoute))
-                    },
-                    divider = {},
-                ) {
-                    tabs.forEachIndexed { _, homeSection ->
-                        Row(
-                            modifier = Modifier
-                                .padding(top = 10.dp, bottom = 10.dp)
-                                .clickable(
-                                    onClick = {
-                                        onTabChange(homeSection)
-                                    },
-                                    indication = null,
-                                    interactionSource = remember {
-                                        MutableInteractionSource()
-                                    }
-                                )
-                                .padding(4.dp),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                painter = painterResource(id = homeSection.icon),
-                                contentDescription = null
-                            )
-                            if (currentRoute == homeSection.route) {
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(text = homeSection.title.uppercase().substring(0..2))
-                            }
-                        }
-
-                    }
+    Row(
+        modifier = Modifier
+            .padding(top = 10.dp, bottom = 10.dp)
+            .clickable(
+                onClick = {
+                    onTabChange(homeSection)
+                },
+                indication = null,
+                interactionSource = remember {
+                    MutableInteractionSource()
                 }
-            }
+            )
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(id = homeSection.icon),
+            contentDescription = null
+        )
+        if (currentRoute == homeSection.route) {
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(text = homeSection.title.uppercase().substring(0..2))
         }
     }
 }
@@ -197,12 +212,50 @@ private suspend fun saveFont(context: Context, font: FontFamily) {
         .putString("font", fontMap.keys.elementAt(index)).commit()
 }
 
-private fun getFont(context: Context): FontFamily {
-    val fontStr = context.getSharedPreferences("custom_setting", Context.MODE_PRIVATE)
-        .getString("font", "") ?: "local"
+@Composable
+fun HomeBottomAppBar(modifier: Modifier = Modifier) {
+    Row(
+        modifier
+            .fillMaxWidth()
+            .height(AppBarHeight)
+            .background(Color.Red)
+            .navigationBarsPadding(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        TableRowItem(
+            homeSection = HomeSections.COMPOSE,
+            currentRoute = ""
+        ) {
 
-    return fontMap[fontStr] ?: local
+        }
+        Spacer(
+            modifier = Modifier
+                .width(100.dp)
+                .fillMaxHeight()
+        )
+        TableRowItem(
+            homeSection = HomeSections.COLLECTION,
+            currentRoute = ""
+        ) {
+
+        }
+    }
+
 }
+
+
+@Preview
+@Composable
+fun BottomPreview() {
+    Compose_unitTheme() {
+        HomeBottomAppBar()
+    }
+}
+
+private val AppBarHeight = 56.dp
+
+
 
 
 

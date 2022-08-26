@@ -37,7 +37,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
 
     private val composeSelection = "${ComposeEntry.ID} = ?"
     private val nodeSelection = "${NodeEntry.WIDGET_ID} = ?"
-
+    private val likeSelection = "${ComposeEntry.NAME} like ?"
 
     companion object {
         const val COMPOSE_TABLE_NAME = "compose"
@@ -139,5 +139,24 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
         return nodes
     }
 
+    fun search(key: String): List<Compose> {
+        val cursor =
+            dbManager.mDB.query(
+                COMPOSE_TABLE_NAME,
+                compose,
+                likeSelection,
+                arrayOf("%$key%"),
+                null,
+                null,
+                sortOrder
+            )
+
+        val composes = mutableListOf<Compose>()
+        while (cursor.moveToNext()) {
+            composes.add(parseCompose(cursor))
+        }
+        cursor.close()
+        return composes
+    }
 
 }

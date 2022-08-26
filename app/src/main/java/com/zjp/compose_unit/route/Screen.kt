@@ -5,6 +5,7 @@ import com.zjp.compose_unit.R
 sealed class Screen(val route: String) {
     object ComposeDetailScreen : Screen(route = "compose_detail_screen")
     object Home : Screen(route = "home_screen")
+    object Search : Screen(route = "search_screen")
     object Debug : Screen(route = "debug_screen")
     object Splash : Screen(route = "splash_screen")
     object ThemeSetting : Screen(route = "theme_setting_screen")

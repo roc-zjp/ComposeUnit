@@ -46,7 +46,7 @@ import com.zjp.core_database.model.LikeWidget
 fun ComposesScreen(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     homeViewModel: HomeViewModel = viewModel(),
-    onClick: (compose: Compose) -> Unit={},
+    onClick: (compose: Compose) -> Unit = {},
 ) {
 
     val uiState = homeViewModel.uiState
@@ -61,8 +61,6 @@ fun ComposesScreen(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
-
-
 
 
     Box() {
@@ -96,7 +94,7 @@ fun Composes(
     likeCollects: List<LikeWidget>,
     appbar: @Composable () -> Unit
 ) {
-    LazyColumn {
+    LazyColumn(contentPadding = PaddingValues(bottom = 56.dp)) {
         stickyHeader {
             appbar()
         }
@@ -157,7 +155,6 @@ fun ComposeItemView(
                 .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
                 .fillMaxWidth()
                 .height(100.dp)
-
                 .clip(
                     TechnoShapeBorder(
                         storkWidth = 1.0f,

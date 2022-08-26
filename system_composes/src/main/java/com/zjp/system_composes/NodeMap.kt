@@ -100,5 +100,6 @@ fun NodeMap(id: Int) {
         84 -> WrapLayoutSample()
         85 -> RowArrangement()
         86 -> ColumnArrangement()
+        87 -> IconToggleButtonBase()
     }
 }

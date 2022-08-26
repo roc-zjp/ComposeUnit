@@ -11,6 +11,7 @@ import com.zjp.compose_unit.ui.developer.DeveloperScreen
 import com.zjp.compose_unit.ui.home.ComposesScreen
 import com.zjp.compose_unit.ui.home.SamplesPage
 import com.zjp.compose_unit.ui.profile.*
+import com.zjp.compose_unit.ui.search.SearchPage
 
 fun NavGraphBuilder.unitNavGraph(
     navController: NavHostController,
@@ -21,7 +22,6 @@ fun NavGraphBuilder.unitNavGraph(
     ) {
         addHomeGraph(navController = navController)
     }
-
 
     composable(
         Screen.ComposeDetailScreen.route + "/{composeId}",
@@ -61,6 +61,19 @@ fun NavGraphBuilder.unitNavGraph(
         Screen.Splash.route,
     ) {
         SplashPage(navController = navController)
+    }
+    composable(
+        Screen.Search.route,
+    ) {
+        SearchPage() { id ->
+            navController.navigate(
+                Screen.ComposeDetailScreen.createComposeDetailRoute(
+                    id
+                )
+            ) {
+                navController.popBackStack()
+            }
+        }
     }
     composable(
         Screen.Debug.route,
