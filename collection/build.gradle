@@ -62,8 +62,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.1.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0")
 
-    // https://mvnrepository.com/artifact/com.google.accompanist/accompanist-insets
-    implementation "com.google.accompanist:accompanist-insets:$insets_systemuicontroller_version"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$insets_systemuicontroller_version"
 
     //零时解决不能预览的问题

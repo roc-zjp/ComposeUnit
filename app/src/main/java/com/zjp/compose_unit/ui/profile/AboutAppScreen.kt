@@ -20,10 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.apkfuns.logutils.LogUtils
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.statusBarsPadding
 import com.zjp.common.LocalThemeColor
 import com.zjp.common.compose.NodeTitle
 import com.zjp.compose_unit.R
@@ -32,37 +28,36 @@ import com.zjp.compose_unit.ui.theme.IndieFlower
 @Composable
 fun AboutAppScreen(goBack: () -> Unit = {}) {
     Scaffold(topBar = {
-        ProvideWindowInsets() {
-            Image(
-                painter = painterResource(id = com.zjp.common.R.drawable.caver),
-                contentScale = ContentScale.Crop,
-                contentDescription = "Header",
-                modifier = Modifier
-                    .height(
-                        200.dp
-                    )
-                    .fillMaxWidth()
-            )
-            Image(
-                painter = painterResource(id = R.drawable.kobe), contentDescription = "kobe",
-                modifier = Modifier
-                    .padding(top = 150.dp, start = 25.dp)
-                    .width(100.dp)
-                    .height(100.dp)
-                    .clip(CircleShape)
-            )
 
-            LogUtils.d("top=${LocalWindowInsets.current.statusBars.top},bottom=${LocalWindowInsets.current.statusBars.bottom}")
-            IconButton(onClick = {
-                goBack()
-            }, modifier = Modifier.statusBarsPadding()) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "back",
-                    tint = Color.White
+        Image(
+            painter = painterResource(id = com.zjp.common.R.drawable.caver),
+            contentScale = ContentScale.Crop,
+            contentDescription = "Header",
+            modifier = Modifier
+                .height(
+                    200.dp
                 )
-            }
+                .fillMaxWidth()
+        )
+        Image(
+            painter = painterResource(id = R.drawable.kobe), contentDescription = "kobe",
+            modifier = Modifier
+                .padding(top = 150.dp, start = 25.dp)
+                .width(100.dp)
+                .height(100.dp)
+                .clip(CircleShape)
+        )
+
+        IconButton(onClick = {
+            goBack()
+        }, modifier = Modifier.statusBarsPadding()) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "back",
+                tint = Color.White
+            )
         }
+
     }) { paddingValue ->
 
         val color = LocalThemeColor.current

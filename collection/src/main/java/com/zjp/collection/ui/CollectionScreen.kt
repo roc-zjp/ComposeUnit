@@ -14,9 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -26,9 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.zjp.collection.viewmodel.CollectionViewModel
 import com.zjp.common.LocalFont
 import com.zjp.common.LocalThemeColor
@@ -103,47 +98,37 @@ fun CollectionPage(
 
 @Composable
 fun CollectionTitle(alpha: Float = 1f) {
-    ProvideWindowInsets() {
-        val sbPaddingValues = rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars)
-        Box(
+    val sbPaddingValues =
+        WindowInsets.statusBars.asPaddingValues()
+    Box(
+        modifier = Modifier
+            .padding(sbPaddingValues)
+            .fillMaxWidth()
+    ) {
+        Image(
+            painter = painterResource(id = com.zjp.common.R.drawable.kobe),
+            contentScale = ContentScale.Crop,
+            contentDescription = "kobe",
             modifier = Modifier
-                .padding(sbPaddingValues)
-                .fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = com.zjp.common.R.drawable.kobe),
-                contentScale = ContentScale.Crop,
-                contentDescription = "kobe",
-                modifier = Modifier
-                    .padding(start = 20.dp)
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .border(1.dp, color = Color.White, shape = CircleShape)
-            )
+                .padding(start = 20.dp)
+                .size(40.dp)
+                .clip(CircleShape)
+                .border(1.dp, color = Color.White, shape = CircleShape)
+        )
 
-            Text(
-                text = "收藏集",
-                color = Color.White.copy(alpha = alpha),
-                modifier = Modifier
-                    .align(Alignment.Center),
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp,
-                fontFamily = LocalFont.current
-            )
-        }
+        Text(
+            text = "收藏集",
+            color = Color.White.copy(alpha = alpha),
+            modifier = Modifier
+                .align(Alignment.Center),
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp,
+            fontFamily = LocalFont.current
+        )
     }
-}
-
-
-@Composable
-fun VerItem() {
 
 }
 
-@Composable
-fun HorItem() {
-
-}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

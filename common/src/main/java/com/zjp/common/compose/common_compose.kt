@@ -2,37 +2,26 @@ package com.zjp.common.compose
 
 import android.util.Log
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.*
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.zjp.common.R
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.Velocity
+import androidx.compose.ui.unit.dp
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 @Composable
 fun UnitTopAppBar(
@@ -44,22 +33,23 @@ fun UnitTopAppBar(
     contentColor: Color = contentColorFor(backgroundColor),
     elevation: Dp = 0.dp
 ) {
-    ProvideWindowInsets {
-        val sbPaddingValues = rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars)
-        TopAppBar(
-            title,
-            modifier = Modifier
-                .background(backgroundColor)
-                .padding(sbPaddingValues)
-                .then(modifier),
-            navigationIcon,
-            actions,
-            backgroundColor,
-            contentColor,
-            elevation
-        )
 
-    }
+    val sbPaddingValues =
+        WindowInsets.statusBars.asPaddingValues()
+    TopAppBar(
+        title,
+        modifier = Modifier
+            .background(backgroundColor)
+            .padding(sbPaddingValues)
+            .then(modifier),
+        navigationIcon,
+        actions,
+        backgroundColor,
+        contentColor,
+        elevation
+    )
+
+
 }
 
 

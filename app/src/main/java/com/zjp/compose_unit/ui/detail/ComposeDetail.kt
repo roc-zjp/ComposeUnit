@@ -22,8 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.insets.navigationBarsWithImePadding
-import com.zjp.collection.CollectionNodeMap
 import com.zjp.common.Const
 import com.zjp.common.code.CodeView
 import com.zjp.common.compose.ComposeHeadView
