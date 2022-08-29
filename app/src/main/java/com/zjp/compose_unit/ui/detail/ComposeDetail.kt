@@ -75,7 +75,6 @@ fun ComposeDetailPage(
                 },
             )
         }) {
-
         Box(
             modifier = Modifier
                 .padding(it)
@@ -83,8 +82,6 @@ fun ComposeDetailPage(
         ) {
             LazyColumn(
                 Modifier
-                    .padding(bottom = 20.dp)
-                    .navigationBarsWithImePadding()
             ) {
                 item {
                     ComposeHeadView(viewModel.compose?.name, viewModel.compose?.info)

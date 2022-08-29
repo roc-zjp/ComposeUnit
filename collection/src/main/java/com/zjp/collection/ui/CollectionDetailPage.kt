@@ -62,42 +62,42 @@ fun CollectionDetailPage(
                             .fillMaxWidth()
                             .height(200.dp)
                     )
-                    ProvideWindowInsets {
-                        val color = LocalThemeColor.current
-                        Row(
-                            modifier = Modifier
-                                .background(color.copy(alpha = 0.3f))
-                                .statusBarsPadding()
-                        ) {
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Text(
-                                text = viewModel.compose!!.name,
-                                color = Color.White,
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
-                            IconButton(onClick = {
-                                goHome()
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Home,
-                                    contentDescription = "Home"
-                                )
-                            }
 
-                            IconButton(onClick = {
-                                viewModel.toggleLike()
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Favorite,
-                                    contentDescription = "Home",
-                                    tint = if (viewModel.likeStatus) Color.Red else Color.Gray
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(10.dp))
+                    val color = LocalThemeColor.current
+                    Row(
+                        modifier = Modifier
+                            .background(color.copy(alpha = 0.3f))
+                            .statusBarsPadding()
+                    ) {
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = viewModel.compose!!.name,
+                            color = Color.White,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        IconButton(onClick = {
+                            goHome()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Home,
+                                contentDescription = "Home"
+                            )
                         }
+
+                        IconButton(onClick = {
+                            viewModel.toggleLike()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Favorite,
+                                contentDescription = "Home",
+                                tint = if (viewModel.likeStatus) Color.Red else Color.Gray
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
                     }
+
                 }
             }
 
