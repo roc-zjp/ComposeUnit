@@ -55,9 +55,10 @@ enum class HomeSections(
     val route: String
 ) {
     COMPOSE("compose", R.drawable.widget, "home_screen/compose"),
-    COLLECTION("collection", R.drawable.ic_outline_collections_24, "home_screen/collection"),
+    COLLECTION("collection", R.drawable.subject, "home_screen/collection"),
     SAMPLE("sample", R.drawable.sample, "home_screen/sample"),
-    PROFILE("profile", R.drawable.profile_light, "home_screen/profile")
+    PROFILE("profile", R.drawable.profile_light, "home_screen/profile"),
+    ARTICLE("article", R.drawable.article_line, "home_screen/article")
 }
 
 

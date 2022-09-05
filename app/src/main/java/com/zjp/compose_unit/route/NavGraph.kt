@@ -5,6 +5,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.zjp.collection.ui.CollectionDetailPage
 import com.zjp.collection.ui.CollectionPage
+import com.zjp.compose_unit.ui.ArticlePage
 import com.zjp.compose_unit.ui.SplashView
 import com.zjp.compose_unit.ui.detail.ComposeDetailPage
 import com.zjp.compose_unit.ui.developer.DeveloperScreen
@@ -65,7 +66,7 @@ fun NavGraphBuilder.unitNavGraph(
     composable(
         Screen.Search.route,
     ) {
-        SearchPage() { id ->
+        SearchPage(toComposeDetail = { id ->
             navController.navigate(
                 Screen.ComposeDetailScreen.createComposeDetailRoute(
                     id
@@ -73,7 +74,9 @@ fun NavGraphBuilder.unitNavGraph(
             ) {
                 navController.popBackStack()
             }
-        }
+        }, onBack = {
+            navController.popBackStack()
+        })
     }
     composable(
         Screen.Debug.route,
@@ -152,6 +155,9 @@ fun NavGraphBuilder.addHomeGraph(
         ProfilePage() { route ->
             navController.navigate(route)
         }
+    }
+    composable(HomeSections.ARTICLE.route) {
+        ArticlePage()
     }
 }
 

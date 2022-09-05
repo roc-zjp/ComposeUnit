@@ -10,6 +10,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -21,10 +24,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.state.ToggleableState
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.zjp.system_composes.system.widgets.CornerImage
 import com.zjp.system_composes.system.widgets.ProgressCollection
 import kotlinx.coroutines.launch
 
@@ -565,12 +574,22 @@ fun IconToggleButtonBase() {
     }
 }
 
+@Composable
+fun IconButtonBase() {
+    IconButton(onClick = { /*TODO*/ }) {
+        Icon(Icons.Filled.Favorite, contentDescription = "Localized description")
+    }
+}
+
+
+
+
 
 @Preview
 @Composable
 fun ButtonBasePreview() {
     Column {
-        IconToggleButtonBase()
+        IconButtonBase()
     }
 }
 

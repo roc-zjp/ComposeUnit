@@ -9,7 +9,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
@@ -22,7 +25,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zjp.common.compose.UnitTopAppBar
@@ -31,8 +33,10 @@ import com.zjp.core_database.model.Compose
 import com.zjp.core_database.repository.ComposesRepository
 
 @Composable
-fun SearchPage(toComposeDetail: (id: Int) -> Unit) {
-
+fun SearchPage(
+    toComposeDetail: (id: Int) -> Unit,
+    onBack: () -> Unit
+) {
     var key by remember {
         mutableStateOf("")
     }
@@ -111,7 +115,7 @@ fun SearchPage(toComposeDetail: (id: Int) -> Unit) {
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-//                        onBack()
+                        onBack()
                     }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
@@ -130,11 +134,4 @@ fun SearchPage(toComposeDetail: (id: Int) -> Unit) {
 
         }
     }
-}
-
-
-@Preview(showSystemUi = true)
-@Composable
-fun SearchPagePreview() {
-    SearchPage(){}
 }

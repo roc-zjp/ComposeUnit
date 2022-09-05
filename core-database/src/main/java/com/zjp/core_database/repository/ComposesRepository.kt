@@ -41,7 +41,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
 
     companion object {
         const val COMPOSE_TABLE_NAME = "compose"
-        const val NODE_TABLE_NAME = "Node"
+        const val NODE_TABLE_NAME = "node"
     }
 
 
@@ -87,6 +87,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
                 composes.add(parseCompose(cursor))
             }
             cursor.close()
+
             return Result.Success(data = composes)
         } catch (e: Exception) {
             LogUtils.e(e)

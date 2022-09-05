@@ -1,7 +1,6 @@
 package com.zjp.system_composes
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.zjp.system_composes.system.animation.*
 import com.zjp.system_composes.system.buttons.ButtonBase
 import com.zjp.system_composes.system.buttons.*
@@ -101,5 +100,10 @@ fun NodeMap(id: Int) {
         85 -> RowArrangement()
         86 -> ColumnArrangement()
         87 -> IconToggleButtonBase()
+        88 -> IconButtonBase()
+        89 -> BasicTextFieldBase()
+        90 -> CreditCardBasicTextField()
+        91 -> BasicTextBase()
+        92 -> ClickTextBase()
     }
 }

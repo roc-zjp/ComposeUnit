@@ -81,7 +81,6 @@ class DBManager {
         }
 
         private fun checkShouldCopy(context: Context, appBuiltInVersion: String): Boolean {
-
             if (BuildConfig.DEBUG) {
                 return true
             }

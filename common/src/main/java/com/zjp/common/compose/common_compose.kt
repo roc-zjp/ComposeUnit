@@ -133,7 +133,7 @@ fun FoldAppbar(
     contentScrollState: LazyGridState = rememberLazyGridState(),
     modifier: Modifier = Modifier,
     appBar: @Composable BoxScope.(progress: Float) -> Unit,
-    content: LazyGridScope.() -> Unit
+    content: @Composable (appBarHeightDp: Dp) -> Unit
 ) {
     val minHeightPx = with(LocalDensity.current) { minHeightDp.roundToPx().toFloat() }
     val maxHeightPx = with(LocalDensity.current) { maxHeightDp.roundToPx().toFloat() }
@@ -189,14 +189,7 @@ fun FoldAppbar(
         val animatedHeight by animateDpAsState(
             targetValue = with(LocalDensity.current) { toolbarOffsetHeightPx.toDp() }
         )
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(1),
-            state = contentScrollState,
-            contentPadding = PaddingValues(top = animatedHeight)
-        ) {
-            content()
-        }
-
+        content(with(LocalDensity.current) { toolbarOffsetHeightPx.toDp() })
         Box(
             modifier = Modifier
                 .fillMaxWidth()

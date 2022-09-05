@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -34,6 +33,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zjp.common.Const
+import com.zjp.common.shape.AppBarHeight
 import com.zjp.common.state.CommonUiState
 import com.zjp.compose_unit.BuildConfig
 import com.zjp.compose_unit.R
@@ -62,8 +62,7 @@ fun ComposesScreen(
         }
     }
 
-
-    Box() {
+    Box {
         if (homeViewModel.uiState.isLoading) {
             LoadingCompose()
         } else {
@@ -94,7 +93,10 @@ fun Composes(
     likeCollects: List<LikeWidget>,
     appbar: @Composable () -> Unit
 ) {
-    LazyColumn(contentPadding = PaddingValues(bottom = 56.dp)) {
+    LazyColumn(
+        modifier = Modifier.padding(WindowInsets.navigationBars.asPaddingValues()),
+        contentPadding = PaddingValues(bottom = AppBarHeight)
+    ) {
         stickyHeader {
             appbar()
         }
@@ -108,6 +110,10 @@ fun Composes(
             }
         }
     }
+}
+
+fun PaddingValues.add(last: PaddingValues) {
+    return
 }
 
 

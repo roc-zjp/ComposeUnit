@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -78,8 +79,13 @@ fun ComposeDetailPage(
                 .padding(it)
                 .fillMaxSize()
         ) {
+
             LazyColumn(
-                Modifier
+                contentPadding = WindowInsets.ime.only(WindowInsetsSides.Vertical + WindowInsetsSides.Bottom)
+                    .union(
+                        WindowInsets.navigationBars
+                    )
+                    .asPaddingValues()
             ) {
                 item {
                     ComposeHeadView(viewModel.compose?.name, viewModel.compose?.info)
@@ -105,7 +111,6 @@ fun ComposeDetailPage(
                 }
 
             }
-
             AnimatedVisibility(
                 visible = viewModel.tips,
                 modifier = Modifier.align(Alignment.BottomStart),

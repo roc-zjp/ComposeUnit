@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -62,7 +63,7 @@ fun App() {
     val currentRoute = navBackStackEntry?.destination?.route
         ?: Screen.Splash.route
     val routes = remember { HomeSections.values().map { it.route } }
-
+    val isHomePage = currentRoute in routes
 
     CompositionLocalProvider(
         LocalThemeColor provides themeColor,
@@ -79,13 +80,9 @@ fun App() {
                     ) {
                         unitNavGraph(navController)
                     }
-                    if (currentRoute in routes) {
-
-
+                    if (isHomePage) {
                         val sbPaddingValues =
                             WindowInsets.navigationBars.asPaddingValues()
-//                            val sbPaddingValues =
-//                                rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars)
                         UnitBottomAppBar(
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
