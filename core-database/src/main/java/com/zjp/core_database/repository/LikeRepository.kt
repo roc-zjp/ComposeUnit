@@ -7,13 +7,8 @@ import com.zjp.core_database.LocalDB
 
 class LikeRepository(private val db: ComposeDatabase = LocalDB.getDatabase()) {
 
-    fun getAllLike(): Result<List<LikeWidget>> {
-        return try {
-            val list = LocalDB.getDatabase().likeDao().getAll()
-            Result.Success(list)
-        } catch (e: Exception) {
-            Result.Error(Exception("获取收藏数据失败"))
-        }
+    fun getAllLike(): List<LikeWidget> {
+        return db.likeDao().getAll()
     }
 
     fun toggleLike(composeId: Int): Boolean {

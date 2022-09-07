@@ -27,10 +27,17 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.apkfuns.logutils.LogUtils
 import com.zjp.common.compose.UnitTopAppBar
+import com.zjp.common.data.Result
 import com.zjp.compose_unit.ui.home.ComposeItemView
+import com.zjp.core_database.LocalDB
 import com.zjp.core_database.model.Compose
+import com.zjp.core_database.model.LikeWidget
 import com.zjp.core_database.repository.ComposesRepository
+import com.zjp.core_database.repository.LikeRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun SearchPage(
@@ -41,13 +48,23 @@ fun SearchPage(
         mutableStateOf("")
     }
     var composes = remember { mutableStateListOf<Compose>() }
+    var likeWidgets by remember {
+        mutableStateOf(emptyList<Int>())
+    }
+
     LaunchedEffect(key1 = key) {
         composes.clear()
         if (key.isNotEmpty()) {
             composes.addAll(ComposesRepository().search(key))
         }
     }
-
+    var scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = true) {
+        scope.launch(Dispatchers.IO) {
+            var result = LikeRepository().getAllLike()
+            likeWidgets = result.map { it.widgetId }.toList()
+        }
+    }
     Scaffold(
         topBar = {
             UnitTopAppBar(
@@ -126,7 +143,7 @@ fun SearchPage(
         BoxWithConstraints(modifier = Modifier.padding(it)) {
             LazyColumn() {
                 items(composes) { compose ->
-                    ComposeItemView(compose = compose, like = false) {
+                    ComposeItemView(compose = compose, like = likeWidgets.contains(compose.id)) {
                         toComposeDetail(compose.id)
                     }
                 }
