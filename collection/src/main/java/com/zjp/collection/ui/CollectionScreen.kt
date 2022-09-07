@@ -7,10 +7,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zjp.collection.viewmodel.CollectionViewModel
@@ -44,7 +47,6 @@ fun CollectionPage(
     onClick: (compose: Collection) -> Unit,
 ) {
     Scaffold(topBar = {
-
     }) { innerPadding ->
         var uiState = viewModel.uiState
         if (uiState is CommonUiState.NoData) {
@@ -67,14 +69,12 @@ fun CollectionPage(
             }
         } else {
             val collections = (uiState as CommonUiState.HasData<List<Collection>>).data
+
             BoxWithConstraints(Modifier.padding(WindowInsets.navigationBars.asPaddingValues())) {
                 val vertical = maxWidth < maxHeight
-                val scrollState = rememberLazyGridState()
                 FoldAppbar(
                     minHeightDp = 80.dp,
-                    maxHeightDp = 200.dp,
-                    contentScrollState = scrollState,
-                    appBar = { progress ->
+                    appbar = { progress ->
                         val color = LocalThemeColor.current
                         Image(
                             painter = painterResource(id = com.zjp.common.R.drawable.caver),
@@ -88,17 +88,10 @@ fun CollectionPage(
                                 .background(color.copy(alpha = progress))
                         )
                         CollectionTitle(alpha = progress)
-                    }
-
-                ) {
-                    val animatedHeight by animateDpAsState(
-                        it
-                    )
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(1),
-                        state = scrollState,
+                    }) {
+                    LazyColumn(
                         contentPadding = PaddingValues(
-                            top = animatedHeight,
+                            top = it,
                             bottom = com.zjp.common.shape.AppBarHeight
                         )
                     ) {
@@ -106,8 +99,65 @@ fun CollectionPage(
                             CollectionItem(item = item, isVertical = vertical, onClick)
                         }
                     }
-
                 }
+//
+//                FoldAppbar(minHeightDp = 50.dp, maxHeightDp = 200.dp, appBar = { progress ->
+//
+//                    val color = LocalThemeColor.current
+//                    Image(
+//                        painter = painterResource(id = com.zjp.common.R.drawable.caver),
+//                        contentDescription = "caver",
+//                        contentScale = ContentScale.Crop,
+//                        modifier = Modifier.fillMaxSize()
+//                    )
+//                    Box(
+//                        modifier = Modifier
+//                            .fillMaxSize()
+//                            .background(color.copy(alpha = progress))
+//                    )
+//                    CollectionTitle(alpha = progress)
+//                }) {
+//
+//                }
+
+//                FoldAppbar(
+//                    minHeightDp = 80.dp,
+//                    maxHeightDp = 200.dp,
+//                    contentScrollState = scrollState,
+//                    appBar = { progress ->
+//                        val color = LocalThemeColor.current
+//                        Image(
+//                            painter = painterResource(id = com.zjp.common.R.drawable.caver),
+//                            contentDescription = "caver",
+//                            contentScale = ContentScale.Crop,
+//                            modifier = Modifier.fillMaxSize()
+//                        )
+//                        Box(
+//                            modifier = Modifier
+//                                .fillMaxSize()
+//                                .background(color.copy(alpha = progress))
+//                        )
+//                        CollectionTitle(alpha = progress)
+//                    }
+//
+//                ) {
+//                    val animatedHeight by animateDpAsState(
+//                        it
+//                    )
+//                    LazyVerticalGrid(
+//                        columns = GridCells.Fixed(1),
+//                        state = scrollState,
+//                        contentPadding = PaddingValues(
+//                            top = animatedHeight,
+//                            bottom = com.zjp.common.shape.AppBarHeight
+//                        )
+//                    ) {
+//                        items(collections) { item ->
+//                            CollectionItem(item = item, isVertical = vertical, onClick)
+//                        }
+//                    }
+//
+//                }
             }
         }
     }

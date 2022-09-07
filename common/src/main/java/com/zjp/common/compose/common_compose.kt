@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
@@ -126,79 +127,170 @@ fun rememberNestedScrollConnection(onOffsetChanged: (Float) -> Unit, appBarHeigh
     }
 
 
+//@Composable
+//fun FoldAppbar(
+//    minHeightDp: Dp,
+//    maxHeightDp: Dp,
+//    contentScrollState: LazyGridState = rememberLazyGridState(),
+//    modifier: Modifier = Modifier,
+//    appBar: @Composable BoxScope.(progress: Float) -> Unit,
+//    content: @Composable (appBarHeightDp: Dp) -> Unit
+//) {
+//    val minHeightPx = with(LocalDensity.current) { minHeightDp.roundToPx().toFloat() }
+//    val maxHeightPx = with(LocalDensity.current) { maxHeightDp.roundToPx().toFloat() }
+//    var toolbarOffsetHeightPx by remember { mutableStateOf(maxHeightPx) }
+//
+//    val progress =
+//        (maxHeightPx - toolbarOffsetHeightPx) / (maxHeightPx - minHeightPx).toFloat()
+//    val nestedScrollConnection = remember {
+//        object : NestedScrollConnection {
+//            override fun onPreScroll(
+//                available: Offset,
+//                source: NestedScrollSource
+//            ): Offset {
+//                val delta = available.y
+//                if (contentScrollState.firstVisibleItemIndex == 0 && contentScrollState.firstVisibleItemScrollOffset == 0) {
+//                    val newOffset = toolbarOffsetHeightPx + delta
+//                    val newHeight = newOffset.coerceIn(minHeightPx, maxHeightPx)
+//                    val consumed = newHeight - toolbarOffsetHeightPx
+//                    toolbarOffsetHeightPx = newHeight
+//                    return Offset(0f, consumed)
+//                }
+//                Log.d(
+//                    "FoldAppbar",
+//                    "delta=${delta},toolbarOffsetHeightPx=${toolbarOffsetHeightPx},firstVisibleItemIndex=${contentScrollState.firstVisibleItemIndex},firstVisibleItemScrollOffset=${contentScrollState.firstVisibleItemScrollOffset}"
+//                )
+//                return Offset.Zero
+//            }
+//
+//
+//            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+//                Log.d(
+//                    "Fling",
+//                    "消费了的速度：${consumed.y},可消费的速度：${available.y}"
+//                )
+//                val delta = available.y / 10f
+//                val newOffset = toolbarOffsetHeightPx + delta
+//                val newHeight = newOffset.coerceIn(minHeightPx, maxHeightPx)
+//                val consumed = newHeight - toolbarOffsetHeightPx
+//                toolbarOffsetHeightPx = newHeight
+//                return Velocity(0f, consumed)
+//            }
+//
+//            override suspend fun onPreFling(available: Velocity): Velocity {
+//                Log.d(
+//                    "Fling",
+//                    "初始速度：${available.y}"
+//                )
+//                return Velocity.Zero
+//            }
+//        }
+//    }
+//    Box(modifier = modifier.nestedScroll(nestedScrollConnection)) {
+//        val animatedHeight by animateDpAsState(
+//            targetValue = with(LocalDensity.current) { toolbarOffsetHeightPx.toDp() }
+//        )
+//        content(with(LocalDensity.current) { toolbarOffsetHeightPx.toDp() })
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(animatedHeight)
+//        ) {
+//            appBar(progress)
+//        }
+//    }
+//}
+
+
 @Composable
 fun FoldAppbar(
-    minHeightDp: Dp,
-    maxHeightDp: Dp,
-    contentScrollState: LazyGridState = rememberLazyGridState(),
+    maxHeightDp: Dp = 200.dp,
+    minHeightDp: Dp = 0.dp,
     modifier: Modifier = Modifier,
-    appBar: @Composable BoxScope.(progress: Float) -> Unit,
-    content: @Composable (appBarHeightDp: Dp) -> Unit
+    appbar: @Composable (progress: Float) -> Unit,
+    content: @Composable (height: Dp) -> Unit
 ) {
-    val minHeightPx = with(LocalDensity.current) { minHeightDp.roundToPx().toFloat() }
-    val maxHeightPx = with(LocalDensity.current) { maxHeightDp.roundToPx().toFloat() }
-    var toolbarOffsetHeightPx by remember { mutableStateOf(maxHeightPx) }
+    val density = LocalDensity.current
+    var topHeight by remember {
+        mutableStateOf(maxHeightDp)
+    }
+    var scrollHeight = remember {
+        0f
+    }
 
-    val progress =
-        (maxHeightPx - toolbarOffsetHeightPx) / (maxHeightPx - minHeightPx).toFloat()
+    var progress = remember {
+        0.0f
+    }
+
+    var maxHeight = remember {
+        with(density) { maxHeightDp.toPx().toInt() }
+    }
+
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
-            override fun onPreScroll(
-                available: Offset,
-                source: NestedScrollSource
-            ): Offset {
-                val delta = available.y
-                if (contentScrollState.firstVisibleItemIndex == 0 && contentScrollState.firstVisibleItemScrollOffset == 0) {
-                    val newOffset = toolbarOffsetHeightPx + delta
-                    val newHeight = newOffset.coerceIn(minHeightPx, maxHeightPx)
-                    val consumed = newHeight - toolbarOffsetHeightPx
-                    toolbarOffsetHeightPx = newHeight
-                    return Offset(0f, consumed)
-                }
-                Log.d(
-                    "FoldAppbar",
-                    "delta=${delta},toolbarOffsetHeightPx=${toolbarOffsetHeightPx},firstVisibleItemIndex=${contentScrollState.firstVisibleItemIndex},firstVisibleItemScrollOffset=${contentScrollState.firstVisibleItemScrollOffset}"
-                )
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 return Offset.Zero
             }
 
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                val delta = consumed.y
 
-            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-                Log.d(
-                    "Fling",
-                    "消费了的速度：${consumed.y},可消费的速度：${available.y}"
-                )
-                val delta = available.y / 10f
-                val newOffset = toolbarOffsetHeightPx + delta
-                val newHeight = newOffset.coerceIn(minHeightPx, maxHeightPx)
-                val consumed = newHeight - toolbarOffsetHeightPx
-                toolbarOffsetHeightPx = newHeight
-                return Velocity(0f, consumed)
-            }
-
-            override suspend fun onPreFling(available: Velocity): Velocity {
-                Log.d(
-                    "Fling",
-                    "初始速度：${available.y}"
-                )
-                return Velocity.Zero
+                scrollHeight += delta
+                val newHeight = with(density) { (maxHeight + scrollHeight).toDp() }
+                topHeight = newHeight.coerceIn(minHeightDp, maxHeightDp)
+                progress = (maxHeightDp - topHeight) / (maxHeightDp - minHeightDp)
+                return Offset.Zero
             }
         }
     }
-    Box(modifier = modifier.nestedScroll(nestedScrollConnection)) {
-        val animatedHeight by animateDpAsState(
-            targetValue = with(LocalDensity.current) { toolbarOffsetHeightPx.toDp() }
-        )
-        content(with(LocalDensity.current) { toolbarOffsetHeightPx.toDp() })
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(animatedHeight)
-        ) {
-            appBar(progress)
+
+    Box(modifier = Modifier.nestedScroll(nestedScrollConnection)) {
+        content(maxHeightDp)
+        TopBar(minHeightDp, maxHeightDp, progress, topHeight) {
+            appbar(progress)
         }
     }
 }
 
+@Composable
+fun TopBar(
+    minHeightDp: Dp,
+    maxHeightDp: Dp,
+    progress: Float,
+    height: Dp,
+    content: @Composable TopScope.() -> Unit
+) {
 
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(height)
+    ) {
+        TopScopeImpl(minHeightDp, maxHeightDp, progress).content()
+    }
+}
+
+
+@Stable
+interface TopScope {
+
+    val minHeight: Dp
+
+    val maxHeight: Dp
+
+    val progress: Float
+}
+
+
+data class TopScopeImpl(
+    override val minHeight: Dp,
+    override val maxHeight: Dp,
+    override val progress: Float
+) : TopScope {
+
+}
 

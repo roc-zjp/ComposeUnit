@@ -3,9 +3,9 @@ package com.zjp.compose_unit.route
 import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import androidx.navigation.compose.composable
+import com.zjp.article.ui.ArticlePage
 import com.zjp.collection.ui.CollectionDetailPage
 import com.zjp.collection.ui.CollectionPage
-import com.zjp.compose_unit.ui.ArticlePage
 import com.zjp.compose_unit.ui.SplashView
 import com.zjp.compose_unit.ui.detail.ComposeDetailPage
 import com.zjp.compose_unit.ui.developer.DeveloperScreen
