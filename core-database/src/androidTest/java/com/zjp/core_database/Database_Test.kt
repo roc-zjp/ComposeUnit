@@ -7,6 +7,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import com.zjp.common.data.Result
+import com.zjp.core_database.model.LikeWidget
 import com.zjp.core_database.repository.LikeRepository
 
 class Database_Test {
@@ -40,11 +41,11 @@ class Database_Test {
 
     @Test
     fun getAllLike() {
+
+        LocalDB.getDatabase().likeDao().insertAll(LikeWidget(id = 1, widgetId = 2))
+        LocalDB.getDatabase().likeDao().insertAll(LikeWidget(id = 2, widgetId = 1))
         val result = likeRepository.getAllLike()
-        assertTrue(result is Result.Success)
-        val ids = (result as Result.Success).data.map { it.widgetId }.toList()
-        assertEquals(ids, listOf(2, 1))
+        val ids = result.map { it.widgetId }.toList()
+        assertEquals(listOf(2, 1), ids)
     }
-
-
 }

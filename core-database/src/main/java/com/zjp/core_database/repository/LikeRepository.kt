@@ -1,13 +1,12 @@
 package com.zjp.core_database.repository
 
 import com.zjp.core_database.ComposeDatabase
-import com.zjp.core_database.model.LikeWidget
-import com.zjp.common.data.Result
 import com.zjp.core_database.LocalDB
+import com.zjp.core_database.model.LikeWidget
 
 class LikeRepository(private val db: ComposeDatabase = LocalDB.getDatabase()) {
 
-    fun getAllLike(): List<LikeWidget> {
+    suspend fun getAllLike(): List<LikeWidget> {
         return db.likeDao().getAll()
     }
 

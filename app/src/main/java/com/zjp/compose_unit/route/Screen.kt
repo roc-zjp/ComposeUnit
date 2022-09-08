@@ -14,6 +14,7 @@ sealed class Screen(val route: String) {
     object AboutMe : Screen(route = "about_me_screen")
     object AboutApp : Screen(route = "about_app_screen")
     object CollectionDetailScreen : Screen(route = "collection_detail_screen")
+    object ArticleDetailScreen : Screen(route = "article_detail_screen")
 
     fun createComposeDetailRoute(id: Int): String {
         return "${ComposeDetailScreen.route}/${id}"

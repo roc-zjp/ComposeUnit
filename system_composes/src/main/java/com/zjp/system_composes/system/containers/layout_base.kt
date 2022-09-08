@@ -1,17 +1,9 @@
 package com.zjp.system_composes.system.containers
 
 import android.graphics.Point
-import androidx.compose.foundation.layout.Box
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.Layout
-import com.google.android.material.math.MathUtils.lerp
-import kotlin.math.roundToInt
 
 @Composable
 fun LayoutBase() {
