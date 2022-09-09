@@ -1,9 +1,9 @@
-package com.zjp.article.ui
+package com.zjp.common.compose
 
 import android.net.http.SslError
 import android.util.Base64
 import android.webkit.*
-import android.webkit.WebView.setWebContentsDebuggingEnabled
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
@@ -13,13 +13,13 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import com.apkfuns.logutils.LogUtils
-import com.zjp.common.compose.UnitTopAppBar
 
 @Composable
-fun ArticleDetailPage(url: String, title: String, goBack: () -> Unit = {}) {
+fun WebViewPage(url: String, title: String, goBack: () -> Unit = {}) {
     val webViewChromeClient = object : WebChromeClient() {
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
@@ -49,19 +49,35 @@ fun ArticleDetailPage(url: String, title: String, goBack: () -> Unit = {}) {
             )
         }
     ) {
+        val urlStr = String(Base64.decode(url, Base64.DEFAULT))
+        val canGoBack = remember {
+            false
+        }
 
-        LogUtils.d(url)
-        AndroidView(modifier = Modifier
-            .padding(it)
-            .fillMaxSize(), factory = { context ->
+        val context = LocalContext.current
+        val webView = remember {
             WebView(context).apply {
                 this.webViewClient = webViewClient
                 this.webChromeClient = webViewChromeClient
-                setWebContentsDebuggingEnabled(true)
+                WebView.setWebContentsDebuggingEnabled(true)
                 settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
                 settings.javaScriptEnabled = true
-                loadUrl(url)
+                loadUrl(urlStr)
             }
+        }
+
+        AndroidView(modifier = Modifier
+            .padding(it)
+            .fillMaxSize(), factory = {
+            webView
         })
+
+        BackHandler(enabled = true) {
+            if (webView.canGoBack()) {
+                webView.goBack()
+            } else {
+                goBack()
+            }
+        }
     }
 }

@@ -59,9 +59,6 @@ fun UnitBottomAppBar(
             )
         }
     }
-    BoxWithConstraints() {
-
-    }
 }
 
 @Composable

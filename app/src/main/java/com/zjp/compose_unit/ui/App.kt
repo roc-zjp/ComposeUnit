@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -75,7 +74,7 @@ fun App() {
                     NavHost(
                         navController = navController,
                         startDestination = Screen.Splash.route,
-                        modifier = Modifier
+                        modifier = Modifier.fillMaxSize()
 
                     ) {
                         unitNavGraph(navController)
@@ -92,7 +91,7 @@ fun App() {
                                     popUpTo(HomeSections.COMPOSE.route) {
                                         inclusive = false
                                     }
-                                    launchSingleTop
+                                    launchSingleTop = true
 
                                 }
                             }, onSearchClick = {

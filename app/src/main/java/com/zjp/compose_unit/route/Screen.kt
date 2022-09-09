@@ -1,5 +1,6 @@
 package com.zjp.compose_unit.route
 
+import android.util.Base64
 import com.zjp.compose_unit.R
 
 sealed class Screen(val route: String) {
@@ -15,6 +16,7 @@ sealed class Screen(val route: String) {
     object AboutApp : Screen(route = "about_app_screen")
     object CollectionDetailScreen : Screen(route = "collection_detail_screen")
     object ArticleDetailScreen : Screen(route = "article_detail_screen")
+    object WebViewScreen : Screen(route = "webview_screen")
 
     fun createComposeDetailRoute(id: Int): String {
         return "${ComposeDetailScreen.route}/${id}"
@@ -22,6 +24,15 @@ sealed class Screen(val route: String) {
 
     fun createCollectionDetailRoute(id: Int): String {
         return "${CollectionDetailScreen.route}/${id}"
+    }
+
+    fun createWebViewRoute(url: String, title: String): String {
+
+        val base64Url = Base64.encodeToString(
+            url.toByteArray(),
+            Base64.DEFAULT
+        )
+        return "${WebViewScreen.route}/${base64Url}/$title"
     }
 }
 
