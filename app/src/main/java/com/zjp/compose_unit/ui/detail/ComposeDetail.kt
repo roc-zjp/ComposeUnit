@@ -166,7 +166,8 @@ fun ComposeNode(node: Node) {
             modifier = Modifier
                 .align(alignment = Alignment.CenterHorizontally)
                 .padding(10.dp)
-                .heightIn(20.dp, 500.dp)
+                .fillMaxSize()
+
         ) {
             NodeMap(id = node.id!!)
         }

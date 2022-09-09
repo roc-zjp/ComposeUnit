@@ -29,7 +29,6 @@ fun WrapLayout(
 
         val locations = mutableListOf<Point>()
 
-
         placeables.forEach { placeable ->
             if (xPosition + placeable.width > constraints.maxWidth) {
                 yPosition += maxHeight

@@ -1,7 +1,10 @@
 package com.zjp.compose_unit.ui
 
 import android.content.Context
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,11 +34,58 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun App() {
-
     val navController = rememberNavController()
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+        ?: Screen.Splash.route
+    val routes = HomeSections.values().map { it.route }
+    val isHomePage = currentRoute in routes
+
+
+    ColorAndFontProvider {
+        val themeColor = LocalThemeColor.current
+        val currentFont = LocalFont.current
+        Compose_unitTheme(primary = themeColor, font = currentFont) {
+            Scaffold { innerPaddingModifier ->
+                Box(modifier = Modifier.padding(innerPaddingModifier)) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.Splash.route,
+                        modifier = Modifier.fillMaxSize()
+
+                    ) {
+                        unitNavGraph(navController)
+                    }
+
+
+                    if (isHomePage) {
+                        UnitBottomAppBar(
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .navigationBarsPadding(),
+                            onTabChange = { section ->
+                                navController.navigate(section.route) {
+                                    popUpTo(HomeSections.COMPOSE.route) {
+                                        inclusive = false
+                                    }
+                                    launchSingleTop = true
+                                }
+                            }, onSearchClick = {
+                                navController.navigate(Screen.Search.route)
+                            })
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ColorAndFontProvider(content: @Composable () -> Unit) {
     var context = LocalContext.current
     var scope = rememberCoroutineScope()
-
 
     var themeColor by remember {
         mutableStateOf(getThemeColor(context))
@@ -44,7 +94,6 @@ fun App() {
     var currentFont by remember {
         mutableStateOf(local)
     }
-
 
     SystemBroadcastReceiver(systemAction = color_change_broadcast_action) { intent ->
         val colorStr = intent?.getIntExtra("color", 0xFF2196F3.toInt()) ?: 0xFF2196F3.toInt()
@@ -58,52 +107,13 @@ fun App() {
         scope.launch { saveFont(context, font) }
     }
 
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-        ?: Screen.Splash.route
-    val routes = remember { HomeSections.values().map { it.route } }
-    val isHomePage = currentRoute in routes
-
     CompositionLocalProvider(
         LocalThemeColor provides themeColor,
         LocalFont provides currentFont,
-    ) {
-        Compose_unitTheme(primary = themeColor, font = currentFont) {
-            Scaffold() { innerPaddingModifier ->
-                Box(modifier = Modifier.padding(innerPaddingModifier)) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = Screen.Splash.route,
-                        modifier = Modifier.fillMaxSize()
-
-                    ) {
-                        unitNavGraph(navController)
-                    }
-                    if (isHomePage) {
-                        val sbPaddingValues =
-                            WindowInsets.navigationBars.asPaddingValues()
-                        UnitBottomAppBar(
-                            modifier = Modifier
-                                .align(Alignment.BottomStart)
-                                .padding(sbPaddingValues),
-                            onTabChange = { section ->
-                                navController.navigate(section.route) {
-                                    popUpTo(HomeSections.COMPOSE.route) {
-                                        inclusive = false
-                                    }
-                                    launchSingleTop = true
-
-                                }
-                            }, onSearchClick = {
-                                navController.navigate(Screen.Search.route)
-                            })
-
-                    }
-                }
-            }
-        }
-    }
+        content = content
+    )
 }
+
 
 private fun saveThemeColor(context: Context, color: Color) {
     context.getSharedPreferences("custom_setting", Context.MODE_PRIVATE).edit()

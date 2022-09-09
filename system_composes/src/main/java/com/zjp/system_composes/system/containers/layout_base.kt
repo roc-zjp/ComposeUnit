@@ -13,12 +13,15 @@ fun LayoutBase() {
         Text("vertically.")
         Text("We've done it by hand!")
     }) { measurables, constraints ->
-
+        var height = 0
         val placeables = measurables.map { measurable ->
             // Measure each children
             measurable.measure(constraints)
         }
-        layout(constraints.maxWidth, constraints.maxHeight) {
+        placeables.forEach {
+            height += it.height
+        }
+        layout(constraints.maxWidth, height) {
             // Track the y co-ord we have placed children up to
             var yPosition = 0
 
@@ -43,12 +46,15 @@ fun HorizontalLayout() {
         Text("vertically.")
         Text("We've done it by hand!")
     }) { measurables, constraints ->
-
+        var height = 0
         val placeables = measurables.map { measurable ->
             // Measure each children
             measurable.measure(constraints)
         }
-        layout(constraints.maxWidth, constraints.maxHeight) {
+        placeables.forEach {
+            height += it.height
+        }
+        layout(constraints.maxWidth, height) {
             // Track the y co-ord we have placed children up to
             var xPosition = 0
 
@@ -72,12 +78,15 @@ fun VerticalLayout() {
         Text("vertically.")
         Text("We've done it by hand!")
     }) { measurables, constraints ->
-
+        var height = 0
         val placeables = measurables.map { measurable ->
             // Measure each children
             measurable.measure(constraints)
         }
-        layout(constraints.maxWidth, constraints.maxHeight) {
+        placeables.forEach {
+            height += it.height
+        }
+        layout(constraints.maxWidth, height) {
             // Track the y co-ord we have placed children up to
             var yPosition = 0
 

@@ -112,10 +112,6 @@ fun Composes(
     }
 }
 
-fun PaddingValues.add(last: PaddingValues) {
-    return
-}
-
 
 @Composable
 fun NoCompose(appbar: @Composable () -> Unit) {
