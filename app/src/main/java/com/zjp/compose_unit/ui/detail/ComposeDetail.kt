@@ -148,7 +148,7 @@ fun ComposeNode(node: Node) {
     var folded by remember {
         mutableStateOf(true)
     }
-    Column {
+    Column() {
         NodeTitle(title = node.name, folded = folded) {
             folded = !folded
         }
@@ -167,7 +167,6 @@ fun ComposeNode(node: Node) {
                 .align(alignment = Alignment.CenterHorizontally)
                 .padding(10.dp)
                 .fillMaxSize()
-
         ) {
             NodeMap(id = node.id!!)
         }

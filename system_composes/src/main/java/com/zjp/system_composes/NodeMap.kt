@@ -105,5 +105,8 @@ fun NodeMap(id: Int) {
         90 -> CreditCardBasicTextField()
         91 -> BasicTextBase()
         92 -> ClickTextBase()
+        93 -> AndroidViewBase()
+        94 -> ComposeViewBase()
+        95 -> BackHandlerBase()
     }
 }

@@ -25,6 +25,7 @@ fun WebViewPage(url: String, title: String, goBack: () -> Unit = {}) {
             super.onProgressChanged(view, newProgress)
         }
 
+
     }
     val webViewClient = object : WebViewClient() {
         override fun onReceivedSslError(
@@ -33,6 +34,11 @@ fun WebViewPage(url: String, title: String, goBack: () -> Unit = {}) {
             error: SslError?
         ) {
             handler?.proceed()
+        }
+
+        override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+            view?.loadUrl(url!!)
+            return true
         }
     }
     Scaffold(
@@ -62,6 +68,16 @@ fun WebViewPage(url: String, title: String, goBack: () -> Unit = {}) {
                 WebView.setWebContentsDebuggingEnabled(true)
                 settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
                 settings.javaScriptEnabled = true
+                settings.domStorageEnabled = true
+                settings.useWideViewPort = true
+                settings.loadWithOverviewMode = true
+                settings.setSupportZoom(true)
+                settings.displayZoomControls = false
+                settings.builtInZoomControls = true
+                settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+                settings.allowFileAccess = true
+                settings.loadsImagesAutomatically = true
+                settings.javaScriptCanOpenWindowsAutomatically = true
                 loadUrl(urlStr)
             }
         }
