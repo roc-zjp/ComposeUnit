@@ -7,21 +7,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import kotlinx.coroutines.launch
 
 @Composable
@@ -93,6 +89,7 @@ fun ScaffoldBase() {
             floatingActionButtonPosition = FabPosition.Center,
             drawerGesturesEnabled = true
         ) {
+            Box(modifier = Modifier.padding(it))
 
         }
     }
@@ -155,7 +152,7 @@ fun BottomAppBarBase() {
             }
 
         ) {
-
+            Box(modifier = Modifier.padding(it))
         }
     }
 }
@@ -388,11 +385,12 @@ fun SnackbarBase() {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     Scaffold(
+        modifier = Modifier.height(400.dp),
         scaffoldState = scaffoldState,
         floatingActionButton = {
             var clickCount by remember { mutableStateOf(0) }
             ExtendedFloatingActionButton(
-                text = { Text("Show snackbar") },
+                text = { Text("Show Snackbar") },
                 onClick = {
                     // show snackbar as a suspend function
                     scope.launch {
@@ -418,6 +416,7 @@ fun CustomSnackbar() {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     Scaffold(
+        modifier = Modifier.height(400.dp),
         scaffoldState = scaffoldState,
         snackbarHost = {
             // reuse default SnackbarHost to have default animation and timing handling
@@ -432,7 +431,7 @@ fun CustomSnackbar() {
         floatingActionButton = {
             var clickCount by remember { mutableStateOf(0) }
             ExtendedFloatingActionButton(
-                text = { Text("Show snackbar") },
+                text = { Text("Show Snackbar") },
                 onClick = {
                     scope.launch {
                         scaffoldState.snackbarHostState.showSnackbar("Snackbar # ${++clickCount}")

@@ -39,8 +39,8 @@ class WanAndroidNetWork {
         .build()
         .create(WanAndroidApi::class.java)
 
-    suspend fun searchArticle(pageNo: String): NetworkResponse<DataBean<ArticleBean>>? {
-        return networkApi.searchArticle(pageNo)
+    suspend fun searchArticle(pageNo: Int): NetworkResponse<DataBean<ArticleBean>>? {
+        return networkApi.searchArticle("$pageNo")
     }
 
     suspend fun getBanner(): NetworkResponse<List<Banner>>? {

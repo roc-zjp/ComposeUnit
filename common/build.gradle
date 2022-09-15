@@ -51,6 +51,7 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
 
     implementation "com.google.accompanist:accompanist-systemuicontroller:$insets_systemuicontroller_version"
+    implementation "com.apkfuns.logutils:library:$logutils_version"
 
 
     //零时解决不能预览的问题

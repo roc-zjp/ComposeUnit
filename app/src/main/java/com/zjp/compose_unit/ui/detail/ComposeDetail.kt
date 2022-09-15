@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -166,7 +165,9 @@ fun ComposeNode(node: Node) {
             modifier = Modifier
                 .align(alignment = Alignment.CenterHorizontally)
                 .padding(10.dp)
-                .fillMaxSize()
+                .fillMaxWidth()
+
+
         ) {
             NodeMap(id = node.id!!)
         }

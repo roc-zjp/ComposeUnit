@@ -32,7 +32,7 @@ import com.zjp.article.repository.LeaderBlog
 import com.zjp.article.viewmodel.ArticleViewModel
 import com.zjp.common.Const
 import com.zjp.common.R
-import com.zjp.common.compose.FoldAppbar
+import com.zjp.common.compose.PullRefreshLoadMoreLayout
 import com.zjp.common.compose.WrapLayout
 import com.zjp.core_net.ArticleBean
 import com.zjp.core_net.Banner
@@ -46,35 +46,44 @@ fun ArticlePage(
     viewModel: ArticleViewModel = viewModel(),
     navigationToWebView: (base64Url: String, title: String) -> Unit
 ) {
-
     if (viewModel.articles.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize())
     } else {
-        val scrollState = rememberLazyListState()
-        FoldAppbar(
-            minHeightDp = 0.dp,
-            appbar = {
-                BannerHeader(viewModel.banners, it)
+        PullRefreshLoadMoreLayout(
+            refresh = {
+                viewModel.refresh()
             },
-            content = { height ->
-                LazyColumn(
-                    contentPadding = PaddingValues(top = height),
-                    state = scrollState
-                ) {
-                    item {
-                        LeaderBlogItem(
-                            blogs = viewModel.blogs,
-                            navigationWebView = navigationToWebView
-                        )
-                    }
-                    items(viewModel.articles) { item ->
-                        ArticleItem(articleBean = item, navigationToWebView = navigationToWebView)
-                    }
+            loadMore = {
+                viewModel.loadMore()
+            },
+            loading = viewModel.loading,
+            modifier = Modifier
+                .padding(bottom = com.zjp.common.shape.AppBarHeight)
+                .navigationBarsPadding()
+        ) { top, bottom ->
+            LazyColumn(
+                modifier = Modifier,
+                contentPadding = PaddingValues(
+                    top = top,
+                    bottom = bottom
+                ),
+                state = rememberLazyListState()
+            ) {
+                item {
+                    BannerHeader(viewModel.banners, 0f)
                 }
-
-            })
+                item {
+                    LeaderBlogItem(
+                        blogs = viewModel.blogs,
+                        navigationWebView = navigationToWebView
+                    )
+                }
+                items(viewModel.articles) { item ->
+                    ArticleItem(articleBean = item, navigationToWebView = navigationToWebView)
+                }
+            }
+        }
     }
-
 }
 
 @OptIn(ExperimentalMaterialApi::class)

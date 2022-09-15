@@ -1,11 +1,9 @@
 package com.zjp.compose_unit.route
 
-import android.os.Bundle
 import android.util.Base64
 import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import androidx.navigation.compose.composable
-import com.zjp.article.ui.ArticleDetailPage
 import com.zjp.article.ui.ArticlePage
 import com.zjp.collection.ui.CollectionDetailPage
 import com.zjp.collection.ui.CollectionPage
@@ -126,19 +124,6 @@ fun NavGraphBuilder.unitNavGraph(
             navController.popBackStack()
         }
     }
-//    composable(
-//        Screen.ArticleDetailScreen.route + "/{url}/{title}",
-//        arguments = listOf(
-//            navArgument("url") { type = NavType.StringType },
-//            navArgument("title") { type = NavType.StringType })
-//    ) {
-//        val url = it.arguments?.getString("url", "") ?: ""
-//        val decodeUrl = String(Base64.decode(url, Base64.DEFAULT))
-//        val title = it.arguments?.getString("title", "") ?: ""
-//        ArticleDetailPage(url = decodeUrl, title = title) {
-//            navController.popBackStack()
-//        }
-//    }
     composable(
         Screen.WebViewScreen.route + "/{url}/{title}",
         arguments = listOf(

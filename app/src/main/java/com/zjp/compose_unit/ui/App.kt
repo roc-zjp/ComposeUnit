@@ -53,24 +53,24 @@ fun App() {
                         navController = navController,
                         startDestination = Screen.Splash.route,
                         modifier = Modifier.fillMaxSize()
-
                     ) {
                         unitNavGraph(navController)
                     }
-
-
                     if (isHomePage) {
                         UnitBottomAppBar(
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
                                 .navigationBarsPadding(),
                             onTabChange = { section ->
-                                navController.navigate(section.route) {
-                                    popUpTo(HomeSections.COMPOSE.route) {
-                                        inclusive = false
+                                if (currentRoute != section.route) {
+                                    navController.navigate(section.route) {
+                                        popUpTo(HomeSections.COMPOSE.route) {
+                                            inclusive = false
+                                        }
+                                        launchSingleTop = true
                                     }
-                                    launchSingleTop = true
                                 }
+
                             }, onSearchClick = {
                                 navController.navigate(Screen.Search.route)
                             })

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
@@ -170,7 +171,7 @@ fun ImageBlendMode() {
         BlendMode.SrcOver,
         BlendMode.Xor
     )
-    WrapLayout(modifier = Modifier) {
+    WrapLayout(modifier = Modifier.requiredHeightIn(20.dp, 10000.dp)) {
         modes.forEach {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
