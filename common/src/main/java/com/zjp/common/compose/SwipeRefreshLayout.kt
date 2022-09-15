@@ -70,9 +70,11 @@ fun PullRefreshLoadMoreLayout(
             with(LocalDensity.current) { state.headerOffset.toDp() + 0.5.dp },
             with(LocalDensity.current) { state.bottomOffset.toDp() + 0.5.dp })
         header(state)
-        Box(modifier = Modifier
-            .align(Alignment.BottomStart)
-            .clipToBounds()) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .clipToBounds()
+        ) {
             bottom(state)
         }
     }
@@ -246,14 +248,13 @@ fun defaultHeader(state: PullRefreshState) {
             if (state.isRefreshing) {
                 CircularProgressIndicator(
                     color = Color.Red,
-                    strokeWidth = 10.dp,
+
                     modifier = Modifier
                 )
             } else {
                 CircularProgressIndicator(
                     progress = state.calculateHeadProgress(),
                     color = Color.Red,
-                    strokeWidth = 10.dp,
                     modifier = Modifier
                 )
             }
@@ -280,14 +281,12 @@ fun defaultBottom(state: PullRefreshState) {
             if (state.isRefreshing) {
                 CircularProgressIndicator(
                     color = Color.Red,
-                    strokeWidth = 10.dp,
                     modifier = Modifier
                 )
             } else {
                 CircularProgressIndicator(
                     progress = state.calculateBottomProgress(),
                     color = Color.Red,
-                    strokeWidth = 10.dp,
                     modifier = Modifier
                 )
             }

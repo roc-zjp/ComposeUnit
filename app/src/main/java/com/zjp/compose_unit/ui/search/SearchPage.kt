@@ -136,7 +136,9 @@ fun SearchPage(
             )
         }
     ) {
-        BoxWithConstraints(modifier = Modifier.padding(it)) {
+        BoxWithConstraints(modifier = Modifier
+            .padding(it)
+            .navigationBarsPadding()) {
             LazyColumn() {
                 items(composes) { compose ->
                     ComposeItemView(compose = compose, like = likeWidgets.contains(compose.id)) {

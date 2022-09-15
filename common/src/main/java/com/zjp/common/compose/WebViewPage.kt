@@ -1,25 +1,31 @@
 package com.zjp.common.compose
 
+import android.content.Intent
+import android.net.Uri
 import android.net.http.SslError
 import android.util.Base64
 import android.webkit.*
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
+import com.apkfuns.logutils.LogUtils
+
 
 @Composable
 fun WebViewPage(url: String, title: String, goBack: () -> Unit = {}) {
+    val context = LocalContext.current
+
+    var alterDialogShow by remember {
+        mutableStateOf(false)
+    }
     val webViewChromeClient = object : WebChromeClient() {
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
@@ -37,7 +43,23 @@ fun WebViewPage(url: String, title: String, goBack: () -> Unit = {}) {
         }
 
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-            view?.loadUrl(url!!)
+            val uri = Uri.parse(url)
+            if (uri.scheme.equals("https") || uri.scheme.equals("http")) {
+                view?.loadUrl(url!!)
+            } else {
+                val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+                    flags = (Intent.FLAG_ACTIVITY_NEW_TASK
+                            or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                }
+
+                if (context != null && intent.resolveActivity(context!!.packageManager) != null) {
+                    context.startActivity(intent)
+                } else {
+                    alterDialogShow = true
+                    LogUtils.d("没有可用的app,$uri")
+                }
+
+            }
             return true
         }
     }
@@ -84,9 +106,11 @@ fun WebViewPage(url: String, title: String, goBack: () -> Unit = {}) {
 
         AndroidView(modifier = Modifier
             .padding(it)
-            .fillMaxSize(), factory = {
-            webView
-        })
+            .fillMaxSize()
+            .navigationBarsPadding(),
+            factory = {
+                webView
+            })
 
         BackHandler(enabled = true) {
             if (webView.canGoBack()) {
@@ -94,6 +118,30 @@ fun WebViewPage(url: String, title: String, goBack: () -> Unit = {}) {
             } else {
                 goBack()
             }
+        }
+        if (alterDialogShow) {
+            AlertDialog(
+                onDismissRequest = {
+                    // Dismiss the dialog when the user clicks outside the dialog or on the back
+                    // button. If you want to disable that functionality, simply use an empty
+                    // onCloseRequest.
+                    alterDialogShow = false
+                },
+                text = {
+                    Text(
+                        "没有安装相关应用"
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            alterDialogShow = false
+                        }
+                    ) {
+                        Text("OK")
+                    }
+                },
+            )
         }
     }
 }
