@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.zjp.common.compose.PullRefreshLoadMoreLayout
+import com.zjp.common.compose.RefreshLayout
 import com.zjp.common.compose.UnitTopAppBar
 import com.zjp.common.utils.recomposeHighlighter
 
@@ -38,14 +38,14 @@ fun DeveloperScreen(
             )
         },
         content = {
-            PullRefreshLoadMoreLayout(
+            RefreshLayout(
                 refreshTriggerDp = 200.dp,
                 loadTriggerDp = 200.dp,
-                refresh = {
+                onRefresh = {
 
 
                 },
-                loadMore = {
+                onLoadMore = {
 
 
                 },

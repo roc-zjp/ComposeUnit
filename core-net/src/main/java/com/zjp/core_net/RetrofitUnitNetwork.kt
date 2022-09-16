@@ -14,7 +14,8 @@ interface WanAndroidApi {
     @FormUrlEncoded
     suspend fun searchArticle(
         @Path("pageNo") pageNo: String,
-        @Field("k") k: String = "compose"
+        @Field("k") k: String = "compose",
+        @Field("page_size") page_size: Int = 40
     ): NetworkResponse<DataBean<ArticleBean>>?
 
 

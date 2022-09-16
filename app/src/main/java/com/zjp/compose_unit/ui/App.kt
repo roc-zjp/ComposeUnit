@@ -35,14 +35,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun App() {
     val navController = rememberNavController()
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
         ?: Screen.Splash.route
     val routes = HomeSections.values().map { it.route }
     val isHomePage = currentRoute in routes
-
-
     ColorAndFontProvider {
         val themeColor = LocalThemeColor.current
         val currentFont = LocalFont.current

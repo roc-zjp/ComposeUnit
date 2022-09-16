@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +32,7 @@ import com.zjp.article.repository.LeaderBlog
 import com.zjp.article.viewmodel.ArticleViewModel
 import com.zjp.common.Const
 import com.zjp.common.R
-import com.zjp.common.compose.PullRefreshLoadMoreLayout
+import com.zjp.common.compose.RefreshLayout
 import com.zjp.common.compose.WrapLayout
 import com.zjp.core_net.ArticleBean
 import com.zjp.core_net.Banner
@@ -47,17 +46,17 @@ fun ArticlePage(
     viewModel: ArticleViewModel = viewModel(),
     navigationToWebView: (base64Url: String, title: String) -> Unit
 ) {
-
     if (viewModel.articles.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize())
     } else {
-        PullRefreshLoadMoreLayout(
-            refresh = {
+        RefreshLayout(
+            onRefresh = {
                 viewModel.refresh()
             },
-            loadMore = {
+            onLoadMore = {
                 viewModel.loadMore()
             },
+            loadEnable = viewModel.loadMoreAble,
             loading = viewModel.loading,
             modifier = Modifier
                 .padding(bottom = com.zjp.common.shape.AppBarHeight)

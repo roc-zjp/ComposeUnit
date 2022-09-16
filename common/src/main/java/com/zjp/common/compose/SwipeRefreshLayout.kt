@@ -1,16 +1,28 @@
 package com.zjp.common.compose
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.center
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -21,40 +33,60 @@ import androidx.compose.ui.unit.dp
 import com.apkfuns.logutils.LogUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlin.math.abs
+import kotlin.math.min
+import kotlin.math.pow
 
 @Composable
-fun PullRefreshLoadMoreLayout(
-    pullRefreshAble: Boolean = true,
-    loadMoreAble: Boolean = true,
+fun RefreshLayout(
+    refreshEnable: Boolean = true,
+    loadEnable: Boolean = true,
     refreshTriggerDp: Dp = 120.dp,
     loadTriggerDp: Dp = 120.dp,
     loading: Boolean = false,
-    refresh: () -> Unit = {},
-    loadMore: () -> Unit = {},
-    modifier: Modifier = Modifier,
-    state: PullRefreshState = rememberPullState(
-        pullRefreshAble,
-        loadMoreAble,
+    onRefresh: () -> Unit = {},
+    onLoadMore: () -> Unit = {},
+    state: PullRefreshState = rememberRefreshState(
+        refreshEnable,
+        loadEnable,
         loading,
         refreshTriggerDp,
         loadTriggerDp,
-        coroutineScope = rememberCoroutineScope(),
-        refresh,
-        loadMore
+        rememberCoroutineScope(),
+        onRefresh,
+        onLoadMore
     ),
-    header: @Composable (state: PullRefreshState) -> Unit = {
-        defaultHeader(state = it)
+    modifier: Modifier = Modifier,
+    header: @Composable (isRefreshing: Boolean, headerOffset: Float, progress: Float) -> Unit = { isRefreshing, headerOffset, progress ->
+//        DefaultHeader(isRefreshing, headerOffset, progress)
+        SwipeRefreshIndicator(
+            refreshTriggerDistance = refreshTriggerDp,
+            progress = progress,
+            isRefreshing = isRefreshing,
+            offsetY = headerOffset
+        )
     },
-    bottom: @Composable (state: PullRefreshState) -> Unit = {
-        defaultBottom(state = it)
+    bottom: @Composable (isRefreshing: Boolean, bottomOffset: Float, progress: Float) -> Unit = { isRefreshing, bottomOffset, progress ->
+//        DefaultBottom(isRefreshing, bottomOffset, progress)
+        SwipeRefreshIndicator(
+            refreshTriggerDistance = refreshTriggerDp,
+            progress = progress,
+            isRefreshing = isRefreshing,
+            offsetY = bottomOffset
+        )
     },
+
     content: @Composable (contentHeaderPadding: Dp, contentBottomPadding: Dp) -> Unit
 ) {
     val scope = rememberCoroutineScope()
+    val density = LocalDensity.current
+
+
     val nestedScrollConnection = remember {
-        PullRefreshNestedScrollConnection(state, scope)
+        RefreshNestedScrollConnection(state)
     }
-    LaunchedEffect(key1 = state.isRefreshing) {
+
+    LaunchedEffect(state.isRefreshing) {
         if (!state.isRefreshing) {
             state.reset()
         }
@@ -66,33 +98,35 @@ fun PullRefreshLoadMoreLayout(
             .nestedScroll(nestedScrollConnection)
     ) {
         content(
-            with(LocalDensity.current) { state.headerOffset.toDp() + 0.5.dp },
-            with(LocalDensity.current) { state.bottomOffset.toDp() + 0.5.dp })
-        header(state)
+            with(density) { state.headerOffset.toDp() + 0.5.dp },
+            with(density) { state.bottomOffset.toDp() + 0.5.dp })
+        header(state.isRefreshing, state.headerOffset, state.calculateHeadProgress())
         Box(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .clipToBounds()
         ) {
-            bottom(state)
+            bottom(state.isRefreshing, state.bottomOffset, state.calculateBottomProgress())
         }
     }
 }
 
 @Composable
-fun rememberPullState(
+fun rememberRefreshState(
     pullRefreshAble: Boolean,
     loadMoreAble: Boolean,
     loading: Boolean = false,
     refreshTriggerDp: Dp = 80.dp,
     loadTriggerDp: Dp = 80.dp,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    refresh: suspend () -> Unit = {},
-    loadMore: suspend () -> Unit = {},
+    onRefresh: () -> Unit = {},
+    onLoadMore: () -> Unit = {},
 ): PullRefreshState {
-
     val density = LocalDensity.current
-    return remember {
+    val updatedOnRefresh = rememberUpdatedState(onRefresh)
+    val updatedOnLoad = rememberUpdatedState(onLoadMore)
+
+    return remember() {
         PullRefreshState(
             pullRefreshAble,
             loadMoreAble,
@@ -100,20 +134,20 @@ fun rememberPullState(
             with(density) { refreshTriggerDp.toPx() },
             with(density) { loadTriggerDp.toPx() },
             coroutineScope,
-            refresh,
-            loadMore,
+            updatedOnRefresh.value,
+            updatedOnLoad.value,
         )
-    }.apply { this.isRefreshing = loading }
+    }.apply {
+        this.isRefreshing = loading
+        this.pullRefreshAble = pullRefreshAble
+        this.loadMoreAble = loadMoreAble
+    }
 }
 
-
-internal class PullRefreshNestedScrollConnection(
+internal class RefreshNestedScrollConnection(
     val state: PullRefreshState,
-    private val coroutineScope: CoroutineScope
 ) : NestedScrollConnection {
-
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-
         return state.dispatchPreScroll(available.y)
     }
 
@@ -126,16 +160,15 @@ internal class PullRefreshNestedScrollConnection(
     }
 
     override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-        coroutineScope.launch { state.dispatchPostFling(0f) }
-        return Velocity.Zero
+        return state.dispatchPostFling(0f)
     }
 }
 
 
 class PullRefreshState(
-    private val pullRefreshAble: Boolean,
-    private val loadMoreAble: Boolean,
-    loading: Boolean,
+    var pullRefreshAble: Boolean,
+    var loadMoreAble: Boolean,
+    var loading: Boolean,
     private val refreshTriggerPx: Float,
     private val loadTriggerPx: Float,
     private val coroutineScope: CoroutineScope,
@@ -191,21 +224,24 @@ class PullRefreshState(
         return Offset(0f, delta)
     }
 
-    internal suspend fun dispatchPostFling(delta: Float) {
-        if (headerOffset > refreshTriggerPx) {
-            isRefreshing = true
-            _headerOffset.animateTo(refreshTriggerPx)
-            refresh()
-        } else {
-            _headerOffset.animateTo(0f)
+    internal fun dispatchPostFling(delta: Float): Velocity {
+        coroutineScope.launch {
+            if (headerOffset > refreshTriggerPx) {
+
+                _headerOffset.animateTo(refreshTriggerPx)
+                refresh()
+            } else {
+                _headerOffset.animateTo(0f)
+            }
+            if (bottomOffset > loadTriggerPx) {
+                _bottomOffset.animateTo(loadTriggerPx)
+
+                loadMore()
+            } else {
+                _bottomOffset.animateTo(0f)
+            }
         }
-        if (bottomOffset > loadTriggerPx) {
-            _bottomOffset.animateTo(loadTriggerPx)
-            isRefreshing = true
-            loadMore()
-        } else {
-            _bottomOffset.animateTo(0f)
-        }
+        return Velocity.Zero
     }
 
     fun calculateHeadProgress(): Float {
@@ -229,10 +265,10 @@ class PullRefreshState(
 
 
 @Composable
-fun defaultHeader(state: PullRefreshState) {
+fun DefaultHeader(isRefreshing: Boolean, headerOffset: Float, progress: Float) {
     Box(
         modifier = Modifier
-            .height(with(LocalDensity.current) { state.headerOffset.toDp() })
+            .height(with(LocalDensity.current) { headerOffset.toDp() })
             .fillMaxWidth()
             .background(Color.Gray)
             .clipToBounds()
@@ -244,30 +280,29 @@ fun defaultHeader(state: PullRefreshState) {
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            if (state.isRefreshing) {
+            if (isRefreshing) {
                 CircularProgressIndicator(
                     color = Color.Red,
-
                     modifier = Modifier
                 )
             } else {
                 CircularProgressIndicator(
-                    progress = state.calculateHeadProgress(),
+                    progress = progress,
                     color = Color.Red,
                     modifier = Modifier
                 )
             }
 
-            Text(text = if (state.isRefreshing) "正在刷新" else "下拉刷新")
+            Text(text = if (isRefreshing) "正在刷新" else "下拉刷新")
         }
     }
 }
 
 @Composable
-fun defaultBottom(state: PullRefreshState) {
+fun DefaultBottom(isRefreshing: Boolean, bottomOffset: Float, progress: Float) {
     Box(
         modifier = Modifier
-            .height(with(LocalDensity.current) { state.bottomOffset.toDp() })
+            .height(with(LocalDensity.current) { bottomOffset.toDp() })
             .background(Color.Gray)
             .fillMaxWidth()
     ) {
@@ -277,20 +312,269 @@ fun defaultBottom(state: PullRefreshState) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (state.isRefreshing) {
+            if (isRefreshing) {
                 CircularProgressIndicator(
                     color = Color.Red,
                     modifier = Modifier
                 )
             } else {
                 CircularProgressIndicator(
-                    progress = state.calculateBottomProgress(),
+                    progress = progress,
                     color = Color.Red,
                     modifier = Modifier
                 )
             }
-            Text(text = if (state.isRefreshing) "正在刷新" else "上拉加载更多")
+            Text(text = if (isRefreshing) "正在刷新" else "上拉加载更多")
         }
     }
 }
 
+
+@Composable
+fun SwipeRefreshIndicator(
+    offsetY: Float,
+    progress: Float,
+    isRefreshing: Boolean,
+    refreshTriggerDistance: Dp,
+    modifier: Modifier = Modifier,
+    arrowEnabled: Boolean = true,
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    contentColor: Color = contentColorFor(backgroundColor),
+    shape: Shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50)),
+
+    elevation: Dp = 6.dp,
+) {
+    val sizes = DefaultSizes
+
+    val indicatorRefreshTrigger = with(LocalDensity.current) { refreshTriggerDistance.toPx() }
+
+    val indicatorHeight = with(LocalDensity.current) { sizes.size.roundToPx() }
+
+    val slingshot = rememberUpdatedSlingshot(
+        offsetY = offsetY,
+        maxOffsetY = indicatorRefreshTrigger,
+        height = indicatorHeight,
+    )
+
+    var offset by remember { mutableStateOf(0f) }
+
+    val adjustedElevation = when {
+        isRefreshing -> elevation
+        offset > 0.5f -> elevation
+        else -> 0.dp
+    }
+    val density = LocalDensity.current
+
+    Box(
+        modifier = Modifier
+            .height(with(density) { offsetY.toDp() })
+            .fillMaxWidth()
+            .clipToBounds()
+    ) {
+        Surface(
+            modifier = modifier
+                .size(size = sizes.size)
+                .align(Alignment.Center),
+            shape = shape,
+            color = backgroundColor,
+            elevation = adjustedElevation
+        ) {
+            val painter = remember { CircularProgressPainter() }
+            painter.arcRadius = sizes.arcRadius
+            painter.strokeWidth = sizes.strokeWidth
+            painter.arrowWidth = sizes.arrowWidth
+            painter.arrowHeight = sizes.arrowHeight
+            painter.arrowEnabled = arrowEnabled && !isRefreshing
+            painter.color = contentColor
+            val alpha = progress
+            painter.alpha = alpha
+            painter.startTrim = slingshot.startTrim
+            painter.endTrim = slingshot.endTrim
+            painter.rotation = slingshot.rotation
+            painter.arrowScale = slingshot.arrowScale
+
+            // This shows either an Image with CircularProgressPainter or a CircularProgressIndicator,
+            // depending on refresh state
+            Crossfade(
+                targetState = isRefreshing,
+                animationSpec = tween(durationMillis = CrossfadeDurationMs)
+            ) { refreshing ->
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (refreshing) {
+                        val circleSize = (sizes.arcRadius + sizes.strokeWidth) * 2
+                        CircularProgressIndicator(
+                            color = contentColor,
+                            strokeWidth = sizes.strokeWidth,
+                            modifier = Modifier.size(circleSize),
+                        )
+                    } else {
+                        Image(
+                            painter = painter,
+                            contentDescription = "Refreshing"
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+private val DefaultSizes = SwipeRefreshIndicatorSizes(
+    size = 40.dp,
+    arcRadius = 7.5.dp,
+    strokeWidth = 2.5.dp,
+    arrowWidth = 10.dp,
+    arrowHeight = 5.dp,
+)
+
+internal class CircularProgressPainter : Painter() {
+    var color by mutableStateOf(Color.Unspecified)
+    var alpha by mutableStateOf(1f)
+    var arcRadius by mutableStateOf(0.dp)
+    var strokeWidth by mutableStateOf(5.dp)
+    var arrowEnabled by mutableStateOf(false)
+    var arrowWidth by mutableStateOf(0.dp)
+    var arrowHeight by mutableStateOf(0.dp)
+    var arrowScale by mutableStateOf(1f)
+
+    private val arrow: Path by lazy {
+        Path().apply { fillType = PathFillType.EvenOdd }
+    }
+
+    var startTrim by mutableStateOf(0f)
+    var endTrim by mutableStateOf(0f)
+    var rotation by mutableStateOf(0f)
+
+    override val intrinsicSize: Size
+        get() = Size.Unspecified
+
+    override fun applyAlpha(alpha: Float): Boolean {
+        this.alpha = alpha
+        return true
+    }
+
+    override fun DrawScope.onDraw() {
+        rotate(degrees = rotation) {
+            val arcRadius = arcRadius.toPx() + strokeWidth.toPx() / 2f
+            val arcBounds = Rect(
+                size.center.x - arcRadius,
+                size.center.y - arcRadius,
+                size.center.x + arcRadius,
+                size.center.y + arcRadius
+            )
+            val startAngle = (startTrim + rotation) * 360
+            val endAngle = (endTrim + rotation) * 360
+            val sweepAngle = endAngle - startAngle
+            drawArc(
+                color = color,
+                alpha = alpha,
+                startAngle = startAngle,
+                sweepAngle = sweepAngle,
+                useCenter = false,
+                topLeft = arcBounds.topLeft,
+                size = arcBounds.size,
+                style = Stroke(
+                    width = strokeWidth.toPx(),
+                    cap = StrokeCap.Square
+                )
+            )
+            if (arrowEnabled) {
+                drawArrow(startAngle, sweepAngle, arcBounds)
+            }
+        }
+    }
+
+    private fun DrawScope.drawArrow(startAngle: Float, sweepAngle: Float, bounds: Rect) {
+        arrow.reset()
+        arrow.moveTo(0f, 0f)
+        arrow.lineTo(
+            x = arrowWidth.toPx() * arrowScale,
+            y = 0f
+        )
+        arrow.lineTo(
+            x = arrowWidth.toPx() * arrowScale / 2,
+            y = arrowHeight.toPx() * arrowScale
+        )
+        val radius = min(bounds.width, bounds.height) / 2f
+        val inset = arrowWidth.toPx() * arrowScale / 2f
+        arrow.translate(
+            Offset(
+                x = radius + bounds.center.x - inset,
+                y = bounds.center.y + strokeWidth.toPx() / 2f
+            )
+        )
+        arrow.close()
+        rotate(degrees = startAngle + sweepAngle) {
+            drawPath(
+                path = arrow,
+                color = color,
+                alpha = alpha
+            )
+        }
+    }
+}
+
+@Composable
+internal fun rememberUpdatedSlingshot(
+    offsetY: Float,
+    maxOffsetY: Float,
+    height: Int
+): Slingshot {
+    val offsetPercent = min(1f, offsetY / maxOffsetY)
+    val adjustedPercent = kotlin.math.max(offsetPercent - 0.4f, 0f) * 5 / 3
+    val extraOffset = abs(offsetY) - maxOffsetY
+
+    // Can accommodate custom start and slingshot distance here
+    val slingshotDistance = maxOffsetY
+    val tensionSlingshotPercent = kotlin.math.max(
+        0f, min(extraOffset, slingshotDistance * 2) / slingshotDistance
+    )
+    val tensionPercent = (
+            (tensionSlingshotPercent / 4) -
+                    (tensionSlingshotPercent / 4).pow(2)
+            ) * 2
+    val extraMove = slingshotDistance * tensionPercent * 2
+    val targetY = height + ((slingshotDistance * offsetPercent) + extraMove).toInt()
+    val offset = targetY - height
+    val strokeStart = adjustedPercent * 0.8f
+
+    val startTrim = 0f
+    val endTrim = strokeStart.coerceAtMost(MaxProgressArc)
+
+    val rotation = (-0.25f + 0.4f * adjustedPercent + tensionPercent * 2) * 0.5f
+    val arrowScale = min(1f, adjustedPercent)
+
+    return remember { Slingshot() }.apply {
+        this.offset = offset
+        this.startTrim = startTrim
+        this.endTrim = endTrim
+        this.rotation = rotation
+        this.arrowScale = arrowScale
+    }
+}
+
+@Stable
+internal class Slingshot {
+    var offset: Int by mutableStateOf(0)
+    var startTrim: Float by mutableStateOf(0f)
+    var endTrim: Float by mutableStateOf(0f)
+    var rotation: Float by mutableStateOf(0f)
+    var arrowScale: Float by mutableStateOf(0f)
+}
+
+internal const val MaxProgressArc = 0.8f
+
+
+private const val CrossfadeDurationMs = 100
+
+@Immutable
+private data class SwipeRefreshIndicatorSizes(
+    val size: Dp,
+    val arcRadius: Dp,
+    val strokeWidth: Dp,
+    val arrowWidth: Dp,
+    val arrowHeight: Dp,
+)

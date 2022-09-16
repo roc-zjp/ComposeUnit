@@ -1,9 +1,6 @@
 package com.zjp.article.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.apkfuns.logutils.LogUtils
@@ -12,7 +9,6 @@ import com.zjp.article.repository.LeaderBlogRepository
 import com.zjp.core_net.ArticleBean
 import com.zjp.core_net.Banner
 import com.zjp.core_net.WanAndroidNetWork
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ArticleViewModel : ViewModel() {
@@ -23,19 +19,20 @@ class ArticleViewModel : ViewModel() {
 
     var banners by mutableStateOf(emptyList<Banner>())
 
-    val blogRepository = LeaderBlogRepository()
+    private val blogRepository = LeaderBlogRepository()
 
     private val wanAndroidNetWork = WanAndroidNetWork()
 
-    private var currentPageNo = 0
+    private var currentPageNo = -1
 
     var loading by mutableStateOf(false)
+
+    var loadMoreAble by mutableStateOf(true)
 
     init {
         LogUtils.d("init")
         viewModelScope.launch {
-            val bean = wanAndroidNetWork.searchArticle(currentPageNo)
-            bean?.data?.datas?.let { articles.addAll(it) }
+            loadMore()
         }
         viewModelScope.launch {
             val bean = wanAndroidNetWork.getBanner()
@@ -49,23 +46,29 @@ class ArticleViewModel : ViewModel() {
         currentPageNo++
         loading = true
         viewModelScope.launch {
-            delay(3000)
             val bean = wanAndroidNetWork.searchArticle(currentPageNo)
             bean?.data?.datas?.let { articles.addAll(it) }
+            bean?.data?.over?.let {
+                loadMoreAble = !it
+            }
             loading = false
         }
     }
 
     fun refresh() {
-        currentPageNo = 0
+        loadMoreAble = true
+        currentPageNo = -1
         loading = true
         viewModelScope.launch {
-            delay(3000)
             val bean = wanAndroidNetWork.searchArticle(currentPageNo)
             articles.clear()
             bean?.data?.datas?.let { articles.addAll(it) }
+            bean?.data?.over?.let {
+                loadMoreAble = !it
+            }
             loading = false
         }
+
     }
 
 }
