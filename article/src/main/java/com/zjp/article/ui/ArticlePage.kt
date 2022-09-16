@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,6 +47,7 @@ fun ArticlePage(
     viewModel: ArticleViewModel = viewModel(),
     navigationToWebView: (base64Url: String, title: String) -> Unit
 ) {
+
     if (viewModel.articles.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize())
     } else {
@@ -70,7 +72,7 @@ fun ArticlePage(
                 state = rememberLazyListState()
             ) {
                 item {
-                    BannerHeader(viewModel.banners, 0f)
+                    BannerHeader(viewModel.banners, 0f, navigationToWebView)
                 }
                 item {
                     LeaderBlogItem(
@@ -115,7 +117,11 @@ fun ArticleItem(articleBean: ArticleBean, navigationToWebView: (String, String) 
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun BannerHeader(banners: List<Banner>, progress: Float) {
+fun BannerHeader(
+    banners: List<Banner>,
+    progress: Float,
+    navigationToWebView: (base64Url: String, title: String) -> Unit
+) {
     if (banners.isEmpty()) {
         LogUtils.d("banner isEmpty")
         Box(
@@ -143,10 +149,8 @@ fun BannerHeader(banners: List<Banner>, progress: Float) {
             modifier = Modifier
                 .fillMaxSize()
                 .height(200.dp),
-            contentPadding = PaddingValues(start = 10.dp, end = 10.dp),
             itemSpacing = 20.dp
         ) { page ->
-
             Card(
                 Modifier
                     .graphicsLayer {
@@ -173,6 +177,16 @@ fun BannerHeader(banners: List<Banner>, progress: Float) {
                             fraction = 1f - pageOffset.coerceIn(0f, 1f)
                         )
                     }
+                    .clickable {
+                        navigationToWebView(
+                            Base64.encodeToString(
+                                banners[page % banners.size].url.toByteArray(),
+                                Base64.DEFAULT
+                            ),
+                            dealTitle(banners[page % banners.size].title)
+                        )
+                    }
+
             ) {
                 AsyncImage(
                     model = banners[page % banners.size].imagePath,

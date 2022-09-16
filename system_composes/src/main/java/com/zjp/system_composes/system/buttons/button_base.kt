@@ -15,10 +15,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -251,19 +248,19 @@ fun TriStateCheckboxBase() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ChipBase() {
-//    Chip(
-//        onClick = { /* Do something! */ },
-//        border = ChipDefaults.outlinedBorder,
-//        colors = ChipDefaults.outlinedChipColors(),
-//        leadingIcon = {
-//            Icon(
-//                Icons.Filled.Settings,
-//                contentDescription = "Localized description"
-//            )
-//        }
-//    ) {
-//        Text("Change settings")
-//    }
+    Chip(
+        onClick = { /* Do something! */ },
+        border = ChipDefaults.outlinedBorder,
+        colors = ChipDefaults.outlinedChipColors(),
+        leadingIcon = {
+            Icon(
+                Icons.Filled.Settings,
+                contentDescription = "Localized description"
+            )
+        }
+    ) {
+        Text("Change settings")
+    }
 }
 
 fun onClick(context: Context) {
@@ -438,7 +435,6 @@ fun BadgeBase() {
 @Composable
 fun DropdownMenuBase() {
     var expanded by remember { mutableStateOf(false) }
-    ProgressCollection()
 
     Box(
         modifier = Modifier
@@ -464,12 +460,21 @@ fun DropdownMenuBase() {
             }
         }
     }
+
+}
+
+
+@Composable
+fun DropdownMenuItemBase() {
+    DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
+        Text("Send Feedback")
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ExposedDropdownMenuBoxBase() {
-    val options = listOf("Option 1", "Option 2", "Option 3", "Option 4", "Option 5")
+    val options = listOf("Android", "ios", "windows", "macos", "linux")
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf("") }
     ExposedDropdownMenuBox(
@@ -481,7 +486,6 @@ fun ExposedDropdownMenuBoxBase() {
         TextField(
             value = selectedOptionText,
             onValueChange = { selectedOptionText = it },
-            label = { Text("Label") },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
                     expanded = expanded
@@ -548,20 +552,20 @@ fun FloatingActionButtonBase() {
 @Composable
 fun FilterChipBase() {
     val state = remember { mutableStateOf(false) }
-//    FilterChip(
-//        selected = state.value,
-//        onClick = { state.value = !state.value },
-//        border = ChipDefaults.outlinedBorder,
-//        colors = ChipDefaults.outlinedFilterChipColors(),
-//        selectedIcon = {
-//            Icon(
-//                imageVector = Icons.Filled.Done,
-//                contentDescription = "Localized Description",
-//                modifier = Modifier.requiredSize(ChipDefaults.SelectedIconSize)
-//            )
-//        }) {
-//        Text("Filter chip")
-//    }
+    FilterChip(
+        selected = state.value,
+        onClick = { state.value = !state.value },
+        border = ChipDefaults.outlinedBorder,
+        colors = ChipDefaults.outlinedFilterChipColors(),
+        selectedIcon = {
+            Icon(
+                imageVector = Icons.Filled.Done,
+                contentDescription = "Localized Description",
+                modifier = Modifier.requiredSize(ChipDefaults.SelectedIconSize)
+            )
+        }) {
+        Text("Filter chip")
+    }
 }
 
 @Composable
@@ -580,9 +584,6 @@ fun IconButtonBase() {
         Icon(Icons.Filled.Favorite, contentDescription = "Localized description")
     }
 }
-
-
-
 
 
 @Preview

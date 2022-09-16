@@ -1,5 +1,6 @@
 package com.zjp.system_composes
 
+import androidx.compose.material.DropdownMenu
 import androidx.compose.runtime.Composable
 import com.zjp.system_composes.system.animation.*
 import com.zjp.system_composes.system.buttons.ButtonBase
@@ -108,5 +109,10 @@ fun NodeMap(id: Int) {
         93 -> AndroidViewBase()
         94 -> ComposeViewBase()
         95 -> BackHandlerBase()
+        96 -> DropdownMenuBase()
+        97 -> ExposedDropdownMenuBoxBase()
+        98 -> BadgeBase()
+        99 -> ChipBase()
+        100 -> DropdownMenuItemBase()
     }
 }

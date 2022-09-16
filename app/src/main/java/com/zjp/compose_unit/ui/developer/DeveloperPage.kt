@@ -13,11 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.apkfuns.logutils.LogUtils
 import com.zjp.common.compose.PullRefreshLoadMoreLayout
 import com.zjp.common.compose.UnitTopAppBar
 import com.zjp.common.utils.recomposeHighlighter
-import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -44,12 +42,12 @@ fun DeveloperScreen(
                 refreshTriggerDp = 200.dp,
                 loadTriggerDp = 200.dp,
                 refresh = {
-                    delay(3000)
-                    LogUtils.d("刷新完成")
+
+
                 },
                 loadMore = {
-                    delay(3000)
-                    LogUtils.d("加载更多")
+
+
                 },
                 modifier = Modifier
                     .padding(it)

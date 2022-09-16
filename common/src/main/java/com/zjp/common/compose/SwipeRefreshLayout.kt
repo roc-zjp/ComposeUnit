@@ -29,8 +29,8 @@ fun PullRefreshLoadMoreLayout(
     refreshTriggerDp: Dp = 120.dp,
     loadTriggerDp: Dp = 120.dp,
     loading: Boolean = false,
-    refresh: suspend () -> Unit = {},
-    loadMore: suspend () -> Unit = {},
+    refresh: () -> Unit = {},
+    loadMore: () -> Unit = {},
     modifier: Modifier = Modifier,
     state: PullRefreshState = rememberPullState(
         pullRefreshAble,
@@ -59,7 +59,6 @@ fun PullRefreshLoadMoreLayout(
             state.reset()
         }
     }
-
     Box(
         modifier = Modifier
             .then(modifier)

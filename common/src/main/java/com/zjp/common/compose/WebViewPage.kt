@@ -16,7 +16,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import com.apkfuns.logutils.LogUtils
 
 
 @Composable
@@ -56,7 +55,6 @@ fun WebViewPage(url: String, title: String, goBack: () -> Unit = {}) {
                     context.startActivity(intent)
                 } else {
                     alterDialogShow = true
-                    LogUtils.d("没有可用的app,$uri")
                 }
 
             }

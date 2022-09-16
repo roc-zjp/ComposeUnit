@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.apkfuns.logutils.LogUtils
 import com.zjp.article.repository.LeaderBlog
 import com.zjp.article.repository.LeaderBlogRepository
 import com.zjp.core_net.ArticleBean
@@ -31,6 +32,7 @@ class ArticleViewModel : ViewModel() {
     var loading by mutableStateOf(false)
 
     init {
+        LogUtils.d("init")
         viewModelScope.launch {
             val bean = wanAndroidNetWork.searchArticle(currentPageNo)
             bean?.data?.datas?.let { articles.addAll(it) }
