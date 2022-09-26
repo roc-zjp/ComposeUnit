@@ -27,7 +27,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zjp.common.LocalThemeColor
 import com.zjp.common.compose.UnitTopAppBar
+import com.zjp.common.utils.recomposeHighlighter
 import com.zjp.compose_unit.ui.home.ComposeItemView
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.repository.ComposesRepository
@@ -136,12 +138,21 @@ fun SearchPage(
             )
         }
     ) {
-        BoxWithConstraints(modifier = Modifier
-            .padding(it)
-            .navigationBarsPadding()) {
+        BoxWithConstraints(
+            modifier = Modifier
+                .padding(it)
+                .recomposeHighlighter()
+                .navigationBarsPadding()
+        ) {
+            val highlighterColor = LocalThemeColor.current
             LazyColumn() {
                 items(composes) { compose ->
-                    ComposeItemView(compose = compose, like = likeWidgets.contains(compose.id)) {
+                    ComposeItemView(
+                        compose = compose,
+                        like = likeWidgets.contains(compose.id),
+                        highlighterColor = highlighterColor,
+                        key = key
+                    ) {
                         toComposeDetail(compose.id)
                     }
                 }

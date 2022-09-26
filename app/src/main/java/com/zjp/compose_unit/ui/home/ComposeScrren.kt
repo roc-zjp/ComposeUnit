@@ -12,15 +12,18 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.*
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,9 +35,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.apkfuns.logutils.LogUtils
 import com.zjp.common.Const
 import com.zjp.common.shape.AppBarHeight
 import com.zjp.common.state.CommonUiState
+import com.zjp.common.utils.recomposeHighlighter
 import com.zjp.compose_unit.BuildConfig
 import com.zjp.compose_unit.R
 import com.zjp.compose_unit.common.shape.TechnoShapeBorder
@@ -100,9 +105,7 @@ fun Composes(
         stickyHeader {
             appbar()
         }
-        items(
-            composes,
-            key = { it.id }) { compose ->
+        items(composes, key = { it.id }) { compose ->
             ComposeItemView(compose = compose, like = likeCollects.any {
                 it.widgetId == compose.id
             }) {
@@ -149,38 +152,40 @@ fun LoadingCompose() {
 fun ComposeItemView(
     compose: Compose,
     like: Boolean,
+    key: String? = null,
+    highlighterColor: Color = Color.Red,
     onClick: () -> Unit = {}
 ) {
+    LogUtils.d("重构:${compose.name},${key}")
+    val updateKey = rememberUpdatedState(newValue = key)
+    var preLayoutResult: TextLayoutResult? by remember {
+        mutableStateOf(null)
+    }
+
     Box {
-        Row(
-            modifier = Modifier
-                .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
-                .fillMaxWidth()
-                .height(100.dp)
-                .clip(
-                    TechnoShapeBorder(
-                        storkWidth = 1.0f,
-                        cornerWidth = 20.dp.value,
-                        spanWidth = 20.dp.value
-                    )
+        Row(modifier = Modifier
+            .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
+            .fillMaxWidth()
+            .height(100.dp)
+            .clip(
+                TechnoShapeBorder(
+                    storkWidth = 1.0f, cornerWidth = 20.dp.value, spanWidth = 20.dp.value
                 )
-                .border(
-                    1.dp,
-                    Const.colorDarkBlue,
-                    TechnoShapeBorder(
-                        storkWidth = 1.0f,
-                        cornerWidth = 20.dp.value,
-                        spanWidth = 20.dp.value
-                    )
+            )
+            .border(
+                1.dp, Const.colorDarkBlue, TechnoShapeBorder(
+                    storkWidth = 1.0f, cornerWidth = 20.dp.value, spanWidth = 20.dp.value
                 )
-                .background(Const.colorDarkBlue.copy(0.25f))
-                .clickable { onClick() }
-                .padding(10.dp)
-        ) {
+            )
+            .background(Const.colorDarkBlue.copy(0.25f))
+            .clickable { onClick() }
+            .padding(10.dp))
+        {
             Box(
                 modifier = Modifier
                     .size(80.dp, 80.dp)
-                    .border(3.dp, Color.White, CircleShape), contentAlignment = Alignment.Center
+                    .border(3.dp, Color.White, CircleShape),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = compose.name.substring(IntRange(0, 1)),
@@ -189,20 +194,45 @@ fun ComposeItemView(
                         textAlign = TextAlign.End,
                         color = Const.colorDarkBlue,
                         shadow = Shadow(
-                            color = Color.Gray,
-                            offset = Offset(5f, 5f),
-                            blurRadius = 5f
+                            color = Color.Gray, offset = Offset(5f, 5f), blurRadius = 5f
                         )
                     ),
                 )
 
             }
+
             Column(modifier = Modifier.padding(10.dp)) {
-                Text(
-                    text = compose.name,
+                Text(text = compose.name,
                     color = Color.Black,
                     fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    onTextLayout = { layoutResult ->
+                        preLayoutResult = layoutResult
+                    },
+                    modifier = Modifier.drawBehind {
+                        LogUtils.d("${compose.name},drawBehind")
+                        if (preLayoutResult == null || updateKey.value.isNullOrEmpty()) {
+                            return@drawBehind
+                        }
+                        updateKey.value?.let {
+                            val startIndex = compose.name.lowercase().indexOf(it.lowercase())
+                            val endIndex = startIndex + it.length
+                            LogUtils.d("${compose.name},$startIndex,$endIndex")
+                            if (startIndex >= 0) {
+
+                                for (index in startIndex until endIndex) {
+                                    val boundsRect = preLayoutResult!!.getBoundingBox(index)
+                                    drawRect(
+                                        brush = SolidColor(highlighterColor),
+                                        topLeft = boundsRect.topLeft,
+                                        size = boundsRect.size
+                                    )
+                                }
+
+                            }
+
+                        }
+                    }
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(

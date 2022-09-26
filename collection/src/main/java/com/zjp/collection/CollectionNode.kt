@@ -24,5 +24,6 @@ fun CollectionNodeMap(id: Int) {
         16 -> DragAble()
         17 -> Swipeable()
         18 -> TransformableSample()
+        19 -> RemoteControl()
     }
 }

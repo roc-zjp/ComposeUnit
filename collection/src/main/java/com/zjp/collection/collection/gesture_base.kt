@@ -1,5 +1,6 @@
 package com.zjp.collection.collection
 
+import android.graphics.Region
 import android.view.LayoutInflater
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
@@ -11,9 +12,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -25,8 +27,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.ViewCompat
+import com.apkfuns.logutils.LogUtils
 import com.zjp.collection.R
 import kotlin.math.roundToInt
 
@@ -365,4 +369,175 @@ fun ComposeWithAndroidView() {
                 }
         })
     }
+}
+
+@Composable
+fun RemoteControl() {
+
+    val okColor = Color(0xFF49A0F8)
+
+    var text by remember { mutableStateOf("") }
+
+    val regionList = listOf(
+        Region(),
+        Region(),
+        Region(),
+        Region(),
+        Region()
+    )
+
+    val path = Path()
+    val okPath = Path()  // 这个路径需要用来做运算，所以单独声明一个
+
+    Box(Modifier.fillMaxSize()) {
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = { offset: Offset ->
+                            LogUtils.d("offset:$offset")
+                            if (regionList[0].contains(offset.x.toInt(), offset.y.toInt())) {
+
+                                text = "click OK Button"
+                            }
+                            if (regionList[1].contains(offset.x.toInt(), offset.y.toInt())) {
+
+                                text = "click Button1 Button"
+                            }
+                            if (regionList[2].contains(offset.x.toInt(), offset.y.toInt())) {
+
+                                text = "click Button2 Button"
+                            }
+                            if (regionList[3].contains(offset.x.toInt(), offset.y.toInt())) {
+
+                                text = "click Button3 Button"
+                            }
+                            if (regionList[4].contains(offset.x.toInt(), offset.y.toInt())) {
+
+                                text = "click Button4 Button"
+                            }
+                        }
+                    )
+                }
+        ) {
+            // 绘制外廓圆（这个园不用点击事件，只是一个线段）
+            path.reset()
+            path.addOval(Rect(Offset(size.width / 2, size.height / 2), 500f))
+            drawPath(path, Color.White)
+
+            // 绘制最中间的 OK 按钮
+            okPath.addOval(Rect(Offset(size.width / 2, size.height / 2), 200f))
+            regionList[0].setPath(
+                okPath.asAndroidPath(),
+                Region(0, 0, size.width.toInt(), size.height.toInt())
+            )  // 这里偷懒了，直接创建了一个不满整个画布的 Region ，其实无所谓，因为是和 path 取交集，但是各位在使用的时候一定要根据自己的需求写，不要学我偷懒，不然出错了我可不负责
+            drawPath(okPath, color = okColor)
+
+            // 绘制按钮1
+            path.reset()
+            path.addArc(Rect(Offset(size.width / 2, size.height / 2), 500f), 225f, 90f)
+            path.lineTo(size.width / 2, size.height / 2)
+            path.op(path, okPath, PathOperation.Difference)
+            regionList[1].setPath(
+                path.asAndroidPath(),
+                Region(0, 0, size.width.toInt(), size.height.toInt())
+            )
+            drawPath(path, color = okColor, style = Stroke(width = 2f))
+
+            // 绘制按钮2
+            path.reset()
+            path.addArc(Rect(Offset(size.width / 2, size.height / 2), 500f), 315f, 90f)
+            path.lineTo(size.width / 2, size.height / 2)
+            path.op(path, okPath, PathOperation.Difference)
+            regionList[2].setPath(
+                path.asAndroidPath(),
+                Region(0, 0, size.width.toInt(), size.height.toInt())
+            )
+            drawPath(path, color = okColor, style = Stroke(width = 2f))
+
+            // 绘制按钮3
+            path.reset()
+            path.addArc(Rect(Offset(size.width / 2, size.height / 2), 500f), 45f, 90f)
+            path.lineTo(size.width / 2, size.height / 2)
+            path.op(path, okPath, PathOperation.Difference)
+            regionList[3].setPath(
+                path.asAndroidPath(),
+                Region(0, 0, size.width.toInt(), size.height.toInt())
+            )
+            drawPath(path, color = okColor, style = Stroke(width = 2f))
+
+            // 绘制按钮4
+            path.reset()
+            path.addArc(Rect(Offset(size.width / 2, size.height / 2), 500f), 135f, 90f)
+            path.lineTo(size.width / 2, size.height / 2)
+            path.op(path, okPath, PathOperation.Difference)
+            regionList[4].setPath(
+                path.asAndroidPath(),
+                Region(0, 0, size.width.toInt(), size.height.toInt())
+            )
+            drawPath(path, color = okColor, style = Stroke(width = 2f))
+
+            // 绘制文字
+            drawIntoCanvas {
+                val paint = android.graphics.Paint().apply {
+                    color = android.graphics.Color.WHITE
+                    textSize = 24.sp.toPx()
+                }
+
+                // OK
+                it.nativeCanvas.drawText(
+                    "OK",
+                    size.width / 2 - 50,
+                    size.height / 2 + 25,
+                    paint
+                )
+
+                paint.color = android.graphics.Color.BLACK
+
+                // Button 1
+                it.nativeCanvas.drawText(
+                    "Button1",
+                    size.width / 2 - 110,
+                    size.height / 2 - 250,
+                    paint
+                )
+
+                // Button 2
+                it.nativeCanvas.drawText(
+                    "Button2",
+                    size.width / 2 + 250,
+                    size.height / 2 + 20,
+                    paint
+                )
+
+                // Button 3
+                it.nativeCanvas.drawText(
+                    "Button3",
+                    size.width / 2 - 110,
+                    size.height / 2 + 300,
+                    paint
+                )
+
+                // Button 4
+                it.nativeCanvas.drawText(
+                    "Button4",
+                    size.width / 2 - 450,
+                    size.height / 2 + 20,
+                    paint
+                )
+            }
+
+        }
+
+        Column(
+            Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = text, fontSize = 22.sp, color = Color.White)
+        }
+    }
+
 }
