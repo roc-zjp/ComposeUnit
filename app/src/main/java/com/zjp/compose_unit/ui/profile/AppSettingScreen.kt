@@ -15,7 +15,7 @@ import com.zjp.compose_unit.route.Screen
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AppSettingScreen(navigateToRoute: (String) -> Unit = {}, goBack: () -> Unit = {}) {
+fun AppSettingPage(navigateToRoute: (String) -> Unit = {}, goBack: () -> Unit = {}) {
     Scaffold(topBar = {
         UnitTopAppBar(title = { Text(text = "应用设置") }, navigationIcon = {
             IconButton(onClick = {
@@ -74,7 +74,7 @@ fun AppSettingScreen(navigateToRoute: (String) -> Unit = {}, goBack: () -> Unit 
                     contentDescription = "theme",
                     tint = MaterialTheme.colors.primary
                 )
-            }) {
+            }, modifier = Modifier.clickable { navigateToRoute(Screen.ItemSetting.route) }) {
                 Text(text = "item样式")
             }
             Divider()

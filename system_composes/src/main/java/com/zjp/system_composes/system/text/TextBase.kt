@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.selects.select
 
 
 /**
@@ -96,7 +97,9 @@ fun RichText() {
                 }
                 append("Compose")
             }
-        }, modifier = Modifier.padding(start = 10.dp).background(Color(0xff44D1FD))
+        }, modifier = Modifier
+            .padding(start = 10.dp)
+            .background(Color(0xff44D1FD))
     )
 }
 
@@ -106,7 +109,9 @@ fun RichText() {
 @Composable
 fun PartiallySelectableText() {
     SelectionContainer {
-        Column(modifier = Modifier.padding(start = 10.dp).background(Color(0xff44D1FD))) {
+        Column(modifier = Modifier
+            .padding(start = 10.dp)
+            .background(Color(0xff44D1FD))) {
             Text("This text is selectable")
             Text("This one too")
             Text("This one as well")
@@ -135,7 +140,9 @@ fun AnnotatedClickableText() {
         pop()
     }
     ClickableText(
-        modifier = Modifier.padding(start = 10.dp).background(Color(0xff44D1FD)),
+        modifier = Modifier
+            .padding(start = 10.dp)
+            .background(Color(0xff44D1FD)),
         text = annotatedText,
         onClick = { offset ->
             annotatedText.getStringAnnotations(tag = "URL", start = offset, end = offset)

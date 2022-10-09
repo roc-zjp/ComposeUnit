@@ -19,8 +19,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -29,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zjp.common.LocalThemeColor
 import com.zjp.common.compose.UnitTopAppBar
-import com.zjp.common.utils.recomposeHighlighter
 import com.zjp.compose_unit.ui.home.ComposeItemView
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.repository.ComposesRepository
@@ -63,6 +64,9 @@ fun SearchPage(
             likeWidgets = result.map { it.widgetId }.toList()
         }
     }
+
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
         topBar = {
             UnitTopAppBar(
@@ -99,7 +103,7 @@ fun SearchPage(
                                 cursorBrush = SolidColor(Color.Red),
                                 keyboardActions = KeyboardActions(
                                     onSearch = {
-
+                                        focusManager.clearFocus()
                                     }
                                 ),
                                 keyboardOptions = KeyboardOptions(
@@ -141,7 +145,6 @@ fun SearchPage(
         BoxWithConstraints(
             modifier = Modifier
                 .padding(it)
-                .recomposeHighlighter()
                 .navigationBarsPadding()
         ) {
             val highlighterColor = LocalThemeColor.current
@@ -161,3 +164,5 @@ fun SearchPage(
         }
     }
 }
+
+

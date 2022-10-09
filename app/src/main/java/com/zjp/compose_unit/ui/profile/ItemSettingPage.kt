@@ -1,27 +1,24 @@
-package com.zjp.compose_unit.ui.home
+package com.zjp.compose_unit.ui.profile
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
-
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
@@ -31,149 +28,63 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.apkfuns.logutils.LogUtils
 import com.zjp.common.Const
-import com.zjp.common.shape.AppBarHeight
-import com.zjp.common.state.CommonUiState
+import com.zjp.common.compose.UnitTopAppBar
 import com.zjp.compose_unit.BuildConfig
 import com.zjp.compose_unit.R
 import com.zjp.compose_unit.common.shape.TechnoShapeBorder
-import com.zjp.compose_unit.viewmodel.HomeViewModel
+import com.zjp.compose_unit.ui.home.ComposeItemView
 import com.zjp.core_database.model.Compose
-import com.zjp.core_database.model.LikeWidget
+import com.zjp.system_composes.custom.shape.NStartShape
+import com.zjp.system_composes.custom.shape.PolyShape
+import com.zjp.system_composes.custom.shape.TicketShape
+
+
+val itemCompose = Compose(0, "Image", "图片组件", 0, 0, 3.0f, "", "用于显示张图片")
 
 @Composable
-fun ComposesScreen(
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    homeViewModel: HomeViewModel = viewModel(),
-    onClick: (compose: Compose) -> Unit = {},
-) {
+fun ItemSettingPage(goBack: () -> Unit = {}) {
 
-    val uiState = homeViewModel.uiState
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                homeViewModel.updateLikeList()
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-
-    Box {
-        if (homeViewModel.uiState.isLoading) {
-            LoadingCompose()
-        } else {
-            if (uiState is CommonUiState.HasData<*>) {
-                Composes(uiState.data as List<Compose>, onClick, homeViewModel.likeCollects) {
-                    ComposesAppBar(selectIndex = homeViewModel.selectIndex, onItemSelected = {
-                        homeViewModel.filter(index = it)
-                    })
-                }
-            } else {
-                NoCompose {
-                    ComposesAppBar(selectIndex = homeViewModel.selectIndex, onItemSelected = {
-                        homeViewModel.filter(index = it)
-                    })
-                }
-            }
-        }
-    }
-
-}
-
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun Composes(
-    composes: List<Compose>,
-    onClick: (compose: Compose) -> Unit,
-    likeCollects: List<LikeWidget>,
-    appbar: @Composable () -> Unit
-) {
-    LazyColumn(
-        modifier = Modifier.padding(WindowInsets.navigationBars.asPaddingValues()),
-        contentPadding = PaddingValues(bottom = AppBarHeight)
-    ) {
-        stickyHeader {
-            appbar()
-        }
-        items(composes, key = { it.id }) { compose ->
-            ComposeItemView(compose = compose, like = likeCollects.any {
-                it.widgetId == compose.id
+    Scaffold(topBar = {
+        UnitTopAppBar(title = { Text(text = "主题设置") }, navigationIcon = {
+            IconButton(onClick = {
+                goBack()
             }) {
-                onClick(compose)
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back")
+            }
+        })
+    }) {
+        Box(modifier = Modifier.padding(it)) {
+            Column {
+                ComposeItem(compose = itemCompose, like = true, shape = TechnoShapeBorder())
+                ComposeItem(compose = itemCompose, like = true, shape = CutCornerShape(32.dp))
             }
         }
     }
 }
 
-
 @Composable
-fun NoCompose(appbar: @Composable () -> Unit) {
-    Column {
-        appbar()
-        Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth()
-        ) {
-            Text(text = "没数据，哥也没办法\\n(≡ _ ≡)/~┴┴", modifier = Modifier.align(Alignment.Center))
-        }
-    }
-
-}
-
-
-@Composable
-fun LoadingCompose() {
-    Box(
-        modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.align(Alignment.Center)) {
-            CircularProgressIndicator()
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(text = "加载中...")
-        }
-    }
-}
-
-
-@Composable
-fun ComposeItemView(
+fun ComposeItem(
     compose: Compose,
     like: Boolean,
     key: String? = null,
     highlighterColor: Color = Color.Red,
+    shape: Shape = CutCornerShape(32.dp),
     onClick: () -> Unit = {}
 ) {
+
     val updateKey = rememberUpdatedState(newValue = key)
     var preLayoutResult: TextLayoutResult? by remember {
         mutableStateOf(null)
     }
-
     Box {
         Row(modifier = Modifier
             .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
             .fillMaxWidth()
             .height(100.dp)
-            .clip(
-                TechnoShapeBorder(
-                    storkWidth = 1.0f, cornerWidth = 20.dp.value, spanWidth = 20.dp.value
-                )
-            )
+            .clip(shape)
             .border(
-                1.dp, Const.colorDarkBlue, TechnoShapeBorder(
-                    storkWidth = 1.0f, cornerWidth = 20.dp.value, spanWidth = 20.dp.value
-                )
+                1.dp, Const.colorDarkBlue, shape
             )
             .background(Const.colorDarkBlue.copy(0.25f))
             .clickable { onClick() }
@@ -259,10 +170,14 @@ fun ComposeItemView(
     }
 }
 
+
 @Preview
 @Composable
-fun DefaultPre() {
-    ComposeItemView(compose = Compose(1, "Text", "Text", 1, 1, 3.0f, "", "info"), true) {
-
+fun ItemPre() {
+    Column() {
+        ComposeItem(compose = itemCompose, like = true, shape = TechnoShapeBorder())
+        ComposeItem(compose = itemCompose, like = true, shape = CutCornerShape(32.dp))
+        ComposeItem(compose = itemCompose, like = true, shape = TicketShape(32f))
+        ComposeItem(compose = itemCompose, like = true, shape = PolyShape(5,50f))
     }
 }

@@ -5,24 +5,19 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.relocation.BringIntoViewRequester
-import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.text.*
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
@@ -31,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import com.apkfuns.logutils.LogUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -50,7 +44,6 @@ import kotlinx.coroutines.launch
  * 【keyboardActions】：onDone、onNext、onPrevious、onSearch、onSend、onGo 键盘按钮点击回调，对应着 keyboardOptions.imeAction的类型【KeyboardActions】
  * 【keyboardOptions】：首字母是否大小写、是否自动纠错、输入类型、键盘按钮类型【KeyboardOptions】
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SimpleFilledTextFieldSample() {
 

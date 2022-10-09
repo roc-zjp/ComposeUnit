@@ -25,5 +25,6 @@ fun CollectionNodeMap(id: Int) {
         17 -> Swipeable()
         18 -> TransformableSample()
         19 -> RemoteControl()
+        20 -> PathDashPathEffectSample()
     }
 }

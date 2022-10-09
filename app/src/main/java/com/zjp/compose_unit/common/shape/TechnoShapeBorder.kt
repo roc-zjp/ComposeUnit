@@ -1,5 +1,6 @@
 package com.zjp.compose_unit.common.shape
 
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.Density
@@ -42,6 +43,19 @@ class TechnoShapeBorder(
         outLinePath.lineTo(0f, size.height - cornerWidth)
         outLinePath.lineTo(0f, cornerWidth)
         outLinePath.close()
+
+        outLinePath.addRect(Rect(200f, 200f, 200f, 200f))
+
+
+//        innerLinePath
+//            .moveTo(size.width / 2, 0f)
+//        innerLinePath.relativeLineTo(size.width * innerRate, 0f)
+//        innerLinePath.relativeLineTo(-spanWidth * 2, spanWidth)
+//        innerLinePath.relativeLineTo(-size.width * innerRate * 2, 0f)
+//        innerLinePath.relativeLineTo(-spanWidth * 2, -spanWidth)
+//        innerLinePath.close()
+//
+//        outLinePath.addPath(innerLinePath)
 
         return Outline.Generic(outLinePath)
     }

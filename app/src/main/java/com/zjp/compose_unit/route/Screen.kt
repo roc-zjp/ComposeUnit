@@ -10,6 +10,7 @@ sealed class Screen(val route: String) {
     object Debug : Screen(route = "debug_screen")
     object Splash : Screen(route = "splash_screen")
     object ThemeSetting : Screen(route = "theme_setting_screen")
+    object ItemSetting : Screen(route = "item_setting_screen")
     object AppSetting : Screen(route = "app_setting_screen")
     object FontSetting : Screen(route = "font_setting_screen")
     object AboutMe : Screen(route = "about_me_screen")

@@ -93,10 +93,19 @@ fun NavGraphBuilder.unitNavGraph(
         }
 
     }
+
+    composable(
+        Screen.ItemSetting.route,
+    ) {
+        ItemSettingPage() {
+            navController.popBackStack()
+        }
+
+    }
     composable(
         Screen.AppSetting.route,
     ) {
-        AppSettingScreen(navigateToRoute = { route ->
+        AppSettingPage(navigateToRoute = { route ->
             navController.navigate(route)
         }, goBack = {
             navController.popBackStack()
