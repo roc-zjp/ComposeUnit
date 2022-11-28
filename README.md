@@ -2,7 +2,7 @@
 
 ## 感谢
 
-首先要感谢 [FlutterUnit](https://github.com/toly1994328/FlutterUnit) ,感谢这个项目在刚开始学习flutter时给与的帮助，给了我很多参考。在入门了flutter之后，关注到了Android Compose，感觉他们很多组件使用相似，所以就萌发了做一个Flutter Unit Compose 版本的想法，希望也能帮到那些刚入门Compose的Android开发人。
+首先要感谢 [FlutterUnit](https://github.com/toly1994328/FlutterUnit) ,感谢这个项目在刚开始学习flutter时给予的帮助，给了我很多参考，简化了flutter的入门门槛。在入门了flutter之后，关注到了Android Compose，感觉他们很多组件使用相似，所以就萌发了做一个Flutter Unit Compose 版本的想法，希望也能帮到那些刚入门Compose的Android开发人。
 
 ## 已完成：
 
@@ -13,6 +13,14 @@
 2. 组件详情
    
    > 每个组合都带有效果和源码展示，可以实际查看效果，也可以查看具体代码实现。
+
+
+
+| <img title="" src="https://raw.githubusercontent.com/roc-zjp/cloudimg/master/2022/11/28-09-53-30-splash.gif" alt="splash" width="1100"> | ![1.jpeg](https://raw.githubusercontent.com/roc-zjp/cloudimg/master/2022/11/28-09-51-55-1.jpeg) | ![2.jpeg](https://raw.githubusercontent.com/roc-zjp/cloudimg/master/2022/11/28-09-58-37-2.jpeg) | ![3.jpeg](https://raw.githubusercontent.com/roc-zjp/cloudimg/master/2022/11/28-10-02-21-3.jpeg) |
+| --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| ![4.jpeg](https://raw.githubusercontent.com/roc-zjp/cloudimg/master/2022/11/28-09-59-50-4.jpeg)                                         | ![5.jpeg](https://raw.githubusercontent.com/roc-zjp/cloudimg/master/2022/11/28-10-00-02-5.jpeg) | ![6.jpeg](https://raw.githubusercontent.com/roc-zjp/cloudimg/master/2022/11/28-10-00-08-6.jpeg) | ![7.jpeg](https://raw.githubusercontent.com/roc-zjp/cloudimg/master/2022/11/28-10-00-12-7.jpeg) |
+
+
 
 ## 目标：
 
