@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.apkfuns.logutils.LogUtils
+
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
@@ -122,7 +122,7 @@ fun BannerHeader(
     navigationToWebView: (base64Url: String, title: String) -> Unit
 ) {
     if (banners.isEmpty()) {
-        LogUtils.d("banner isEmpty")
+
         Box(
             modifier = Modifier
                 .background(Color.Green)

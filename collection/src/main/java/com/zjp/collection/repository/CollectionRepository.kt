@@ -1,6 +1,5 @@
 package com.zjp.collection.repository
 
-import com.apkfuns.logutils.LogUtils
 import com.zjp.common.data.Result
 import com.zjp.core_database.CollectEntry
 import com.zjp.core_database.CollectionNodeEntry
@@ -71,7 +70,6 @@ class CollectionRepository(private val dbManager: DBManager = DBManager.getInsta
     }
 
     fun getLinkComposes(links: Array<String>): Result<List<Collection>> {
-        LogUtils.d("links:${links.toList()}")
         try {
             var sqlBuffer =
                 StringBuffer("SELECT * FROM $COMPOSE_TABLE_NAME WHERE id IN (")
@@ -80,7 +78,6 @@ class CollectionRepository(private val dbManager: DBManager = DBManager.getInsta
             }
             sqlBuffer.append(")")
             sqlBuffer.delete(sqlBuffer.lastIndexOf(","), sqlBuffer.lastIndexOf(",") + 1)
-            LogUtils.d(sqlBuffer)
             val cursor = dbManager.mDB.rawQuery(sqlBuffer.toString(), null)
             val composes = mutableListOf<Collection>()
             while (cursor.moveToNext()) {
@@ -89,7 +86,7 @@ class CollectionRepository(private val dbManager: DBManager = DBManager.getInsta
             cursor.close()
             return Result.Success(data = composes)
         } catch (e: Exception) {
-            LogUtils.e(e)
+
             return Result.Error(e)
         }
     }
@@ -113,7 +110,7 @@ class CollectionRepository(private val dbManager: DBManager = DBManager.getInsta
             }
             cursor.close()
         } catch (e: Exception) {
-            LogUtils.e(e)
+
         }
         return null
     }

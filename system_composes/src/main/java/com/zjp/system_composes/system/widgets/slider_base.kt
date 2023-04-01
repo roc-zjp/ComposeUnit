@@ -67,7 +67,7 @@ fun RangeSliderBase() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = "当前值：${range.toRange()}")
         RangeSlider(
-            values = range, onValueChange = {
+            value = range, onValueChange = {
                 range = it
             },
             valueRange = -50f..50f,

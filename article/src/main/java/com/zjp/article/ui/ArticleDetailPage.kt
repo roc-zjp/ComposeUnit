@@ -15,7 +15,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.apkfuns.logutils.LogUtils
+
 import com.zjp.common.compose.UnitTopAppBar
 
 @Composable
@@ -50,7 +50,7 @@ fun ArticleDetailPage(url: String, title: String, goBack: () -> Unit = {}) {
         }
     ) {
 
-        LogUtils.d(url)
+
         AndroidView(modifier = Modifier
             .padding(it)
             .fillMaxSize(), factory = { context ->

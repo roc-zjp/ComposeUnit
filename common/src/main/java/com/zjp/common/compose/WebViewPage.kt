@@ -16,7 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import com.apkfuns.logutils.LogUtils
+
 
 
 @Composable
@@ -44,7 +44,7 @@ fun WebViewPage(url: String, title: String, goBack: () -> Unit = {}) {
 
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
             val uri = Uri.parse(url)
-            LogUtils.d(url)
+
             if (uri.scheme.equals("https") || uri.scheme.equals("http")) {
                 view?.loadUrl(url!!)
             } else {
@@ -52,7 +52,6 @@ fun WebViewPage(url: String, title: String, goBack: () -> Unit = {}) {
                     flags = (Intent.FLAG_ACTIVITY_NEW_TASK
                             or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 }
-                LogUtils.d("uri scheme:${uri.scheme},host${uri.host}，${uri.path}")
 
                 if (context != null && intent.resolveActivity(context!!.packageManager) != null) {
                     context.startActivity(intent)

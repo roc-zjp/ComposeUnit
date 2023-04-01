@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.apkfuns.logutils.LogUtils
+
 import com.zjp.common.state.CommonUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -34,7 +34,7 @@ import kotlin.random.Random
  */
 @Composable
 fun DerivedState() {
-    LogUtils.d("re composed")
+
     var counter by remember {
         mutableStateOf(0)
     }
@@ -58,8 +58,7 @@ fun SnapshotFlow(scaffoldState: ScaffoldState) {
             .mapNotNull { it.currentSnackbarData?.message }
             .distinctUntilChanged()
             .collect() { message ->
-                LogUtils.d("A Snackbar with message $message was shown")
-            }
+                }
     }
 
     var scope = rememberCoroutineScope()
@@ -126,7 +125,7 @@ fun TwoButtonScreen() {
 fun Timer(
     buttonColor: String
 ) {
-    LogUtils.d("re compose")
+
     val timerDuration = 5000L
     println("Composing timer with colour : $buttonColor")
     LaunchedEffect(key1 = buttonColor, block = {

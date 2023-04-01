@@ -3,7 +3,7 @@ package com.zjp.article.viewmodel
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.apkfuns.logutils.LogUtils
+
 import com.zjp.article.repository.LeaderBlog
 import com.zjp.article.repository.LeaderBlogRepository
 import com.zjp.core_net.ArticleBean
@@ -30,7 +30,7 @@ class ArticleViewModel : ViewModel() {
     var loadMoreAble by mutableStateOf(true)
 
     init {
-        LogUtils.d("init")
+
         viewModelScope.launch {
             loadMore()
         }

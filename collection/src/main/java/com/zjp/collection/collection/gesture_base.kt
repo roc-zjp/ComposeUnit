@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.ViewCompat
-import com.apkfuns.logutils.LogUtils
 import com.zjp.collection.R
 import kotlin.math.roundToInt
 
@@ -397,7 +396,6 @@ fun RemoteControl() {
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onTap = { offset: Offset ->
-                            LogUtils.d("offset:$offset")
                             if (regionList[0].contains(offset.x.toInt(), offset.y.toInt())) {
 
                                 text = "click OK Button"

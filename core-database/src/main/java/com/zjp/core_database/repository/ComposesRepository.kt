@@ -1,6 +1,6 @@
 package com.zjp.core_database.repository
 
-import com.apkfuns.logutils.LogUtils
+
 import com.zjp.common.data.Result
 import com.zjp.core_database.utils.parseCompose
 import com.zjp.core_database.utils.parseNode
@@ -63,8 +63,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
                 composes.add(parseCompose(cursor))
             }
             cursor.close()
-            LogUtils.d("获取数据成功")
-            LogUtils.d(composes)
+
             return Result.Success(data = composes)
         } catch (e: Exception) {
             return Result.Error(e)
@@ -72,7 +71,6 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
     }
 
     fun getLinkComposes(links: Array<String>): Result<List<Compose>> {
-        LogUtils.d("links:${links.toList()}")
         try {
             var sqlBuffer = StringBuffer("SELECT * FROM $COMPOSE_TABLE_NAME WHERE id IN (")
             links.forEach { linkId ->
@@ -80,7 +78,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
             }
             sqlBuffer.append(")")
             sqlBuffer.delete(sqlBuffer.lastIndexOf(","), sqlBuffer.lastIndexOf(",") + 1)
-            LogUtils.d(sqlBuffer)
+
             val cursor = dbManager.mDB.rawQuery(sqlBuffer.toString(), null)
             val composes = mutableListOf<Compose>()
             while (cursor.moveToNext()) {
@@ -90,7 +88,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
 
             return Result.Success(data = composes)
         } catch (e: Exception) {
-            LogUtils.e(e)
+
             return Result.Error(e)
         }
     }
@@ -114,7 +112,7 @@ class ComposesRepository(private val dbManager: DBManager = DBManager.getInstanc
             }
             cursor.close()
         } catch (e: Exception) {
-            LogUtils.e(e)
+
         }
         return null
     }

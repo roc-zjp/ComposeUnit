@@ -35,7 +35,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.apkfuns.logutils.LogUtils
+
 import com.zjp.common.Const
 import com.zjp.common.shape.AppBarHeight
 import com.zjp.common.state.CommonUiState

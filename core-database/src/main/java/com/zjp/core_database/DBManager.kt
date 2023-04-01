@@ -2,7 +2,7 @@ package com.zjp.core_database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import com.apkfuns.logutils.LogUtils
+
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -60,8 +60,7 @@ class DBManager {
             fileOutPutStream.flush()
             inputStream.close()
             fileOutPutStream.close()
-            LogUtils.d(filePath);
-            LogUtils.d("复制成功");
+
         }
 
         private fun saveNewVersion(context: Context, version: String) {

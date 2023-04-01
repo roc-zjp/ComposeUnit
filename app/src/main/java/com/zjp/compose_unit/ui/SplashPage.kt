@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.apkfuns.logutils.LogUtils
+
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.zjp.compose_unit.R
 import com.zjp.core_database.DBManager
@@ -35,7 +35,6 @@ fun SplashView(toHomePage: () -> Unit) {
     LaunchedEffect(true) {
         state = true
         DBManager.initDB(context.applicationContext)
-        LogUtils.d("版本号：${DBManager.getInstance().mDB.version}")
         delay(3000)
         toHomePage()
     }

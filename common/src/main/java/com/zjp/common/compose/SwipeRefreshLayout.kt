@@ -30,7 +30,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-import com.apkfuns.logutils.LogUtils
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -195,7 +195,6 @@ class PullRefreshState(
             coroutineScope.launch {
                 _bottomOffset.snapTo(newHeight + delta / 2)
             }
-            LogUtils.d("下滑:delta=$delta,consumed=$consumed")
             return Offset(x = 0f, y = consumed)
         }
 
