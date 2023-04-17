@@ -39,6 +39,7 @@ android {
     lint {
         baseline = file("lint-baseline.xml")
     }
+    namespace 'com.zjp.article'
 
 
 }

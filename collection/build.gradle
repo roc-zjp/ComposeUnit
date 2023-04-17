@@ -37,6 +37,7 @@ android {
         kotlinCompilerExtensionVersion compose_compiler
         kotlinCompilerVersion kotlin_version
     }
+    namespace 'com.zjp.collection'
 
 }
 

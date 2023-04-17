@@ -13,6 +13,8 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -23,14 +25,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.zjp.article.viewmodel.ArticleViewModel
 import com.zjp.compose_unit.R
 import com.zjp.compose_unit.route.Screen
+import com.zjp.compose_unit.viewmodel.ProfileViewModel
 import com.zjp.core_database.DBManager
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ProfileScreen(navigateToRoute: (String) -> Unit = {}) {
+fun ProfileScreen(
+    viewModel: ProfileViewModel = viewModel(),
+    navigateToRoute: (String) -> Unit = {}
+) {
+    val context = LocalContext.current
+    LaunchedEffect(viewModel.newVersion) {
+        if (viewModel.newVersion == null) {
+            Toast.makeText(context, "已经是最新版本", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(context, "检查到了新版本", Toast.LENGTH_LONG).show()
+        }
+    }
     Scaffold(
         topBar = {
             Image(
@@ -113,6 +130,8 @@ fun ProfileScreen(navigateToRoute: (String) -> Unit = {}) {
                         contentDescription = "",
                         tint = MaterialTheme.colors.primary
                     )
+                }, modifier = Modifier.clickable {
+                    viewModel.checkUpdate()
                 }) {
                     Text(text = "检查APP版本")
                 }

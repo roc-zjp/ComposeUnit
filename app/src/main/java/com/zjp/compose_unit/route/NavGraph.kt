@@ -2,6 +2,7 @@ package com.zjp.compose_unit.route
 
 import android.util.Base64
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.zjp.article.ui.ArticlePage
@@ -202,7 +203,7 @@ fun DeveloperPage(
 
 @Composable
 fun ProfilePage(navigateToRoute: (String) -> Unit) {
-    ProfileScreen(navigateToRoute)
+    ProfileScreen(viewModel = viewModel(),navigateToRoute)
 }
 
 @Composable
