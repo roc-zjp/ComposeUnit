@@ -42,7 +42,7 @@ interface FileApi {
 
 class FileNetWork {
     companion object {
-        const val LoalHost = "http://192.168.10.41:10000"
+        const val LoalHost = "http://www.utops.ltd:10000"
     }
 
     private val networkApi = Retrofit.Builder()

@@ -13,60 +13,81 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zjp.compose_unit.R
 import com.zjp.compose_unit.route.Screen
 import com.zjp.compose_unit.viewmodel.ProfileViewModel
-import com.zjp.core_database.DBManager
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel = viewModel(),
-    navigateToRoute: (String) -> Unit = {}
+    viewModel: ProfileViewModel = viewModel(), navigateToRoute: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
-
-    LaunchedEffect(key1 = viewModel.message) {
-        if (viewModel.message.isNotEmpty()) {
-            Toast.makeText(context, viewModel.message, Toast.LENGTH_SHORT).show()
+    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(Unit) {
+        viewModel.message.observe(lifecycleOwner) {
+            if (it.isNotEmpty()) {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
         }
     }
+    ProfileView(
+        currentAppVersionName = viewModel.currentAppVersionName,
+        currentDatabaseVersion = viewModel.currentDatabaseVersion,
+        checkAppUpdate = { viewModel.checkAppUpdate() },
+        checkDatabaseUpdate = { viewModel.checkDatabaseUpdate() },
+        navigateToRoute = navigateToRoute
+    )
 
-    Scaffold(
-        topBar = {
-            Image(
-                painter = painterResource(id = com.zjp.common.R.drawable.caver),
-                contentScale = ContentScale.Crop,
-                contentDescription = "Header",
-                modifier = Modifier
-                    .height(
-                        200.dp
-                    )
-                    .fillMaxWidth()
-            )
-            Image(
-                painter = painterResource(id = R.drawable.kobe), contentDescription = "kobe",
-                modifier = Modifier
-                    .padding(top = 175.dp, start = 25.dp)
-                    .width(50.dp)
-                    .height(50.dp)
-                    .clip(CircleShape)
-            )
 
-        }
-    ) { paddingValue ->
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ProfileView(
+    currentAppVersionName: String = "",
+    currentDatabaseVersion: String = "",
+    checkAppUpdate: () -> Unit = {},
+    checkDatabaseUpdate: () -> Unit = {},
+    navigateToRoute: (String) -> Unit = {}
+) {
+    Scaffold(topBar = {
+        Image(
+            painter = painterResource(id = com.zjp.common.R.drawable.caver),
+            contentScale = ContentScale.Crop,
+            contentDescription = "Header",
+            modifier = Modifier
+                .height(
+                    200.dp
+                )
+                .fillMaxWidth()
+        )
+        Image(
+            painter = painterResource(id = R.drawable.kobe),
+            contentDescription = "kobe",
+            modifier = Modifier
+                .padding(top = 175.dp, start = 25.dp)
+                .width(50.dp)
+                .height(50.dp)
+                .clip(CircleShape)
+        )
+
+    }) { paddingValue ->
         val context = LocalContext.current
         Box(modifier = Modifier.padding(paddingValue)) {
             Column(
@@ -103,19 +124,17 @@ fun ProfileScreen(
                         contentDescription = "",
                         tint = MaterialTheme.colors.primary
                     )
-                }, trailing = if (viewModel.appNewVersion != null) ({
-                    Text(text = "${viewModel.appNewVersion!!.version}")
-                }) else null,
-                    modifier = Modifier.clickable {
-                        navigateToRoute(Screen.AboutApp.route)
-                    }) {
+                }, modifier = Modifier.clickable {
+                    navigateToRoute(Screen.AboutApp.route)
+                }) {
                     Text(text = "关于应用")
                 }
                 ListItem(icon = {
                     Icon(
                         Icons.Filled.Person,
                         contentDescription = "",
-                        tint = MaterialTheme.colors.primary
+                        tint = MaterialTheme.colors.primary,
+                        modifier = Modifier.size(36.dp)
                     )
                 }, modifier = Modifier.clickable {
                     navigateToRoute(Screen.AboutMe.route)
@@ -123,29 +142,59 @@ fun ProfileScreen(
                     Text(text = "关于我")
                 }
                 Divider()
-                ListItem(icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.check_update),
-                        contentDescription = "",
-                        tint = MaterialTheme.colors.primary
-                    )
-                },trailing = if (viewModel.sqliteNewVersion != null) ({
-                        Text(text = "${viewModel.sqliteNewVersion!!.version}")
-                    }) else null, modifier = Modifier.clickable {
-                        viewModel.checkAppUpdate(context)
-                    }) {
-                    Text(text = "检查APP版本")
+                ListItem(
+                    icon = {
+                        Box(
+                            modifier = Modifier
+                                .height(40.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.check_update),
+                                contentDescription = "",
+                                tint = MaterialTheme.colors.primary
+                            )
+                        }
+                    },
+                    trailing = {
+                        Box(
+                            modifier = Modifier.height(40.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = "V${currentAppVersionName}")
+                        }
+                    },
+                    secondaryText = {
+                        Text(text = "当前已是最新版本")
+                    },
+                    modifier = Modifier.clickable {
+                        checkAppUpdate()
+                    },
+                ) {
+                    Text(text = "APP版本")
                 }
                 ListItem(icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.database),
-                        contentDescription = "",
-                        tint = MaterialTheme.colors.primary
-                    )
+                    Box(
+                        modifier = Modifier
+                            .height(40.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.database),
+                            contentDescription = "",
+                            tint = MaterialTheme.colors.primary
+                        )
+                    }
+                }, trailing = {
+                    Box(modifier = Modifier.height(40.dp), contentAlignment = Alignment.Center) {
+                        Text(text = "V${currentDatabaseVersion}")
+                    }
+                }, secondaryText = {
+                    Text(text = "当前已是最新版本")
                 }, modifier = Modifier.clickable {
-                    viewModel.checkDatabaseUpdate()
+                    checkDatabaseUpdate()
                 }) {
-                    Text(text = "检查数据库版本")
+                    Text(text = "数据库版本")
                 }
             }
         }
@@ -155,5 +204,5 @@ fun ProfileScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun ProfileScreenPre() {
-    ProfileScreen() {}
+    ProfileView()
 }

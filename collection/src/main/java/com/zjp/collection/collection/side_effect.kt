@@ -32,6 +32,7 @@ import kotlin.random.Random
 /**
  * 减少不必要的重构
  */
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun DerivedState() {
 
