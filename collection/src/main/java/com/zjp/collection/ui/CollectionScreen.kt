@@ -144,17 +144,19 @@ fun CollectionItem(item: Collection, isVertical: Boolean, onClick: (compose: Col
 
             ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                val bytes = Base64.decode(item.img, Base64.DEFAULT)
-                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                if (item.img.isNotEmpty()) {
+                    val bytes = Base64.decode(item.img, Base64.DEFAULT)
+                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = "image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(2f),
-                )
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = "image",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(2f),
+                    )
+                }
                 Box(modifier = Modifier.padding(16.dp)) {
                     Column() {
                         Text(

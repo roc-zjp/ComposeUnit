@@ -48,7 +48,8 @@ fun App() {
                 Box(modifier = Modifier.padding(innerPaddingModifier)) {
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.Splash.route,
+                        startDestination = Screen.
+                        Splash.route,
                         modifier = Modifier.fillMaxSize()
                     ) {
                         unitNavGraph(navController)

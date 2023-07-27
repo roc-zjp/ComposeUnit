@@ -2,6 +2,11 @@ package com.zjp.collection
 
 import androidx.compose.runtime.Composable
 import com.zjp.collection.collection.*
+import com.zjp.collection.collection.animation.AnimatedVisibilityDemo
+import com.zjp.collection.collection.animation.ExitAndInAnimation
+import com.zjp.collection.collection.animation.animateAsState
+import com.zjp.collection.collection.animation.customAnimation
+import com.zjp.collection.collection.animation.startAnimationImmediately
 
 @Composable
 fun CollectionNodeMap(id: Int) {
@@ -26,5 +31,10 @@ fun CollectionNodeMap(id: Int) {
         18 -> TransformableSample()
         19 -> RemoteControl()
         20 -> PathDashPathEffectSample()
+        21 -> AnimatedVisibilityDemo()
+        22 -> startAnimationImmediately()
+        23 -> ExitAndInAnimation()
+        24 -> customAnimation()
+        25 -> animateAsState()
     }
 }
