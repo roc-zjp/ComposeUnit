@@ -32,7 +32,7 @@ import com.zjp.compose_unit.route.Screen
 import com.zjp.compose_unit.viewmodel.ProfileViewModel
 
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = viewModel(), navigateToRoute: (String) -> Unit = {}
@@ -108,34 +108,51 @@ fun ProfileView(
                         .padding(end = 20.dp)
                 )
                 ListItem(icon = {
-                    Icon(
-                        Icons.Outlined.Settings,
-                        contentDescription = "",
-                        tint = MaterialTheme.colors.primary
-                    )
+                    Box(
+                        modifier = Modifier
+                            .height(40.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.setting),
+                            contentDescription = "",
+                            tint = MaterialTheme.colors.primary
+                        )
+                    }
                 }, modifier = Modifier.clickable {
                     navigateToRoute(Screen.AppSetting.route)
                 }) {
                     Text(text = "应用设置")
                 }
                 ListItem(icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.app),
-                        contentDescription = "",
-                        tint = MaterialTheme.colors.primary
-                    )
+                    Box(
+                        modifier = Modifier
+                            .height(40.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.about_app),
+                            contentDescription = "",
+                            tint = MaterialTheme.colors.primary
+                        )
+                    }
                 }, modifier = Modifier.clickable {
                     navigateToRoute(Screen.AboutApp.route)
                 }) {
                     Text(text = "关于应用")
                 }
                 ListItem(icon = {
-                    Icon(
-                        Icons.Filled.Person,
-                        contentDescription = "",
-                        tint = MaterialTheme.colors.primary,
-                        modifier = Modifier.size(36.dp)
-                    )
+                    Box(
+                        modifier = Modifier
+                            .height(40.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.about_me),
+                            contentDescription = "",
+                            tint = MaterialTheme.colors.primary
+                        )
+                    }
                 }, modifier = Modifier.clickable {
                     navigateToRoute(Screen.AboutMe.route)
                 }) {

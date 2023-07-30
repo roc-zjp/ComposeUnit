@@ -1,22 +1,35 @@
 package com.zjp.common.compose
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.net.http.SslError
 import android.util.Base64
-import android.webkit.*
+import android.webkit.SslErrorHandler
+import android.webkit.WebChromeClient
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-
 
 
 @Composable
@@ -39,7 +52,20 @@ fun WebViewPage(url: String, title: String, goBack: () -> Unit = {}) {
             handler: SslErrorHandler?,
             error: SslError?
         ) {
-            handler?.proceed()
+            val builder = AlertDialog.Builder(view!!.context)
+            builder.setMessage("SSL认证失败，是否继续访问？")
+            builder.setPositiveButton(
+                "确定"
+            ) { _, _ ->
+                handler!!.proceed() // 接受https所有网站的证书
+            }
+
+            builder.setNegativeButton(
+                "取消"
+            ) { dialog, which -> handler!!.cancel() }
+
+            val dialog = builder.create()
+            dialog.show()
         }
 
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
