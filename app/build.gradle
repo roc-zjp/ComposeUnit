@@ -12,7 +12,7 @@ android {
         applicationId "com.zjp.compose_unit"
         minSdk 21
         targetSdk 33
-        versionCode 6
+        versionCode 7
         versionName "3.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

@@ -32,7 +32,6 @@ import com.zjp.compose_unit.route.Screen
 import com.zjp.compose_unit.viewmodel.ProfileViewModel
 
 
-
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = viewModel(), navigateToRoute: (String) -> Unit = {}
@@ -81,9 +80,9 @@ fun ProfileView(
             painter = painterResource(id = R.drawable.kobe),
             contentDescription = "kobe",
             modifier = Modifier
-                .padding(top = 175.dp, start = 25.dp)
-                .width(50.dp)
-                .height(50.dp)
+                .padding(top = 160.dp, start = 25.dp)
+                .width(80.dp)
+                .height(80.dp)
                 .clip(CircleShape)
         )
 
@@ -110,7 +109,7 @@ fun ProfileView(
                 ListItem(icon = {
                     Box(
                         modifier = Modifier
-                            .height(40.dp),
+                            .size(30.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -127,7 +126,7 @@ fun ProfileView(
                 ListItem(icon = {
                     Box(
                         modifier = Modifier
-                            .height(40.dp),
+                            .size(30.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -144,7 +143,7 @@ fun ProfileView(
                 ListItem(icon = {
                     Box(
                         modifier = Modifier
-                            .height(40.dp),
+                            .size(30.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -163,7 +162,7 @@ fun ProfileView(
                     icon = {
                         Box(
                             modifier = Modifier
-                                .height(40.dp),
+                                .size(30.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
@@ -193,7 +192,7 @@ fun ProfileView(
                 ListItem(icon = {
                     Box(
                         modifier = Modifier
-                            .height(40.dp),
+                            .size(30.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(

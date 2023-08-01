@@ -1,17 +1,21 @@
 package com.zjp.system_composes.system.widgets
 
+import android.content.Context
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
@@ -22,8 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.zjp.common.compose.WrapLayout
-import com.zjp.system_composes.R
 import kotlin.math.roundToInt
+
 
 /**
  * 从资源文件和网络获取图片
@@ -42,6 +46,13 @@ fun ImageBase() {
         )
         Image(
             painter = rememberAsyncImagePainter("https://cdn.pixabay.com/photo/2014/07/31/22/50/photographer-407068_1280.jpg"),
+            contentDescription = "图标",
+            modifier = Modifier
+                .height(100.dp)
+                .width(100.dp)
+        )
+        Image(
+            painter = painterAssets("jetpack_compose.png"),
             contentDescription = "图标",
             modifier = Modifier
                 .height(100.dp)
@@ -253,4 +264,31 @@ fun ImageDefaultPre() {
         ImageBlendMode()
         SwipeableBase()
     }
+}
+
+
+@Composable
+fun painterAssets(name: String): Painter {
+    val context = LocalContext.current
+
+    val imageBitmap = remember(name, context.theme) {
+        loadImageBitmapAssets(context, name)
+    }
+    return BitmapPainter(imageBitmap)
+}
+
+private fun loadImageBitmapAssets(context: Context, name: String): ImageBitmap {
+    try {
+        return ImageBitmap.assetsImage(context, name)
+    } catch (throwable: Throwable) {
+        throw IllegalArgumentException()
+    }
+}
+
+fun ImageBitmap.Companion.assetsImage(context: Context, name: String): ImageBitmap {
+    val bitmap = context.assets
+        .open(name)
+        .use(BitmapFactory::decodeStream)
+
+    return bitmap.asImageBitmap()
 }
