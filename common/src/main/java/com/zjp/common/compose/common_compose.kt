@@ -10,7 +10,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,33 +26,26 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import kotlin.math.abs
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UnitTopAppBar(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    navigationIcon: @Composable (() -> Unit)? = null,
+    navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
-    backgroundColor: Color = MaterialTheme.colors.primarySurface,
-    contentColor: Color = contentColorFor(backgroundColor),
-    elevation: Dp = 0.dp
+    backgroundColor: Color = MaterialTheme.colorScheme.primary,
 ) {
 
-    val sbPaddingValues =
-        WindowInsets.statusBars.asPaddingValues()
     TopAppBar(
-        title,
+        title = title,
         modifier = Modifier
             .background(backgroundColor)
-            .padding(sbPaddingValues)
             .then(modifier),
-        navigationIcon,
-        actions,
-        backgroundColor,
-        contentColor,
-        elevation
+        navigationIcon = navigationIcon,
+        actions = actions,
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = backgroundColor)
+
     )
-
-
 }
 
 

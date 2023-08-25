@@ -36,55 +36,33 @@ import com.zjp.compose_unit.route.HomeSections
 import com.zjp.compose_unit.route.Screen
 import com.zjp.compose_unit.route.unitNavGraph
 import com.zjp.compose_unit.ui.theme.AppShapes
-import com.zjp.compose_unit.ui.theme.AppTypography
-import com.zjp.compose_unit.ui.theme.fontMap
-import com.zjp.compose_unit.ui.theme.local
 import com.zjp.compose_unit.ui.theme.DarkColors
 import com.zjp.compose_unit.ui.theme.LightColors
+import com.zjp.compose_unit.ui.theme.appTypography
+import com.zjp.compose_unit.ui.theme.fontMap
+import com.zjp.compose_unit.ui.theme.local
 import kotlinx.coroutines.launch
 
-@Composable
-fun AppTheme(
-    useDarkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable() () -> Unit
-) {
-    val colors = if (!useDarkTheme) {
-        LightColors
-    } else {
-        DarkColors
-    }
-
-    MaterialTheme(
-        colorScheme = colors,
-        content = content
-    )
-}
 
 @Composable
-fun App(useDarkTheme: Boolean = isSystemInDarkTheme()) {
+fun App() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
         ?: Screen.Splash.route
     val routes = HomeSections.values().map { it.route }
     val isHomePage = currentRoute in routes
-    val colors = if (!useDarkTheme) {
-        LightColors
-    } else {
-        DarkColors
-    }
 
     ColorAndFontProvider {
         val themeColor = LocalThemeColor.current
         val currentFont = LocalFont.current
 
-        MaterialTheme(
-            colorScheme = colors,
-            typography = AppTypography,
-            shapes = AppShapes
+        Compose_unitTheme(
+            primary = themeColor,
+            font = currentFont,
         ) {
-            Scaffold { innerPaddingModifier ->
-                Box(modifier = Modifier.padding(innerPaddingModifier)) {
+            Scaffold { _ ->
+                Box(modifier = Modifier.padding()) {
                     NavHost(
                         navController = navController,
                         startDestination = Screen.Splash.route,
@@ -115,6 +93,30 @@ fun App(useDarkTheme: Boolean = isSystemInDarkTheme()) {
             }
         }
     }
+}
+
+@Composable
+fun Compose_unitTheme(
+    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    primary: Color = Color.Blue,
+    font: FontFamily = local,
+    content: @Composable () -> Unit
+) {
+
+    val colors = if (!useDarkTheme) {
+        LightColors.copy(primary = primary)
+    } else {
+        DarkColors.copy(primary = primary)
+    }
+
+
+
+    MaterialTheme(
+        colorScheme = colors,
+        typography = appTypography(fontFamily = font),
+        shapes = AppShapes,
+        content = content
+    )
 }
 
 

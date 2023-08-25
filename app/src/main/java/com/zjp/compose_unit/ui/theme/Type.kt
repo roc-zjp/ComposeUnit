@@ -2,14 +2,35 @@ package com.zjp.compose_unit.ui.theme
 
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.zjp.compose_unit.R
 
 // Set of Material typography styles to start with
-val AppTypography = Typography(
 
-)
+
+fun appTypography(fontFamily: FontFamily): Typography {
+    return Typography(
+        headlineSmall = TextStyle(
+            fontFamily = fontFamily
+        ),
+        titleLarge = TextStyle(
+            fontFamily = fontFamily
+        ),
+        bodyLarge = TextStyle(
+            fontFamily = fontFamily
+        ),
+        bodyMedium = TextStyle(
+            fontFamily = fontFamily
+        ),
+        labelMedium = TextStyle(
+            fontFamily = fontFamily
+        )
+    )
+}
 
 
 val local: FontFamily = FontFamily.Default

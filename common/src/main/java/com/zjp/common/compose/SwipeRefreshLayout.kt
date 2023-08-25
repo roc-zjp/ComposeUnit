@@ -2,14 +2,12 @@ package com.zjp.common.compose
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +28,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -337,7 +334,7 @@ fun SwipeRefreshIndicator(
     refreshTriggerDistance: Dp,
     modifier: Modifier = Modifier,
     arrowEnabled: Boolean = true,
-    backgroundColor: Color = MaterialTheme.colors.surface,
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
     contentColor: Color = contentColorFor(backgroundColor),
     shape: Shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50)),
 
@@ -376,8 +373,8 @@ fun SwipeRefreshIndicator(
                 .align(Alignment.Center),
             shape = shape,
             color = backgroundColor,
-            elevation = adjustedElevation
-        ) {
+
+            ) {
             val painter = remember { CircularProgressPainter() }
             painter.arcRadius = sizes.arcRadius
             painter.strokeWidth = sizes.strokeWidth
@@ -396,7 +393,7 @@ fun SwipeRefreshIndicator(
             // depending on refresh state
             Crossfade(
                 targetState = isRefreshing,
-                animationSpec = tween(durationMillis = CrossfadeDurationMs)
+                animationSpec = tween(durationMillis = CrossfadeDurationMs), label = ""
             ) { refreshing ->
                 Box(
                     modifier = Modifier.fillMaxSize(),
