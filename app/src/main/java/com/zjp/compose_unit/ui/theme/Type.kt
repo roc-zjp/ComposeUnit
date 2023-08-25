@@ -5,8 +5,6 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import com.zjp.compose_unit.R
 
 // Set of Material typography styles to start with
@@ -16,17 +14,13 @@ fun appTypography(fontFamily: FontFamily): Typography {
     return Typography(
         headlineSmall = TextStyle(
             fontFamily = fontFamily
-        ),
-        titleLarge = TextStyle(
+        ), titleLarge = TextStyle(
             fontFamily = fontFamily
-        ),
-        bodyLarge = TextStyle(
+        ), bodyLarge = TextStyle(
             fontFamily = fontFamily
-        ),
-        bodyMedium = TextStyle(
+        ), bodyMedium = TextStyle(
             fontFamily = fontFamily
-        ),
-        labelMedium = TextStyle(
+        ), labelMedium = TextStyle(
             fontFamily = fontFamily
         )
     )

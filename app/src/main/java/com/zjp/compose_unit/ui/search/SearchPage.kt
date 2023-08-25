@@ -90,6 +90,7 @@ fun SearchPage(
                                 .fillMaxSize()
                                 .clip(CircleShape)
                                 .background(Color.White),
+
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
@@ -105,6 +106,7 @@ fun SearchPage(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(start = 10.dp, end = 30.dp)
+
                                     .align(Alignment.CenterVertically),
                                 textStyle = TextStyle(
                                     textAlign = TextAlign.Justify,
