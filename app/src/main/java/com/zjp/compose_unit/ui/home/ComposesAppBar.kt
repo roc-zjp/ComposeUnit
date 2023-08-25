@@ -7,7 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -39,7 +39,7 @@ fun ComposesAppBar(selectIndex: Int, onItemSelected: (index: Int) -> Unit) {
 
                 ) {
                 val boxSize by animateDpAsState(
-                    targetValue = if (selectIndex == index) 100.dp else 75.dp
+                    targetValue = if (selectIndex == index) 100.dp else 75.dp, label = ""
                 )
                 Box(
                     modifier = Modifier

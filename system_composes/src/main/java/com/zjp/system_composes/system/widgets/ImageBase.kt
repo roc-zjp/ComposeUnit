@@ -6,7 +6,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -216,37 +216,41 @@ fun CornerImage() {
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwipeableBase() {
-    val width = 350.dp
-    val squareSize = 50.dp
-
-    val swipeableState = rememberSwipeableState("A")
-    val sizePx = with(LocalDensity.current) { (width - squareSize).toPx() }
-    val anchors = mapOf(0f to "A", sizePx / 2 to "B", sizePx to "C")
-
-    Box(
-        modifier = Modifier
-            .width(width)
-            .swipeable(
-                state = swipeableState,
-                anchors = anchors,
-                thresholds = { _, _ -> FractionalThreshold(0.5f) },
-                orientation = Orientation.Horizontal
-            )
-            .background(Color.Black)
-    ) {
-        Box(
-            Modifier
-                .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
-                .size(squareSize)
-                .background(Color.Red),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(swipeableState.currentValue, color = Color.White, fontSize = 24.sp)
-        }
-    }
+    Text(text = "SwipeableBase")
+//    val width = 350.dp
+//    val squareSize = 50.dp
+//
+//
+//
+//    val swipeableState = rememberSwipeableState(initialValue = "A")
+//    val sizePx = with(LocalDensity.current) { (width - squareSize).toPx() }
+//    val anchors = mapOf(0f to "A", sizePx / 2 to "B", sizePx to "C")
+//
+//    Box(
+//        modifier = Modifier
+//            .width(width)
+//            .swipeable(
+//                state = swipeableState,
+//                anchors = anchors,
+//                thresholds = { _, _ -> FractionalThreshold(0.5f) },
+//                orientation = Orientation.Horizontal
+//            )
+//            .background(Color.Black)
+//    ) {
+//        Box(
+//            Modifier
+//                .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
+//                .size(squareSize)
+//                .background(Color.Red),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            Text(swipeableState.currentValue, color = Color.White, fontSize = 24.sp)
+//        }
+//    }
 }
 
 

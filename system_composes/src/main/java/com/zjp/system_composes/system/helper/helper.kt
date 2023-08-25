@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
@@ -21,7 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterialApi::class)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwipeToDismissBase() {
     var lists = List(30) { index -> "Hello $index" }
@@ -31,7 +32,8 @@ fun SwipeToDismissBase() {
         items(lists) { item ->
             var unread by remember { mutableStateOf(false) }
             val dismissState = rememberDismissState(
-                confirmStateChange = {
+
+                confirmValueChange = {
                     if (it == DismissValue.DismissedToEnd) unread = !unread
                     it != DismissValue.DismissedToEnd
                 }
@@ -47,7 +49,7 @@ fun SwipeToDismissBase() {
                             DismissValue.Default -> Color.LightGray
                             DismissValue.DismissedToEnd -> Color.Green
                             DismissValue.DismissedToStart -> Color.Red
-                        }
+                        }, label = ""
                     )
                     val alignment = when (direction) {
                         DismissDirection.StartToEnd -> Alignment.CenterStart
@@ -58,7 +60,8 @@ fun SwipeToDismissBase() {
                         DismissDirection.EndToStart -> Icons.Default.Delete
                     }
                     val scale by animateFloatAsState(
-                        if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
+                        if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f,
+                        label = ""
                     )
 
                     Box(
@@ -78,15 +81,18 @@ fun SwipeToDismissBase() {
                 dismissContent = {
                     Card(
                         elevation = animateDpAsState(
-                            if (dismissState.dismissDirection != null) 4.dp else 0.dp
-                        ).value
+                            if (dismissState.dismissDirection != null) 4.dp else 0.dp, label = ""
+                        ).value.let {
+                            CardDefaults.cardElevation(defaultElevation = it)
+                        }
                     ) {
-                        ListItem(
-                            text = {
-                                Text(item, fontWeight = if (unread) FontWeight.Bold else null)
-                            },
-                            secondaryText = { Text("Swipe me left or right!") }
-                        )
+                        ListItem(headlineContent = {
+                            Text(
+                                item,
+                                fontWeight = if (unread) FontWeight.Bold else null
+                            )
+                        }, supportingContent = { Text("Swipe me left or right!") })
+
                     }
                 }
             )

@@ -1,12 +1,9 @@
 package com.zjp.system_composes.system.widgets
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.util.toRange
 
@@ -60,7 +57,7 @@ fun SliderBaseWithStep() {
  *【valueRange】：最大最小范围【ClosedFloatingPointRange】
  *【steps】：步数【Int】
  */
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 fun RangeSliderBase() {
     var range by remember { mutableStateOf(-20f..20f) }

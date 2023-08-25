@@ -6,11 +6,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -124,7 +124,7 @@ fun ComposeDetailPage(
                     modifier = Modifier
                         .height(30.dp)
                         .fillMaxWidth()
-                        .background(MaterialTheme.colors.primary)
+                        .background(MaterialTheme.colorScheme.background)
                 ) {
                     Text(
                         text = if (viewModel.likeStatus) "收藏成功" else "取消成功",
@@ -151,7 +151,7 @@ fun ComposeNode(node: Node) {
         NodeTitle(title = node.name, folded = folded) {
             folded = !folded
         }
-        AnimatedContent(targetState = folded) {
+        AnimatedContent(targetState = folded, label = "") {
             if (!it) {
                 CodeView(
                     code = node.code,

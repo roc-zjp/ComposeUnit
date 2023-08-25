@@ -1,7 +1,5 @@
 package com.zjp.system_composes.system.containers
 
-import android.content.ClipData
-import android.widget.Space
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -12,13 +10,11 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.outlined.Create
-
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.intellij.lang.annotations.JdkConstants
 
 /**
  * 【verticalAlignment】：竖直方向对齐模式【Alignment】
@@ -354,12 +349,12 @@ fun LazyVerticalGridBase() {
             content = {
                 items(list.size) { index ->
                     Card(
-                        backgroundColor = Color.Red,
+                        colors = CardDefaults.cardColors(containerColor = Color.Red),
                         modifier = Modifier
                             .padding(4.dp)
                             .fillMaxWidth(),
-                        elevation = 8.dp,
-                    ) {
+
+                        ) {
                         Text(
                             text = list[index],
                             fontWeight = FontWeight.Bold,
@@ -399,11 +394,12 @@ fun LazyVerticalGridFixed() {
             content = {
                 items(list.size) { index ->
                     Card(
-                        backgroundColor = Color.Red,
+                        colors = CardDefaults.cardColors(containerColor = Color.Red),
+
                         modifier = Modifier
                             .padding(4.dp)
                             .fillMaxWidth(),
-                        elevation = 8.dp,
+                        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
                     ) {
                         Text(
                             text = list[index],
@@ -420,29 +416,24 @@ fun LazyVerticalGridFixed() {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 fun ListItemBase() {
-    ListItem(
-        icon = {
-            Icon(
-                Icons.Outlined.Create,
-                contentDescription = "",
-            )
-        },
-        secondaryText = {
-            Text(text = "secondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryText")
-        },
-        singleLineSecondaryText = false,
-        overlineText = { Text(text = "overlineText") },
-        trailing = { Text(text = "trailing") },
-        modifier = Modifier
-            .clickable { }
-            .background(Color.Blue)
 
-    ) {
-        Text(text = "关于应用")
-    }
+    ListItem(headlineContent = { Text(text = "关于应用") }, supportingContent = {
+        Text(text = "secondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryTextsecondaryText")
+
+    }, leadingContent = {
+        Icon(
+            Icons.Outlined.Create,
+            contentDescription = "",
+        )
+    }, trailingContent = {
+        Text(text = "trailing")
+    }, modifier = Modifier
+        .clickable { }
+        .background(Color.Blue))
+
 }
 
 @Preview

@@ -47,7 +47,6 @@ android {
 
 dependencies {
 
-    implementation 'androidx.compose.material:material:1.4.3'
     implementation "androidx.compose.material3:material3:$m3_version"
     implementation project(path: ':common')
     implementation project(path: ':collection')

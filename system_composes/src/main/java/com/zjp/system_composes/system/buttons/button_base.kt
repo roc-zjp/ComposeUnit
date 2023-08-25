@@ -10,10 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -21,17 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.state.ToggleableState
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.zjp.system_composes.system.widgets.CornerImage
-import com.zjp.system_composes.system.widgets.ProgressCollection
 import kotlinx.coroutines.launch
 
 /**
@@ -69,7 +59,7 @@ fun ButtonBase() {
                 2.dp,
                 Brush.radialGradient(listOf(Color.White, Color.Red, Color.Green, Color.Black))
             ),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray)
+            colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
         ) {
             Text(text = "Button")
         }
@@ -84,7 +74,7 @@ fun ButtonWithCustomColor() {
         onClick = {
             //your onclick code
         },
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray)
+        colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
     )
 
     {
@@ -101,7 +91,7 @@ fun ButtonWithMultipleText() {
         onClick = {
             //your onclick code
         },
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray)
+        colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
     )
 
     {
@@ -232,7 +222,7 @@ fun TriStateCheckboxBase() {
             state = parentState,
             onClick = onParentClick,
             colors = CheckboxDefaults.colors(
-                checkedColor = MaterialTheme.colors.primary
+                checkedColor = MaterialTheme.colorScheme.primary
             )
         )
         Spacer(Modifier.size(25.dp))
@@ -245,22 +235,12 @@ fun TriStateCheckboxBase() {
 }
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ChipBase() {
-    Chip(
-        onClick = { /* Do something! */ },
-        border = ChipDefaults.outlinedBorder,
-        colors = ChipDefaults.outlinedChipColors(),
-        leadingIcon = {
-            Icon(
-                Icons.Filled.Settings,
-                contentDescription = "Localized description"
-            )
-        }
-    ) {
-        Text("Change settings")
-    }
+
+    Text(text = "material3 不可用")
+
+
 }
 
 fun onClick(context: Context) {
@@ -323,82 +303,15 @@ fun AlertDialogBase(openDialog: Boolean, dismiss: () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 fun BackdropScaffoldBase() {
-    val scope = rememberCoroutineScope()
-    val selection = remember { mutableStateOf(1) }
-    val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed)
-    LaunchedEffect(scaffoldState) {
-        scaffoldState.reveal()
-    }
-    BackdropScaffold(
-        scaffoldState = scaffoldState,
 
-        appBar = {
-            TopAppBar(
-                title = { Text("Backdrop scaffold") },
-                navigationIcon = {
-                    if (scaffoldState.isConcealed) {
-                        IconButton(onClick = { scope.launch { scaffoldState.reveal() } }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Localized description")
-                        }
-                    } else {
-                        IconButton(onClick = { scope.launch { scaffoldState.conceal() } }) {
-                            Icon(Icons.Default.Close, contentDescription = "Localized description")
-                        }
-                    }
-                },
-                actions = {
-                    var clickCount by remember { mutableStateOf(0) }
-                    IconButton(
-                        onClick = {
-                            // show snackbar as a suspend function
-                            scope.launch {
-                                scaffoldState.snackbarHostState
-                                    .showSnackbar("Snackbar #${++clickCount}")
-                            }
-                        }
-                    ) {
-                        Icon(Icons.Default.Favorite, contentDescription = "Localized description")
-                    }
-                },
-                elevation = 0.dp,
-                backgroundColor = Color.Transparent
-            )
-        },
-        backLayerContent = {
-            LazyColumn(modifier = Modifier.height(200.dp)) {
-                items(if (selection.value >= 3) 3 else 5) {
-                    ListItem(
-                        Modifier.clickable {
-                            selection.value = it
-                            scope.launch { scaffoldState.conceal() }
-                        },
-                        text = { Text("Select $it") }
-                    )
-                }
-            }
-        },
-        frontLayerContent = {
-            Text("Selection: ${selection.value}")
-            LazyColumn(modifier = Modifier.height(200.dp)) {
-                items(50) {
-                    ListItem(
-                        text = { Text("Item $it") },
-                        icon = {
-                            Icon(
-                                Icons.Default.Favorite,
-                                contentDescription = "Localized description"
-                            )
-                        }
-                    )
-                }
-            }
-        }
-    )
+    Text(text = "BackdropScaffold material3 不可用")
+
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BadgeBase() {
     BadgedBox(badge = { Badge { Text("8") } }) {
@@ -448,16 +361,10 @@ fun DropdownMenuBase() {
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            DropdownMenuItem(onClick = { /* Handle refresh! */ }) {
-                Text("Refresh")
-            }
-            DropdownMenuItem(onClick = { /* Handle settings! */ }) {
-                Text("Settings")
-            }
-            Divider()
-            DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
-                Text("Send Feedback")
-            }
+            DropdownMenuItem(text = { Text("Refresh") }, onClick = { /*TODO*/ })
+            DropdownMenuItem(text = { Text("Settings") }, onClick = { /*TODO*/ })
+            DropdownMenuItem(text = { Text("Send Feedback") }, onClick = { /*TODO*/ })
+
         }
     }
 
@@ -466,12 +373,13 @@ fun DropdownMenuBase() {
 
 @Composable
 fun DropdownMenuItemBase() {
-    DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
-        Text("Send Feedback")
-    }
+    DropdownMenuItem(text = { Text("Send Feedback") }, onClick = { /*TODO*/ })
+
+
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExposedDropdownMenuBoxBase() {
     val options = listOf("Android", "ios", "windows", "macos", "linux")
@@ -504,14 +412,13 @@ fun ExposedDropdownMenuBoxBase() {
                 }
             ) {
                 filteringOptions.forEach { selectionOption ->
-                    DropdownMenuItem(
-                        onClick = {
-                            selectedOptionText = selectionOption
-                            expanded = false
-                        }
-                    ) {
-                        Text(text = selectionOption)
-                    }
+
+                    DropdownMenuItem(text = { Text(text = selectionOption) }, onClick = {
+                        selectedOptionText = selectionOption
+                        expanded = false
+                    })
+
+
                 }
             }
         }
@@ -540,7 +447,7 @@ fun FloatingActionButtonBase() {
         onClick = { /*do something*/ },
         modifier = Modifier.fillMaxWidth(),
         shape = CircleShape,
-        backgroundColor = Color.Magenta,
+        containerColor = Color.Magenta,
         contentColor = Color.White
     ) {
         Icon(Icons.Filled.Favorite, contentDescription = null)
@@ -548,24 +455,15 @@ fun FloatingActionButtonBase() {
 }
 
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterChipBase() {
     val state = remember { mutableStateOf(false) }
     FilterChip(
         selected = state.value,
         onClick = { state.value = !state.value },
-        border = ChipDefaults.outlinedBorder,
-        colors = ChipDefaults.outlinedFilterChipColors(),
-        selectedIcon = {
-            Icon(
-                imageVector = Icons.Filled.Done,
-                contentDescription = "Localized Description",
-                modifier = Modifier.requiredSize(ChipDefaults.SelectedIconSize)
-            )
-        }) {
-        Text("Filter chip")
-    }
+        label = { Text("Filter chip") })
+
 }
 
 @Composable
@@ -573,7 +471,9 @@ fun IconToggleButtonBase() {
     var checked by remember { mutableStateOf(false) }
 
     IconToggleButton(checked = checked, onCheckedChange = { checked = it }) {
-        val tint by animateColorAsState(if (checked) Color(0xFFEC407A) else Color(0xFFB0BEC5))
+        val tint by animateColorAsState(if (checked) Color(0xFFEC407A) else Color(0xFFB0BEC5),
+            label = ""
+        )
         Icon(Icons.Filled.Favorite, contentDescription = "Localized description", tint = tint)
     }
 }

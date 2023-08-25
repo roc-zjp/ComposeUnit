@@ -1,12 +1,20 @@
 package com.zjp.compose_unit.ui
 
 import android.content.Context
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,29 +35,59 @@ import com.zjp.compose_unit.common.font_change_broadcast_action
 import com.zjp.compose_unit.route.HomeSections
 import com.zjp.compose_unit.route.Screen
 import com.zjp.compose_unit.route.unitNavGraph
-import com.zjp.compose_unit.ui.theme.Compose_unitTheme
+import com.zjp.compose_unit.ui.theme.AppShapes
+import com.zjp.compose_unit.ui.theme.AppTypography
 import com.zjp.compose_unit.ui.theme.fontMap
 import com.zjp.compose_unit.ui.theme.local
+import com.zjp.compose_unit.ui.theme.DarkColors
+import com.zjp.compose_unit.ui.theme.LightColors
 import kotlinx.coroutines.launch
 
 @Composable
-fun App() {
+fun AppTheme(
+    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable() () -> Unit
+) {
+    val colors = if (!useDarkTheme) {
+        LightColors
+    } else {
+        DarkColors
+    }
+
+    MaterialTheme(
+        colorScheme = colors,
+        content = content
+    )
+}
+
+@Composable
+fun App(useDarkTheme: Boolean = isSystemInDarkTheme()) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
         ?: Screen.Splash.route
     val routes = HomeSections.values().map { it.route }
     val isHomePage = currentRoute in routes
+    val colors = if (!useDarkTheme) {
+        LightColors
+    } else {
+        DarkColors
+    }
+
     ColorAndFontProvider {
         val themeColor = LocalThemeColor.current
         val currentFont = LocalFont.current
-        Compose_unitTheme(primary = themeColor, font = currentFont) {
+
+        MaterialTheme(
+            colorScheme = colors,
+            typography = AppTypography,
+            shapes = AppShapes
+        ) {
             Scaffold { innerPaddingModifier ->
                 Box(modifier = Modifier.padding(innerPaddingModifier)) {
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.
-                        Splash.route,
+                        startDestination = Screen.Splash.route,
                         modifier = Modifier.fillMaxSize()
                     ) {
                         unitNavGraph(navController)

@@ -1,11 +1,12 @@
 package com.zjp.system_composes.system.containers
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
+
+import androidx.compose.material3.*
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,18 +24,21 @@ import androidx.compose.ui.unit.dp
  * 【indication】：按下卡时显示的指示【LocalIndication】
  * 【role】：用户界面元素的类型。可访问性服务可能会使用它来描述元素或进行自定义。例如，如果卡片充当按钮，您应该通过Role.Button
  */
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 fun CardBase() {
     var count by remember { mutableStateOf(0) }
     Card(
-        onClick = { count++ },
+
         modifier = Modifier
             .width(100.dp)
-            .height(100.dp),
+            .height(100.dp)
+            .clickable {
+                count++
+            },
         border = BorderStroke(width = 1.dp, color = Color.Red),
-        elevation = 10.dp
-    ) {
+
+        ) {
         Text("Clickable card content with count: $count")
     }
 }

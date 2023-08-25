@@ -7,7 +7,7 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.*
@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.zjp.common.compose.WrapLayout
-import com.zjp.system_composes.R
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -468,7 +467,7 @@ fun AnimatedContentWithContentTransform() {
                     // be displayed out of bounds.
                     SizeTransform(clip = false)
                 )
-            }
+            }, label = ""
         ) { targetCount ->
             Text(text = "$targetCount")
         }
@@ -493,19 +492,19 @@ fun AnimatedContentBase() {
         Button(onClick = { count++ }) {
             Text("Add")
         }
-        AnimatedContent(targetState = count) { targetCount ->
+        AnimatedContent(targetState = count, label = "") { targetCount ->
             // Make sure to use `targetCount`, not `count`.
             Text(text = "Count: $targetCount")
         }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedContentSizeTransform() {
     var expanded by remember { mutableStateOf(false) }
     Surface(
-        color = MaterialTheme.colors.primary,
+        color = MaterialTheme.colorScheme.primary,
         onClick = { expanded = !expanded }
     ) {
         AnimatedContent(
@@ -528,7 +527,8 @@ fun AnimatedContentSizeTransform() {
                                 }
                             }
                         }
-            }
+            },
+            label = "",
         ) { targetExpanded ->
             if (targetExpanded) {
                 Expanded()
@@ -539,12 +539,12 @@ fun AnimatedContentSizeTransform() {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn( ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedContentChild() {
     var expanded by remember { mutableStateOf(false) }
     Surface(
-        color = MaterialTheme.colors.primary,
+        color = MaterialTheme.colorScheme.primary,
         onClick = { expanded = !expanded }
     ) {
         AnimatedContent(
@@ -567,7 +567,7 @@ fun AnimatedContentChild() {
                                 }
                             }
                         }
-            }
+            }, label = ""
         ) { targetExpanded ->
 
             val background by transition.animateColor(label = "") { state ->
@@ -643,7 +643,8 @@ fun CrossfadeBase() {
             } else {
                 "A"
             }
-        }) { screen ->
+        }, label = ""
+    ) { screen ->
         when (screen) {
             "A" -> Text("Page A Click Me", Modifier.background(Color.Red))
             "B" -> Text("Page B Click Me", Modifier.background(Color.Green))

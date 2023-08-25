@@ -7,10 +7,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.*
+
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -30,7 +29,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zjp.compose_unit.R
 import com.zjp.compose_unit.route.Screen
 import com.zjp.compose_unit.viewmodel.ProfileViewModel
-
 
 @Composable
 fun ProfileScreen(
@@ -53,10 +51,9 @@ fun ProfileScreen(
         navigateToRoute = navigateToRoute
     )
 
-
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 fun ProfileView(
     currentAppVersionName: String = "",
@@ -87,11 +84,10 @@ fun ProfileView(
         )
 
     }) { paddingValue ->
-        val context = LocalContext.current
         Box(modifier = Modifier.padding(paddingValue)) {
             Column(
                 modifier = Modifier
-                    .padding(paddingValue)
+                    .padding()
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
 
@@ -100,13 +96,13 @@ fun ProfileView(
                     text = "天涯浪子",
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp,
-                    color = MaterialTheme.colors.primary,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.End,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(end = 20.dp)
                 )
-                ListItem(icon = {
+                ListItem(headlineContent = { Text(text = "应用设置") }, leadingContent = {
                     Box(
                         modifier = Modifier
                             .size(30.dp),
@@ -115,15 +111,15 @@ fun ProfileView(
                         Icon(
                             painter = painterResource(id = R.drawable.setting),
                             contentDescription = "",
-                            tint = MaterialTheme.colors.primary
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
-                }, modifier = Modifier.clickable {
+                }, trailingContent = {}, modifier = Modifier.clickable {
                     navigateToRoute(Screen.AppSetting.route)
-                }) {
-                    Text(text = "应用设置")
-                }
-                ListItem(icon = {
+                })
+
+
+                ListItem(headlineContent = { Text(text = "关于应用") }, leadingContent = {
                     Box(
                         modifier = Modifier
                             .size(30.dp),
@@ -132,15 +128,15 @@ fun ProfileView(
                         Icon(
                             painter = painterResource(id = R.drawable.about_app),
                             contentDescription = "",
-                            tint = MaterialTheme.colors.primary
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
-                }, modifier = Modifier.clickable {
+                }, trailingContent = {}, modifier = Modifier.clickable {
                     navigateToRoute(Screen.AboutApp.route)
-                }) {
-                    Text(text = "关于应用")
-                }
-                ListItem(icon = {
+                })
+
+
+                ListItem(headlineContent = { Text(text = "关于我") }, leadingContent = {
                     Box(
                         modifier = Modifier
                             .size(30.dp),
@@ -149,17 +145,25 @@ fun ProfileView(
                         Icon(
                             painter = painterResource(id = R.drawable.about_me),
                             contentDescription = "",
-                            tint = MaterialTheme.colors.primary
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
-                }, modifier = Modifier.clickable {
-                    navigateToRoute(Screen.AboutMe.route)
-                }) {
-                    Text(text = "关于我")
-                }
+                }, trailingContent = {}, modifier = Modifier.clickable {
+                    navigateToRoute(Screen.AboutApp.route)
+                })
+
+
+
+
+
+
                 Divider()
-                ListItem(
-                    icon = {
+
+                ListItem(headlineContent = { Text(text = "APP版本") },
+                    supportingContent = {
+                        Text(text = "当前已是最新版本")
+                    },
+                    leadingContent = {
                         Box(
                             modifier = Modifier
                                 .size(30.dp),
@@ -168,50 +172,46 @@ fun ProfileView(
                             Icon(
                                 painter = painterResource(id = R.drawable.check_update),
                                 contentDescription = "",
-                                tint = MaterialTheme.colors.primary
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
-                    },
-                    trailing = {
+                    }, trailingContent = {
                         Box(
                             modifier = Modifier.height(40.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(text = "V${currentAppVersionName}")
                         }
-                    },
-                    secondaryText = {
+                    }, modifier = Modifier.clickable {
+                        checkAppUpdate()
+                    })
+
+                ListItem(headlineContent = { Text(text = "数据库版本") },
+                    supportingContent = {
                         Text(text = "当前已是最新版本")
                     },
-                    modifier = Modifier.clickable {
-                        checkAppUpdate()
-                    },
-                ) {
-                    Text(text = "APP版本")
-                }
-                ListItem(icon = {
-                    Box(
-                        modifier = Modifier
-                            .size(30.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.database),
-                            contentDescription = "",
-                            tint = MaterialTheme.colors.primary
-                        )
-                    }
-                }, trailing = {
-                    Box(modifier = Modifier.height(40.dp), contentAlignment = Alignment.Center) {
-                        Text(text = "V${currentDatabaseVersion}")
-                    }
-                }, secondaryText = {
-                    Text(text = "当前已是最新版本")
-                }, modifier = Modifier.clickable {
-                    checkDatabaseUpdate()
-                }) {
-                    Text(text = "数据库版本")
-                }
+                    leadingContent = {
+                        Box(
+                            modifier = Modifier
+                                .size(30.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.database),
+                                contentDescription = "",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }, trailingContent = {
+                        Box(
+                            modifier = Modifier.height(40.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = "V${currentDatabaseVersion}")
+                        }
+                    }, modifier = Modifier.clickable {
+                        checkDatabaseUpdate()
+                    })
             }
         }
     }

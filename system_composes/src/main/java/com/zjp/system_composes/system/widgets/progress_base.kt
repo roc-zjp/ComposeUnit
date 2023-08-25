@@ -2,7 +2,7 @@ package com.zjp.system_composes.system.widgets
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +29,7 @@ private fun CircularProgressAnimated() {
     var progress by remember { mutableStateOf(0.1f) }
     val animatedProgress = animateFloatAsState(
         targetValue = progress,
-        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
+        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec, label = ""
     ).value
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(Modifier.height(30.dp))
@@ -67,11 +67,11 @@ fun LinearProgress() {
     Row {
         Spacer(modifier = Modifier.width(10.dp))
         LinearProgressIndicator(
-            progress = 0.7f,
-            backgroundColor = Color.LightGray,
             color = Color.Red,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            trackColor = Color.LightGray,
         )
+        
         Spacer(modifier = Modifier.width(10.dp))
         LinearProgressIndicator(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier.width(10.dp))

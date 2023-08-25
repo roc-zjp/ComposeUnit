@@ -1,148 +1,70 @@
 package com.zjp.compose_unit.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Typography
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import com.zjp.compose_unit.R
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.darkColorScheme
 
-private val DarkColorPalette = darkColors(
-    primaryVariant = md_theme_dark_primary,
-    primary = md_theme_dark_primary,
-    onPrimary = md_theme_dark_onPrimary,
-    secondary = md_theme_dark_secondary,
-    onSecondary = md_theme_dark_onSecondary,
-    error = md_theme_dark_error,
-    onError = md_theme_dark_onError,
-    background = md_theme_dark_background,
-    onBackground = md_theme_dark_onBackground,
-    surface = md_theme_dark_surface,
-    onSurface = md_theme_dark_onSurface,
-)
-
-private val LightColorPalette = lightColors(
-    primaryVariant = md_theme_light_primary,
+val LightColors = lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
-
+    primaryContainer = md_theme_light_primaryContainer,
+    onPrimaryContainer = md_theme_light_onPrimaryContainer,
     secondary = md_theme_light_secondary,
     onSecondary = md_theme_light_onSecondary,
-
+    secondaryContainer = md_theme_light_secondaryContainer,
+    onSecondaryContainer = md_theme_light_onSecondaryContainer,
+    tertiary = md_theme_light_tertiary,
+    onTertiary = md_theme_light_onTertiary,
+    tertiaryContainer = md_theme_light_tertiaryContainer,
+    onTertiaryContainer = md_theme_light_onTertiaryContainer,
     error = md_theme_light_error,
     onError = md_theme_light_onError,
-
+    errorContainer = md_theme_light_errorContainer,
+    onErrorContainer = md_theme_light_onErrorContainer,
+    outline = md_theme_light_outline,
     background = md_theme_light_background,
     onBackground = md_theme_light_onBackground,
     surface = md_theme_light_surface,
     onSurface = md_theme_light_onSurface,
+    surfaceVariant = md_theme_light_surfaceVariant,
+    onSurfaceVariant = md_theme_light_onSurfaceVariant,
+    inverseSurface = md_theme_light_inverseSurface,
+    inverseOnSurface = md_theme_light_inverseOnSurface,
+    inversePrimary = md_theme_light_inversePrimary,
+    surfaceTint = md_theme_light_surfaceTint,
+    outlineVariant = md_theme_light_outlineVariant,
+    scrim = md_theme_light_scrim,
 )
 
 
-@Composable
-fun Compose_unitTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    primary: Color = Color.Blue,
-    font: FontFamily = local,
-    content: @Composable () -> Unit
-) {
-    val colors = if (darkTheme) {
-        DarkColorPalette.copy(primary = primary)
-    } else {
-        LightColorPalette.copy(primary = primary)
-    }
-
-    MaterialTheme(
-        colors = colors,
-        typography = Typography(
-            body1 = TextStyle(
-                fontFamily = FontFamily.Default,
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp
-            ),
-            defaultFontFamily = font
-        ),
-        shapes = Shapes,
-        content = content
-    )
-}
-
-
-val Rubik = FontFamily(
-    Font(R.font.chops, FontWeight.Light),
-    Font(R.font.neucha_regular, FontWeight.Normal),
-    Font(R.font.inconsolata_regular, FontWeight.Normal, FontStyle.Italic),
-    Font(R.font.indieflower_regular, FontWeight.Medium),
-    Font(R.font.comicneue_regular, FontWeight.Bold)
-)
-
-val MyTypography = Typography(
-    h1 = TextStyle(
-        fontFamily = Rubik,
-        fontWeight = FontWeight.W300,
-        fontSize = 96.sp
-    ),
-    body1 = TextStyle(
-        fontFamily = Rubik,
-        fontWeight = FontWeight.W600,
-        fontSize = 16.sp
-    )
-    /*...*/
-)
-
-
-val Yellow200 = Color(0xffffeb46)
-val Blue200 = Color(0xff91a4fc)
-// ...
-
-//val DarkColors = darkColors(
-//    primary = Color(0xff4699FB),
-//    secondary = Blue200,
-//    // ...
-//)
-// val LightColors = lightColors(
-//    primary = Color(0xff4699FB),
-//    primaryVariant = Yellow400,
-//    secondary = Blue700,
-//    // ...
-//)
-
-
-val tabColors = arrayListOf<Color>(
-    Color(0xff44D1FD),
-    Color(0xffFD4F43),
-    Color(0xffB375FF),
-    Color(0xFF4CAF50),
-    Color(0xFFFF9800),
-    Color(0xFF00F1F1),
-    Color(0xFFDBD83F),
-)
-
-val fontFamilySupport = arrayListOf<String>(
-    "local",
-    "ComicNeue",
-    "IndieFlower",
-    "BalooBhai2",
-    "Inconsolata",
-    "Neucha"
-)
-
-val themeColorSupport = mapOf<Color, String>(
-    Color(244, 67, 54) to "毁灭之红",
-    Color(255, 152, 0) to "愤怒之橙",
-    Color(255, 235, 59) to "警告之黄",
-    Color(76, 175, 80) to "伪装之绿",
-    Color(33, 150, 243) to "冷漠之蓝",
-    Color(63, 81, 181) to "无限之靛",
-    Color(156, 39, 176) to "神秘之紫",
-    Color(45, 45, 45) to "归宿之黑",
+val DarkColors = darkColorScheme(
+    primary = md_theme_dark_primary,
+    onPrimary = md_theme_dark_onPrimary,
+    primaryContainer = md_theme_dark_primaryContainer,
+    onPrimaryContainer = md_theme_dark_onPrimaryContainer,
+    secondary = md_theme_dark_secondary,
+    onSecondary = md_theme_dark_onSecondary,
+    secondaryContainer = md_theme_dark_secondaryContainer,
+    onSecondaryContainer = md_theme_dark_onSecondaryContainer,
+    tertiary = md_theme_dark_tertiary,
+    onTertiary = md_theme_dark_onTertiary,
+    tertiaryContainer = md_theme_dark_tertiaryContainer,
+    onTertiaryContainer = md_theme_dark_onTertiaryContainer,
+    error = md_theme_dark_error,
+    onError = md_theme_dark_onError,
+    errorContainer = md_theme_dark_errorContainer,
+    onErrorContainer = md_theme_dark_onErrorContainer,
+    outline = md_theme_dark_outline,
+    background = md_theme_dark_background,
+    onBackground = md_theme_dark_onBackground,
+    surface = md_theme_dark_surface,
+    onSurface = md_theme_dark_onSurface,
+    surfaceVariant = md_theme_dark_surfaceVariant,
+    onSurfaceVariant = md_theme_dark_onSurfaceVariant,
+    inverseSurface = md_theme_dark_inverseSurface,
+    inverseOnSurface = md_theme_dark_inverseOnSurface,
+    inversePrimary = md_theme_dark_inversePrimary,
+    surfaceTint = md_theme_dark_surfaceTint,
+    outlineVariant = md_theme_dark_outlineVariant,
+    scrim = md_theme_dark_scrim,
 )
 

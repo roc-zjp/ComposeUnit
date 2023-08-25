@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 
 import androidx.compose.ui.Alignment
@@ -124,7 +121,10 @@ fun NoCompose(appbar: @Composable () -> Unit) {
                 .fillMaxHeight()
                 .fillMaxWidth()
         ) {
-            Text(text = "没数据，哥也没办法\\n(≡ _ ≡)/~┴┴", modifier = Modifier.align(Alignment.Center))
+            Text(
+                text = "没数据，哥也没办法\\n(≡ _ ≡)/~┴┴",
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 
@@ -247,7 +247,7 @@ fun ComposeItemView(
             Icon(
                 painter = painterResource(id = R.drawable.collect),
                 contentDescription = "",
-                tint = MaterialTheme.colors.primary,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(end = 20.dp, top = 5.dp)

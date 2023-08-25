@@ -1,6 +1,6 @@
 package com.zjp.system_composes.system.helper
 
-import androidx.compose.material.Divider
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,7 +16,6 @@ fun DividerBase() {
     Divider(
         thickness = 5.dp,
         color = Color.Magenta,
-        startIndent = 20.dp,
     )
 }
 

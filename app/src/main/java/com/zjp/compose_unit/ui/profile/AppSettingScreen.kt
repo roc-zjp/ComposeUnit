@@ -3,7 +3,7 @@ package com.zjp.compose_unit.ui.profile
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -13,7 +13,7 @@ import com.zjp.common.compose.UnitTopAppBar
 import com.zjp.compose_unit.R
 import com.zjp.compose_unit.route.Screen
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 fun AppSettingPage(navigateToRoute: (String) -> Unit = {}, goBack: () -> Unit = {}) {
     Scaffold(topBar = {
@@ -26,73 +26,76 @@ fun AppSettingPage(navigateToRoute: (String) -> Unit = {}, goBack: () -> Unit = 
         })
     }) {
         Column(Modifier.padding(it)) {
-            ListItem(icon = {
+            ListItem(headlineContent = { Text(text = "主题设置") }, leadingContent = {
                 Icon(
                     painter = painterResource(id = R.drawable.theme_icon),
                     contentDescription = "",
-                    tint = MaterialTheme.colors.primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
-            }, trailing = {
+            }, trailingContent = {
                 Icon(
                     painter = painterResource(id = R.drawable.arrow_right_bold),
                     contentDescription = "theme",
-                    tint = MaterialTheme.colors.primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }, modifier = Modifier.clickable {
                 navigateToRoute(Screen.ThemeSetting.route)
-            }) {
-                Text(text = "主题设置")
-            }
+            })
+
             Divider()
-            ListItem(icon = {
+            ListItem(headlineContent = { Text(text = "字体设置") }, leadingContent = {
                 Icon(
                     painter = painterResource(id = R.drawable.font_icon),
                     contentDescription = "",
-                    tint = MaterialTheme.colors.primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
-            }, trailing = {
+            }, trailingContent = {
                 Icon(
                     painter = painterResource(id = R.drawable.arrow_right_bold),
                     contentDescription = "theme",
-                    tint = MaterialTheme.colors.primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }, modifier = Modifier.clickable {
-                navigateToRoute(Screen.FontSetting.route)
-            }) {
-                Text(text = "字体设置")
-            }
+                navigateToRoute(Screen.ThemeSetting.route)
+            })
+
             Divider()
-            ListItem(icon = {
+
+            ListItem(headlineContent = { Text(text = "item样式") }, leadingContent = {
                 Icon(
                     painter = painterResource(id = R.drawable.item_icon),
                     contentDescription = "",
-                    tint = MaterialTheme.colors.primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
-            }, trailing = {
+            }, trailingContent = {
                 Icon(
                     painter = painterResource(id = R.drawable.arrow_right_bold),
                     contentDescription = "theme",
-                    tint = MaterialTheme.colors.primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
-            }, modifier = Modifier.clickable { navigateToRoute(Screen.ItemSetting.route) }) {
-                Text(text = "item样式")
-            }
+            }, modifier = Modifier.clickable {
+                navigateToRoute(Screen.ItemSetting.route)
+            })
+
             Divider()
-            ListItem(icon = {
+
+            ListItem(headlineContent = { Text(text = "版本信息") }, leadingContent = {
                 Icon(
                     painter = painterResource(id = R.drawable.app_version),
                     contentDescription = "",
-                    tint = MaterialTheme.colors.primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
-            }, trailing = {
+            }, trailingContent = {
                 Icon(
                     painter = painterResource(id = R.drawable.arrow_right_bold),
                     contentDescription = "theme",
-                    tint = MaterialTheme.colors.primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
-            }) {
-                Text(text = "版本信息")
-            }
+            }, modifier = Modifier.clickable {
+                navigateToRoute(Screen.ItemSetting.route)
+            })
+
+
             Divider()
         }
     }

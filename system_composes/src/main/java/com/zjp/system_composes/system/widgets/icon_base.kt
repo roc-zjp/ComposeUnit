@@ -1,7 +1,7 @@
 package com.zjp.system_composes.system.widgets
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
