@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -39,10 +40,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zjp.common.LocalThemeColor
 import com.zjp.common.compose.UnitTopAppBar
+import com.zjp.compose_unit.common.compose.UnitBottomAppBar
 import com.zjp.compose_unit.ui.home.ComposeItemView
 import com.zjp.core_database.model.Compose
 import com.zjp.core_database.repository.ComposesRepository
@@ -86,11 +89,9 @@ fun SearchPage(
                     Box(modifier = Modifier.padding(end = 35.dp)) {
                         Row(
                             modifier = Modifier
-                                .padding(top = 10.dp, bottom = 10.dp)
-                                .fillMaxSize()
-                                .clip(CircleShape)
-                                .background(Color.White),
+                                .clip(RoundedCornerShape(20))
 
+                                .background(Color.White),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
@@ -104,8 +105,13 @@ fun SearchPage(
                                     key = it
                                 },
                                 modifier = Modifier
+                                    .padding(
+                                        start = 10.dp,
+                                        end = 30.dp,
+                                        top = 10.dp,
+                                        bottom = 10.dp
+                                    )
                                     .fillMaxWidth()
-                                    .padding(start = 10.dp, end = 30.dp)
 
                                     .align(Alignment.CenterVertically),
                                 textStyle = TextStyle(
@@ -178,5 +184,16 @@ fun SearchPage(
         }
     }
 }
+
+@Preview
+@Composable
+fun BottomBarPreview() {
+    SearchPage(toComposeDetail = {
+
+    }, onBack = {
+
+    })
+}
+
 
 
