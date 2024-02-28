@@ -21,3 +21,7 @@
 ## 目标：
 
 向 [FlutterUnit](https://github.com/toly1994328/FlutterUnit)  看齐，该项目可以看做是FlutterUnit Compose 版本,后期的目标就是实现Flutter Unit的所有功能。
+
+## 体验
+
+[google play 点击下载](https://play.google.com/store/apps/details?id=com.zjp.compose_unit)
